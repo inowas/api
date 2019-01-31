@@ -39,4 +39,38 @@ final class UserManager
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function list()
+    {
+        $userRepository = $this->entityManager->getRepository(User::class);
+        return $userRepository->findAll();
+    }
+
+    /**
+     * @param string $password
+     * @return string
+     * @throws \Exception
+     */
+    public function encryptPassword(string $password): string
+    {
+        return $this->passwordEncoder->encodePassword(new User('encryptMyPassword', $password), $password);
+    }
+
+    /**
+     * @param string $username
+     * @return bool
+     */
+    public function usernameIsValidAndAvailable(string $username): bool
+    {
+
+        if (strlen($username) <= 3) {
+            return false;
+        }
+
+        $userRepository = $this->entityManager->getRepository(User::class);
+        return !($userRepository->findOneBy(['username' => $username]) instanceof User);
+    }
 }

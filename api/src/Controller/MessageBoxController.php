@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Command\Command;
-use App\Command\TestCommand;
 use App\Entity\User;
+use App\Model\Common\Command;
+use App\Model\User\Command\CreateUserCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -22,7 +22,7 @@ final class MessageBoxController
     private $tokenStorage;
 
     private $availableCommands = [
-        'testCommand' => TestCommand::class
+        'createUser' => CreateUserCommand::class
     ];
 
     public function __construct(MessageBusInterface $bus, TokenStorageInterface $tokenStorage)
