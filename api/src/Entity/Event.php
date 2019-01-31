@@ -62,6 +62,14 @@ class Event
     protected $created;
 
     /**
+     * @return string
+     */
+    public static function eventName(): string
+    {
+        return lcfirst(static::class);
+    }
+
+    /**
      * @param Event $event
      * @return Event
      * @throws \Exception
@@ -134,14 +142,6 @@ class Event
     public function payload(): array
     {
         return $this->payload;
-    }
-
-    /**
-     * @return string
-     */
-    public function eventName(): string
-    {
-        return $this->eventName;
     }
 
     /**

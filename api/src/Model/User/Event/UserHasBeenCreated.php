@@ -15,7 +15,6 @@ final class UserHasBeenCreated extends Event
     private $roles;
     private $enabled;
 
-    public const NAME = 'userHasBeenCreated';
     public const AGGREGATE_NAME = UserAggregate::NAME;
 
     /**
@@ -29,7 +28,7 @@ final class UserHasBeenCreated extends Event
      */
     public static function fromParams(string $aggregateId, string $username, string $password, array $roles = [], bool $enabled = true)
     {
-        $self = new self($aggregateId, UserAggregate::NAME, self::NAME, [
+        $self = new self($aggregateId, UserAggregate::NAME, self::eventName(), [
             'username' => $username,
             'password' => $password,
             'roles' => $roles,
