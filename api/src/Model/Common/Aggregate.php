@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Model\Common;
 
-use Ramsey\Uuid\Uuid;
-
 class Aggregate
 {
-    /**
-     * @var Uuid
-     */
-    private $id;
 
-    public static function fromId(Uuid $id)
+    public const NAME = '';
+
+    /**
+     * @var string
+     */
+    protected $id;
+
+
+    public static function withId(string $id): Aggregate
     {
         $self = new self();
         $self->id = $id;
@@ -21,10 +23,18 @@ class Aggregate
     }
 
     /**
-     * @return Uuid
+     * @return string
      */
-    public function getId(): Uuid
+    public function id(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function name(): string
+    {
+        return self::NAME;
     }
 }

@@ -13,7 +13,7 @@ class CreateUserCommand extends Command
     private $roles;
     private $enabled;
 
-    public static function fromParams(string $username, string $password, array $roles = [], bool $enabled = true)
+    public static function fromParams(string $username, string $password, array $roles = ['ROLE_USER'], bool $enabled = true)
     {
         $self = new self();
         $self->username = $username;
@@ -28,13 +28,13 @@ class CreateUserCommand extends Command
         $self = new self();
         $self->username = $payload['username'] ?? null;
         $self->password = $payload['password'] ?? null;
-        $self->roles = $payload['roles'] ?? ['ROLE_USER'];
-        $self->enabled = $payload['enables'] ?? true;
+        $self->roles = ['ROLE_USER'];
+        $self->enabled = true;
         return $self;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function username(): string
     {
@@ -42,7 +42,7 @@ class CreateUserCommand extends Command
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function password(): string
     {
@@ -50,7 +50,7 @@ class CreateUserCommand extends Command
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function roles(): array
     {
@@ -58,7 +58,7 @@ class CreateUserCommand extends Command
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function isEnabled(): bool
     {

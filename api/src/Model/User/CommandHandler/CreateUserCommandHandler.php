@@ -53,6 +53,6 @@ class CreateUserCommandHandler
         );
 
         $this->aggregateRepository->storeEvent($event);
-        $this->userProjection->onUserHasBeenCreated($event);
+        $this->userProjection->apply($event);
     }
 }

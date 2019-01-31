@@ -73,4 +73,11 @@ final class UserManager
         $userRepository = $this->entityManager->getRepository(User::class);
         return !($userRepository->findOneBy(['username' => $username]) instanceof User);
     }
+
+    public function findUserById(string $id): ?User
+    {
+        /** @var User $user */
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+        return $user;
+    }
 }

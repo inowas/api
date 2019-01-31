@@ -76,9 +76,9 @@ final class MessageBoxController
         /** @var Command $command */
         $command = $commandClass::fromPayload($payload);
         $command->withAddedMetadata('user_id', $user->getId()->toString());
+        $command->withAddedMetadata('is_admin', in_array('ROLE_ADMIN', $user->getRoles()));
 
         $this->commandBus->dispatch($command);
-
         return new JsonResponse([], 202);
     }
 }

@@ -20,42 +20,49 @@ final class User implements UserInterface
      * @var Uuid
      *
      * @ORM\Id
-     * @ORM\Column(name="id", type="uuid", unique=true)
+     * @ORM\Column(name="id", type="uuid", unique=true, nullable=false)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, unique=true, nullable=false)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="enabled", type="boolean")
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="roles", type="json_array")
+     * @ORM\Column(name="archived", type="boolean", nullable=false)
      */
-    private $roles;
+    private $archived;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="profile", type="json_array")
+     * @ORM\Column(name="roles", type="json_array", nullable=false)
+     */
+    private $roles;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="profile", type="json_array", nullable=false)
      */
     private $profile;
 
@@ -81,6 +88,7 @@ final class User implements UserInterface
         $this->username = $username;
         $this->password = $password;
         $this->enabled = $enabled;
+        $this->archived = false;
         $this->roles = $roles;
         $this->profile = [];
     }
@@ -95,9 +103,19 @@ final class User implements UserInterface
         return $this->username;
     }
 
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 
     public function isEnabled(): bool
@@ -105,14 +123,39 @@ final class User implements UserInterface
         return $this->enabled;
     }
 
+    public function setEnabled(string $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): void
+    {
+        $this->archived = $archived;
+    }
+
     public function getRoles(): array
     {
         return $this->roles;
     }
 
+    public function setRoles(string $roles): void
+    {
+        $this->roles = $roles;
+    }
+
     public function getProfile(): array
     {
         return $this->profile;
+    }
+
+    public function setProfile(array $profile): void
+    {
+        $this->profile = $profile;
     }
 
     public function getSalt(): string

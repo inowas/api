@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\User\Event;
 
 use App\Entity\Event;
+use App\Model\User\Aggregate\UserAggregate;
 
 final class UserHasBeenCreated extends Event
 {
@@ -14,7 +15,8 @@ final class UserHasBeenCreated extends Event
     private $roles;
     private $enabled;
 
-    public const TYPE = 'userHasBeenCreated';
+    public const NAME = 'userHasBeenCreated';
+    public const AGGREGATE_NAME = UserAggregate::NAME;
 
     /**
      * @param string $aggregateId
@@ -25,8 +27,9 @@ final class UserHasBeenCreated extends Event
      * @return UserHasBeenCreated
      * @throws \Exception
      */
-    public static function fromParams(string $aggregateId, string $username, string $password, array $roles = [], bool $enabled = true) {
-        $self = new self($aggregateId, self::TYPE, [
+    public static function fromParams(string $aggregateId, string $username, string $password, array $roles = [], bool $enabled = true)
+    {
+        $self = new self($aggregateId, UserAggregate::NAME, self::NAME, [
             'username' => $username,
             'password' => $password,
             'roles' => $roles,
@@ -39,7 +42,6 @@ final class UserHasBeenCreated extends Event
         $self->enabled = $enabled;
         return $self;
     }
-
 
     public function username(): string
     {

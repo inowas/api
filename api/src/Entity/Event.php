@@ -19,7 +19,8 @@ class Event
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=36)
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -30,10 +31,16 @@ class Event
     protected $aggregateId;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=255)
+     * @var Uuid
+     * @ORM\Column(type="string", length=64)
      */
-    protected $type;
+    protected $aggregateName;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=64)
+     */
+    protected $eventName;
 
     /**
      * @var integer
@@ -55,17 +62,29 @@ class Event
     protected $created;
 
     /**
+     * @param Event $event
+     * @return Event
+     * @throws \Exception
+     */
+    public static function fromBaseClass(Event $event) {
+        $self = new static($event->aggregateId(), $event->aggregateName(), $event->eventName(), $event->payload());
+        return $self;
+    }
+
+    /**
      * Event constructor.
      * @param string $aggregateId
-     * @param string $type
+     * @param string $aggregateName
+     * @param string $eventName
      * @param array $payload
      * @throws \Exception
      */
-    protected function __construct(string $aggregateId, string $type, array $payload)
+    protected function __construct(string $aggregateId, string $aggregateName, string $eventName, array $payload)
     {
         $this->id = Uuid::uuid4()->toString();
         $this->aggregateId = $aggregateId;
-        $this->type = $type;
+        $this->aggregateName = $aggregateName;
+        $this->eventName = $eventName;
         $this->payload = $payload;
     }
 
@@ -84,6 +103,15 @@ class Event
     public function aggregateId(): string
     {
         return $this->aggregateId;
+    }
+
+    /**
+     * @return string
+     *
+     */
+    public function aggregateName(): string
+    {
+        return $this->aggregateName;
     }
 
     /**
@@ -111,9 +139,9 @@ class Event
     /**
      * @return string
      */
-    public function type(): string
+    public function eventName(): string
     {
-        return $this->type;
+        return $this->eventName;
     }
 
     /**
@@ -131,7 +159,7 @@ class Event
      */
     public function toBaseClass(): Event
     {
-        $self = new Event($this->aggregateId, $this->type, $this->payload);
+        $self = new Event($this->aggregateId(), $this->aggregateName(), $this->eventName(), $this->payload());
         $self->id = $this->id;
         $self->version = $this->version;
         return $self;
