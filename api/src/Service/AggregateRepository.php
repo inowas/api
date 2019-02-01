@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Event;
+use App\Model\Common\Aggregate;
 use App\Model\User\Aggregate\UserAggregate;
 use App\Model\User\Event\UserHasBeenArchived;
 use App\Model\User\Event\UserHasBeenCreated;
@@ -22,7 +23,7 @@ final class AggregateRepository
         UserAggregate::class
     ];
 
-    private $events =  [
+    private $events = [
         UserHasBeenArchived::class,
         UserHasBeenCreated::class,
         UserHasBeenDeleted::class,
@@ -81,10 +82,11 @@ final class AggregateRepository
 
     /**
      * @param string $aggregateId
-     * @return array
+     * @param bool $applyEvents
+     * @return Aggregate
      * @throws \Exception
      */
-    public function findAggregateById(string $aggregateId)
+    public function findAggregateById(string $aggregateId, bool $applyEvents = true): Aggregate
     {
         $event = $this->eventRepository->findOneBy(
             ['aggregateId' => $aggregateId],
@@ -100,8 +102,41 @@ final class AggregateRepository
         }
 
         $classname = $this->aggregateNamesMap[$event->aggregateName()];
+
+        /** @var Aggregate $aggregate */
         $aggregate = $classname::withId($aggregateId);
+
+        if ($applyEvents) {
+            $events = $this->findEventsByAggregateId($aggregateId);
+            foreach ($events as $event) {
+                $aggregate->apply($event);
+            }
+        }
+
         return $aggregate;
+    }
+
+    public function findEventsByAggregateId(string $aggregateId): array
+    {
+        $events = $this->eventRepository->findBy(
+            ['aggregateId' => $aggregateId],
+            ['version' => 'ASC']
+        );
+
+        /**
+         * @var int $key
+         * @var  Event $event
+         */
+        foreach ($events as $key => &$event) {
+            if (!array_key_exists($event->getEventName(), $this->eventNamesMap)) {
+                throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
+            }
+
+            $classname = $this->eventNamesMap[$event->getEventName()];
+            $event = $classname::fromBaseClass($event);
+        }
+
+        return $events;
     }
 
     /**

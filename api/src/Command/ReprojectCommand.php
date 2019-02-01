@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Model\Common\Projection;
+use App\Model\User\Projector\UserProjector;
 use App\Service\AggregateRepository;
 
-use App\Service\UserProjection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ final class ReprojectCommand extends Command
     protected $aggregateRepository;
     protected $projections;
 
-    public function __construct(AggregateRepository $aggregateRepository, UserProjection $userProjection)
+    public function __construct(AggregateRepository $aggregateRepository, UserProjector $userProjection)
     {
         $this->aggregateRepository = $aggregateRepository;
         $this->projections[] = $userProjection;

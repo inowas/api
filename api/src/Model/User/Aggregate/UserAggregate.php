@@ -9,6 +9,4 @@ use App\Model\Common\Aggregate;
 class UserAggregate extends Aggregate
 {
     public const NAME = 'user';
-
-
 }

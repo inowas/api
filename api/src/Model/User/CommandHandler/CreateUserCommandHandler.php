@@ -6,9 +6,9 @@ namespace App\Model\User\CommandHandler;
 
 use App\Model\User\Command\CreateUserCommand;
 use App\Model\User\Event\UserHasBeenCreated;
+use App\Model\User\Projector\UserProjector;
 use App\Service\AggregateRepository;
 use App\Service\UserManager;
-use App\Service\UserProjection;
 use Ramsey\Uuid\Uuid;
 
 class CreateUserCommandHandler
@@ -19,15 +19,15 @@ class CreateUserCommandHandler
     /** @var UserManager */
     private $userManager;
 
-    /** @var UserProjection */
-    private $userProjection;
+    /** @var UserProjector */
+    private $userProjector;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, UserProjection $userProjection)
+    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, UserProjector $userProjector)
     {
         $this->aggregateRepository = $aggregateRepository;
         $this->userManager = $userManager;
-        $this->userProjection = $userProjection;
+        $this->userProjector = $userProjector;
     }
 
     /**
@@ -53,6 +53,6 @@ class CreateUserCommandHandler
         );
 
         $this->aggregateRepository->storeEvent($event);
-        $this->userProjection->apply($event);
+        $this->userProjector->apply($event);
     }
 }

@@ -7,27 +7,27 @@ namespace App\Model\User\CommandHandler;
 use App\Entity\User;
 use App\Model\User\Command\ChangeUserProfileCommand;
 use App\Model\User\Event\UserProfileHasBeenChanged;
+use App\Model\User\Projector\UserProjector;
 use App\Service\AggregateRepository;
 use App\Service\UserManager;
-use App\Service\UserProjection;
 
 class ChangeUserProfileCommandHandler
 {
     /** @var AggregateRepository */
     private $aggregateRepository;
 
-    /** @var UserProjection */
-    private $userProjection;
+    /** @var UserProjector */
+    private $userProjector;
 
     /** @var UserManager */
     private $userManager;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, UserProjection $userProjection)
+    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, UserProjector $userProjector)
     {
         $this->aggregateRepository = $aggregateRepository;
         $this->userManager = $userManager;
-        $this->userProjection = $userProjection;
+        $this->userProjector = $userProjector;
     }
 
     /**
@@ -59,11 +59,11 @@ class ChangeUserProfileCommandHandler
 
         $aggregateId = $userId;
 
-        // This is a simple check if the aggregate exists
-        $this->aggregateRepository->findAggregateById($aggregateId);
+        // This is a simple check if the aggregate exists, so we do not need to apply any event
+        $this->aggregateRepository->findAggregateById($aggregateId, false);
 
         $event = UserProfileHasBeenChanged::fromParams($aggregateId, $command->profile());
         $this->aggregateRepository->storeEvent($event);
-        $this->userProjection->apply($event);
+        $this->userProjector->apply($event);
     }
 }

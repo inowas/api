@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Model\User\Projector;
 
 use App\Entity\Event;
 use App\Entity\User;
@@ -17,7 +17,7 @@ use App\Model\User\Event\UserPasswordHasBeenChanged;
 use App\Model\User\Event\UserProfileHasBeenChanged;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class UserProjection extends Projection
+final class UserProjector extends Projection
 {
 
     private $entityManager;
