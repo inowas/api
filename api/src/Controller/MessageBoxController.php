@@ -6,7 +6,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Model\Common\Command;
+use App\Model\User\Command\ChangeUsernameCommand;
+use App\Model\User\Command\ChangeUserPasswordCommand;
+use App\Model\User\Command\ChangeUserProfileCommand;
 use App\Model\User\Command\CreateUserCommand;
+use App\Model\User\Command\ReactivateUserCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -21,9 +25,8 @@ final class MessageBoxController
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    private $availableCommands = [
-        'createUser' => CreateUserCommand::class
-    ];
+    /** @var array */
+    private $availableCommands = [];
 
     public function __construct(MessageBusInterface $bus, TokenStorageInterface $tokenStorage)
     {
@@ -36,38 +39,20 @@ final class MessageBoxController
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function messagebox(Request $request): JsonResponse
     {
-        if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
-            return new JsonResponse(['message' => 'Expecting Header: Content-Type: application/json'], 322);
-        }
+        $this->availableCommands = [
+            'changeUsername' => ChangeUsernameCommand::class,
+            'changeUserPassword' => ChangeUserPasswordCommand::class,
+            'changeUserProfile' => ChangeUserProfileCommand::class,
+            'reactivateUser' => ReactivateUserCommand::class
+        ];
 
-        $body = \json_decode($request->getContent(), true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return new JsonResponse(['message' => 'Invalid JSON received.'], 322);
-        }
-
-        $message_name = $body['message_name'] ?? null;
-
-        if (!$message_name) {
-            return new JsonResponse(['message' => sprintf('Unknown Message Name: %s', $message_name)], 322);
-        }
-
-        $commandClass = $this->availableCommands[$message_name] ?? null;
-
-        if (!$commandClass) {
-            return new JsonResponse(['message' => sprintf('Unknown Message Name: %s', $message_name)], 322);
-        }
-
-        $payload = $body['payload'] ?? null;
-
-        if (!$payload) {
-            return new JsonResponse(['message' => 'Parameter payload expected.'], 322);
-        }
-
-        if (!is_array($payload)) {
-            return new JsonResponse(['message' => 'Payload is expected to be an object or array.'], 322);
+        try {
+            $commandClass = $this->extractCommandClass($request);
+            $payload = $this->extractPayload($request);
+        } catch (\Exception $e) {
+            return new JsonResponse(['message' => $e->getMessage()], 322);
         }
 
         /** @var User $user */
@@ -80,5 +65,93 @@ final class MessageBoxController
 
         $this->commandBus->dispatch($command);
         return new JsonResponse([], 202);
+    }
+
+    /**
+     * @Route("/register", name="register", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function register(Request $request): JsonResponse
+    {
+
+        $this->availableCommands = [
+            'createUser' => CreateUserCommand::class
+        ];
+
+        try {
+            $commandClass = $this->extractCommandClass($request);
+            $payload = $this->extractPayload($request);
+        } catch (\Exception $e) {
+            return new JsonResponse(['message' => $e->getMessage()], 322);
+        }
+
+        /** @var Command $command */
+        $command = $commandClass::fromPayload($payload);
+        $this->commandBus->dispatch($command);
+        return new JsonResponse([], 202);
+    }
+
+    /**
+     * @param Request $request
+     * @return Command
+     * @throws \Exception
+     */
+    private function extractCommandClass(Request $request): string
+    {
+        if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
+            throw new \RuntimeException('Expecting Header: Content-Type: application/json');
+        }
+
+        $body = \json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('Invalid JSON received.');
+        }
+
+        $message_name = $body['message_name'] ?? null;
+
+        if (!$message_name) {
+            throw new \Exception(sprintf('Unknown Message Name: %s', $message_name));
+        }
+
+        /** @var string $commandClass */
+        $commandClass = $this->availableCommands[$message_name] ?? null;
+
+        if (!$commandClass) {
+            throw new \Exception(sprintf('Unknown Message Name: %s', $message_name));
+        }
+
+        return $commandClass;
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     * @throws \Exception
+     */
+    private function extractPayload(Request $request): array
+    {
+        if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
+            throw new \Exception('Expecting Header: Content-Type: application/json');
+        }
+
+        $body = \json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('Invalid JSON received.');
+        }
+
+        $payload = $body['payload'] ?? null;
+
+        if (!$payload) {
+            throw new \Exception('Parameter payload expected.');
+        }
+
+        if (!is_array($payload)) {
+            throw new \Exception('Payload is expected to be an object or array.');
+        }
+
+        return $payload;
     }
 }

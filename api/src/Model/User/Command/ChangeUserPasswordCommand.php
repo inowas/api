@@ -15,11 +15,11 @@ class ChangeUserPasswordCommand extends Command
     {
         $self = new self();
         $self->userId = $payload['user_id'] ?? null;
-        $self->password = $payload['password'] ?? null;
+        $self->password = $payload['password'];
         return $self;
     }
 
-    public function password(): ?string
+    public function password(): string
     {
         return $this->password;
     }

@@ -67,6 +67,19 @@ final class User implements UserInterface
     private $profile;
 
     /**
+     * @param string $aggregateId
+     * @param string $username
+     * @param string $password
+     * @return User
+     * @throws \Exception
+     */
+    public static function withAggregateId(string $aggregateId, string $username, string $password) {
+        $self = new self($username, $password);
+        $self->id = Uuid::fromString($aggregateId);
+        return $self;
+    }
+
+    /**
      * User constructor.
      * @param string|null $username
      * @param string|null $password
@@ -74,16 +87,8 @@ final class User implements UserInterface
      * @param bool $enabled
      * @throws \Exception
      */
-    public function __construct(?string $username, ?string $password, array $roles = [], bool $enabled = true)
+    public function __construct(string $username, string $password, array $roles = [], bool $enabled = true)
     {
-        if ('' === $username || null === $username) {
-            throw new \InvalidArgumentException('The username cannot be empty.');
-        }
-
-        if ('' === $password || null === $password) {
-            throw new \InvalidArgumentException('The username cannot be empty.');
-        }
-
         $this->id = Uuid::uuid4();
         $this->username = $username;
         $this->password = $password;
@@ -123,7 +128,7 @@ final class User implements UserInterface
         return $this->enabled;
     }
 
-    public function setEnabled(string $enabled): void
+    public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
     }
@@ -143,7 +148,7 @@ final class User implements UserInterface
         return $this->roles;
     }
 
-    public function setRoles(string $roles): void
+    public function setRoles(array $roles): void
     {
         $this->roles = $roles;
     }

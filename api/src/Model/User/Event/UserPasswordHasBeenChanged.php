@@ -11,8 +11,6 @@ final class UserPasswordHasBeenChanged extends Event
 {
     private $password;
 
-    public const AGGREGATE_NAME = UserAggregate::NAME;
-
     /**
      * @param string $aggregateId
      * @param string $password
@@ -21,7 +19,7 @@ final class UserPasswordHasBeenChanged extends Event
      */
     public static function fromParams(string $aggregateId, string $password)
     {
-        $self = new self($aggregateId, self::AGGREGATE_NAME, self::eventName(), [
+        $self = new self($aggregateId, UserAggregate::NAME, self::getEventNameFromClassname(), [
             'password' => $password,
         ]);
 

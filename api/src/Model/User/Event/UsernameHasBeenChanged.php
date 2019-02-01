@@ -11,8 +11,6 @@ final class UsernameHasBeenChanged extends Event
 {
     private $username;
 
-    public const AGGREGATE_NAME = UserAggregate::NAME;
-
     /**
      * @param string $aggregateId
      * @param string $username
@@ -21,7 +19,7 @@ final class UsernameHasBeenChanged extends Event
      */
     public static function fromParams(string $aggregateId, string $username)
     {
-        $self = new self($aggregateId, self::AGGREGATE_NAME, self::eventName(), [
+        $self = new self($aggregateId, UserAggregate::NAME, self::getEventNameFromClassname(), [
             'username' => $username,
         ]);
 

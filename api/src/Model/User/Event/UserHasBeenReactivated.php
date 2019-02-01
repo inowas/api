@@ -9,8 +9,6 @@ use App\Model\User\Aggregate\UserAggregate;
 
 final class UserHasBeenReactivated extends Event
 {
-    public const AGGREGATE_NAME = UserAggregate::NAME;
-
     /**
      * @param string $aggregateId
      * @return UserHasBeenReactivated
@@ -18,7 +16,7 @@ final class UserHasBeenReactivated extends Event
      */
     public static function fromParams(string $aggregateId)
     {
-        $self = new self($aggregateId, self::AGGREGATE_NAME, self::eventName(), []);
+        $self = new self($aggregateId, UserAggregate::NAME, self::getEventNameFromClassname(), []);
         return $self;
     }
 }

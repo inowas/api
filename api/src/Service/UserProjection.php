@@ -10,6 +10,7 @@ use App\Model\Common\Projection;
 use App\Model\User\Aggregate\UserAggregate;
 use App\Model\User\Event\UserHasBeenArchived;
 use App\Model\User\Event\UserHasBeenCreated;
+use App\Model\User\Event\UserHasBeenDeleted;
 use App\Model\User\Event\UserHasBeenReactivated;
 use App\Model\User\Event\UsernameHasBeenChanged;
 use App\Model\User\Event\UserPasswordHasBeenChanged;
@@ -57,8 +58,27 @@ final class UserProjection extends Projection
      */
     protected function onUserHasBeenCreated(UserHasBeenCreated $event): void
     {
-        $user = new User($event->username(), $event->password(), $event->roles(), $event->isEnabled());
+        $user = User::withAggregateId($event->aggregateId(), $event->username(), $event->password());
+        $user->setRoles($event->roles());
+        $user->setEnabled($event->isEnabled());
         $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param UserHasBeenDeleted $event
+     * @throws \Exception
+     */
+    protected function onUserHasBeenDeleted(UserHasBeenDeleted $event): void
+    {
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy(['id' => $event->aggregateId()]);
+
+        if (!$user instanceof User) {
+            throw new \Exception(sprintf('User with id: %s not found.', $event->aggregateId()));
+        }
+
+        $this->entityManager->remove($user);
         $this->entityManager->flush();
     }
 

@@ -15,7 +15,7 @@ class ChangeUserProfileCommand extends Command
     {
         $self = new self();
         $self->userId = $payload['user_id'] ?? null;
-        $self->profile = $payload['profile'] ?? [];
+        $self->profile = $payload['profile'];
         return $self;
     }
 

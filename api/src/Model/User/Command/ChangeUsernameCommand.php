@@ -15,11 +15,11 @@ class ChangeUsernameCommand extends Command
     {
         $self = new self();
         $self->userId = $payload['user_id'] ?? null;
-        $self->username = $payload['username'] ?? null;
+        $self->username = $payload['username'];
         return $self;
     }
 
-    public function username(): ?string
+    public function username(): string
     {
         return $this->username;
     }

@@ -64,9 +64,9 @@ class Event
     /**
      * @return string
      */
-    public static function eventName(): string
+    public static function getEventNameFromClassname(): string
     {
-        return lcfirst(static::class);
+        return lcfirst(substr(static::class, strrpos(static::class, '\\') + 1));
     }
 
     /**
@@ -75,7 +75,7 @@ class Event
      * @throws \Exception
      */
     public static function fromBaseClass(Event $event) {
-        $self = new static($event->aggregateId(), $event->aggregateName(), $event->eventName(), $event->payload());
+        $self = new static($event->aggregateId(), $event->aggregateName(), $event->getEventNameFromClassname(), $event->payload());
         return $self;
     }
 
@@ -123,6 +123,14 @@ class Event
     }
 
     /**
+     * @return string
+     */
+    public function getEventName(): string
+    {
+        return $this->eventName;
+    }
+
+    /**
      * @return int
      */
     public function version(): int
@@ -159,7 +167,7 @@ class Event
      */
     public function toBaseClass(): Event
     {
-        $self = new Event($this->aggregateId(), $this->aggregateName(), $this->eventName(), $this->payload());
+        $self = new Event($this->aggregateId(), $this->aggregateName(), $this->getEventNameFromClassname(), $this->payload());
         $self->id = $this->id;
         $self->version = $this->version;
         return $self;
