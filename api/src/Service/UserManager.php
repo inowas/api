@@ -22,15 +22,6 @@ final class UserManager
     }
 
     /**
-     * @throws \Exception
-     */
-    public function list()
-    {
-        $userRepository = $this->entityManager->getRepository(User::class);
-        return $userRepository->findAll();
-    }
-
-    /**
      * @param string $password
      * @return string
      * @throws \Exception

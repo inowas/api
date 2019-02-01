@@ -68,8 +68,6 @@ final class AggregateRepository
          * @var  Event $event
          */
         foreach ($events as $key => &$event) {
-            var_dump($this->eventNamesMap, $event->getEventName());
-
             if (!array_key_exists($event->getEventName(), $this->eventNamesMap)) {
                 throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
             }
