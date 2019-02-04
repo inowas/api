@@ -16,11 +16,23 @@ abstract class Aggregate
      */
     protected $id;
 
+    public static $registeredEvents = [];
+
     public static function withId(string $id): Aggregate
     {
         $self = new static();
         $self->id = $id;
         return $self;
+    }
+
+    public static function eventMap(): array
+    {
+        $eventMap = [];
+        foreach (static::$registeredEvents as $classname) {
+            $eventMap[$classname::getEventNameFromClassname()] = $classname;
+        }
+
+        return $eventMap;
     }
 
     /**

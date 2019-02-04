@@ -7,13 +7,6 @@ namespace App\Service;
 use App\Entity\Event;
 use App\Model\Common\Aggregate;
 use App\Model\User\Aggregate\UserAggregate;
-use App\Model\User\Event\UserHasBeenArchived;
-use App\Model\User\Event\UserHasBeenCreated;
-use App\Model\User\Event\UserHasBeenDeleted;
-use App\Model\User\Event\UserHasBeenReactivated;
-use App\Model\User\Event\UsernameHasBeenChanged;
-use App\Model\User\Event\UserPasswordHasBeenChanged;
-use App\Model\User\Event\UserProfileHasBeenChanged;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -23,18 +16,8 @@ final class AggregateRepository
         UserAggregate::class
     ];
 
-    private $events = [
-        UserHasBeenArchived::class,
-        UserHasBeenCreated::class,
-        UserHasBeenDeleted::class,
-        UserHasBeenReactivated::class,
-        UsernameHasBeenChanged::class,
-        UserPasswordHasBeenChanged::class,
-        UserProfileHasBeenChanged::class
-    ];
-
-    private $aggregateNamesMap = [];
-    private $eventNamesMap = [];
+    private $aggregateMap = [];
+    private $eventMap = [];
 
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -47,18 +30,15 @@ final class AggregateRepository
         $this->entityManager = $entityManager;
         $this->eventRepository = $entityManager->getRepository(Event::class);
 
-        foreach ($this->events as $classname) {
-            $this->eventNamesMap[$classname::getEventNameFromClassname()] = $classname;
-        }
-
-        foreach ($this->aggregates as $classname) {
-            $this->aggregateNamesMap[$classname::NAME] = $classname;
+        /** @var Aggregate $aggregate */
+        foreach ($this->aggregates as $aggregate) {
+            $this->aggregateMap[$aggregate::NAME] = $aggregate;
+            array_merge($this->eventMap, $aggregate::eventMap());
         }
     }
 
     public function getEventsByAggregateName(string $aggregateName): array
     {
-
         $events = $this->eventRepository->findBy(
             ['aggregateName' => $aggregateName],
             ['id' => 'ASC']
@@ -69,11 +49,11 @@ final class AggregateRepository
          * @var  Event $event
          */
         foreach ($events as $key => &$event) {
-            if (!array_key_exists($event->getEventName(), $this->eventNamesMap)) {
+            if (!array_key_exists($event->getEventName(), $this->eventMap)) {
                 throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
             }
 
-            $classname = $this->eventNamesMap[$event->getEventName()];
+            $classname = $this->eventMap[$event->getEventName()];
             $event = $classname::fromBaseClass($event);
         }
 
@@ -97,11 +77,11 @@ final class AggregateRepository
             throw new \Exception('Unknown AggregateId');
         }
 
-        if (!array_key_exists($event->aggregateName(), $this->aggregateNamesMap)) {
+        if (!array_key_exists($event->aggregateName(), $this->aggregateMap)) {
             throw new \RuntimeException(sprintf('Missing aggregateType in aggregateMap class %s', \get_class($this)));
         }
 
-        $classname = $this->aggregateNamesMap[$event->aggregateName()];
+        $classname = $this->aggregateMap[$event->aggregateName()];
 
         /** @var Aggregate $aggregate */
         $aggregate = $classname::withId($aggregateId);
@@ -128,11 +108,11 @@ final class AggregateRepository
          * @var  Event $event
          */
         foreach ($events as $key => &$event) {
-            if (!array_key_exists($event->getEventName(), $this->eventNamesMap)) {
+            if (!array_key_exists($event->getEventName(), $this->eventMap)) {
                 throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
             }
 
-            $classname = $this->eventNamesMap[$event->getEventName()];
+            $classname = $this->eventMap[$event->getEventName()];
             $event = $classname::fromBaseClass($event);
         }
 
