@@ -22,11 +22,13 @@ class EventRepository extends ServiceEntityRepository
      */
     public function getVersion(string $aggregateId): int
     {
-        return $this->createQueryBuilder('e')
+        $result = $this->createQueryBuilder('e')
             ->select('count(e)')
             ->where('e.aggregateId = :aggregateId')
             ->setParameter('aggregateId', $aggregateId)
             ->getQuery()
             ->getSingleScalarResult();
+
+        return (int)$result;
     }
 }

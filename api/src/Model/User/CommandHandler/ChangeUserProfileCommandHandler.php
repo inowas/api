@@ -51,9 +51,7 @@ class ChangeUserProfileCommandHandler
             throw new \Exception('User not found');
         }
 
-        $diff = array_diff_assoc($user->getProfile(), $command->profile());
-
-        if (count($diff) === 0) {
+        if ($user->getProfile() == $command->profile()) {
             return; // Nothing to do here
         }
 

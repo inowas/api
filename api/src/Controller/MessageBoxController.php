@@ -6,10 +6,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Model\Common\Command;
+use App\Model\User\Command\ArchiveUserCommand;
 use App\Model\User\Command\ChangeUsernameCommand;
 use App\Model\User\Command\ChangeUserPasswordCommand;
 use App\Model\User\Command\ChangeUserProfileCommand;
 use App\Model\User\Command\CreateUserCommand;
+use App\Model\User\Command\DeleteUserCommand;
 use App\Model\User\Command\ReactivateUserCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,9 +44,11 @@ final class MessageBoxController
     public function messagebox(Request $request): JsonResponse
     {
         $this->availableCommands = [
+            'archiveUser' => ArchiveUserCommand::class,
             'changeUsername' => ChangeUsernameCommand::class,
             'changeUserPassword' => ChangeUserPasswordCommand::class,
             'changeUserProfile' => ChangeUserProfileCommand::class,
+            'deleteUser' => DeleteUserCommand::class,
             'reactivateUser' => ReactivateUserCommand::class
         ];
 
@@ -99,6 +103,7 @@ final class MessageBoxController
      */
     private function extractCommandClass(Request $request): string
     {
+
         if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
             throw new \RuntimeException('Expecting Header: Content-Type: application/json');
         }
@@ -144,7 +149,7 @@ final class MessageBoxController
 
         $payload = $body['payload'] ?? null;
 
-        if (!$payload) {
+        if (null === $payload) {
             throw new \Exception('Parameter payload expected.');
         }
 

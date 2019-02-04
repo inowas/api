@@ -2,16 +2,14 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class UserAuthenticationTest extends WebTestCase
+class UserAuthenticationTest extends CommandTestBaseClass
 {
 
     public function provider()
     {
         return [
-            ['admin', 'admin_pw', 200],
-            ['user', 'user_pw', 403]
+            ['admin', 'admin_pw', ['ROLE_ADMIN'], 200],
+            ['user', 'user_pw', ['ROLE_USER'], 403]
         ];
     }
 
@@ -19,24 +17,15 @@ class UserAuthenticationTest extends WebTestCase
      * @dataProvider provider
      * @param $username
      * @param $password
+     * @param $roles
      * @param $statusCode
+     * @throws \Exception
      */
-    public function testAuthentication($username, $password, $statusCode)
+    public function testAuthentication($username, $password, $roles, $statusCode)
     {
         $client = static::createClient();
-
-        $client->request(
-            'POST',
-            '/api/login_check',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            json_encode(["username" => $username, "password" => $password])
-        );
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $content = json_decode($client->getResponse()->getContent(), true);
-        $token = $content['token'];
+        $this->createUser($username, $password, $roles);
+        $token = $this->getToken($username, $password);
 
         $client->request(
             'GET',
