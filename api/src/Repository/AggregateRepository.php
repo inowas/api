@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Repository;
 
 use App\Entity\Event;
 use App\Model\Common\Aggregate;
 use App\Model\User\Aggregate\UserAggregate;
-use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class AggregateRepository

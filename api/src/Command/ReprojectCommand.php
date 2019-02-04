@@ -6,7 +6,7 @@ namespace App\Command;
 
 use App\Model\Common\Projection;
 use App\Model\User\Projector\UserProjector;
-use App\Service\AggregateRepository;
+use App\Repository\AggregateRepository;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

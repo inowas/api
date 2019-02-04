@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Model\User\Command\ChangeUsernameCommand;
 use App\Model\User\Event\UsernameHasBeenChanged;
 use App\Model\User\Projector\UserProjector;
-use App\Service\AggregateRepository;
+use App\Repository\AggregateRepository;
 use App\Service\UserManager;
 
 class ChangeUsernameCommandHandler

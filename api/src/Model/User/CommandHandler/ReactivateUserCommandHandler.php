@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Model\User\Command\ReactivateUserCommand;
 use App\Model\User\Event\UserHasBeenReactivated;
 use App\Model\User\Projector\UserProjector;
-use App\Service\AggregateRepository;
+use App\Repository\AggregateRepository;
 use App\Service\UserManager;
 
 class ReactivateUserCommandHandler

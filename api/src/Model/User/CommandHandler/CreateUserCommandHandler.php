@@ -7,7 +7,7 @@ namespace App\Model\User\CommandHandler;
 use App\Model\User\Command\CreateUserCommand;
 use App\Model\User\Event\UserHasBeenCreated;
 use App\Model\User\Projector\UserProjector;
-use App\Service\AggregateRepository;
+use App\Repository\AggregateRepository;
 use App\Service\UserManager;
 use Ramsey\Uuid\Uuid;
 
