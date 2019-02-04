@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Model\User\Command\CreateUserCommand;
 use App\Service\UserManager;
 
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class CreateUserCLICommand extends Command
+final class CreateUserCommand extends Command
 {
 
     protected static $defaultName = 'app:create-user';
@@ -54,8 +53,8 @@ final class CreateUserCLICommand extends Command
             throw new \Exception('Username ist not available already exits');
         }
 
-        /** @var CreateUserCommand $command */
-        $command = CreateUserCommand::fromParams($username, $password);
+        /** @var \App\Model\User\Command\CreateUserCommand $command */
+        $command = \App\Model\User\Command\CreateUserCommand::fromParams($username, $password);
         $command->withAddedMetadata('user_id', 'CLI');
         $this->commandBus->dispatch($command);
         $output->writeln('User successfully generated!');
