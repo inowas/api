@@ -32,7 +32,7 @@ final class AggregateRepository
         /** @var Aggregate $aggregate */
         foreach ($this->aggregates as $aggregate) {
             $this->aggregateMap[$aggregate::NAME] = $aggregate;
-            array_merge($this->eventMap, $aggregate::eventMap());
+            $this->eventMap = array_merge($this->eventMap, $aggregate::eventMap());
         }
     }
 
@@ -65,7 +65,7 @@ final class AggregateRepository
      * @return Aggregate
      * @throws \Exception
      */
-    public function findAggregateById(string $aggregateId, bool $applyEvents = true): Aggregate
+    public function findAggregateById(string $aggregateId): Aggregate
     {
         $event = $this->eventRepository->findOneBy(
             ['aggregateId' => $aggregateId],
@@ -84,12 +84,9 @@ final class AggregateRepository
 
         /** @var Aggregate $aggregate */
         $aggregate = $classname::withId($aggregateId);
-
-        if ($applyEvents) {
-            $events = $this->findEventsByAggregateId($aggregateId);
-            foreach ($events as $event) {
-                $aggregate->apply($event);
-            }
+        $events = $this->findEventsByAggregateId($aggregateId);
+        foreach ($events as $event) {
+            $aggregate->apply($event);
         }
 
         return $aggregate;

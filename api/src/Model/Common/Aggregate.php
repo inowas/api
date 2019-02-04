@@ -53,6 +53,9 @@ abstract class Aggregate
 
     public function apply(Event $e): void
     {
+        if (!in_array(get_class($e), static::$registeredEvents)){
+            throw new \InvalidArgumentException(sprintf('Class %s is not in the list of registeredEvents', get_class($e)));
+        }
         $handler = $this->determineEventMethodFor($e);
         if (method_exists($this, $handler)) {
             $this->{$handler}($e);

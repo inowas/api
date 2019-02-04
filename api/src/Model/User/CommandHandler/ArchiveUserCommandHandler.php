@@ -52,11 +52,10 @@ class ArchiveUserCommandHandler
         }
 
         $aggregateId = $userId;
-
-        // This is a simple check if the aggregate exists, so we do not need to apply any event
-        $this->aggregateRepository->findAggregateById($aggregateId, false);
-
         $event = UserHasBeenArchived::fromParams($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate->apply($event);
+
         $this->aggregateRepository->storeEvent($event);
         $this->userProjector->apply($event);
     }

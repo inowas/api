@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\User\CommandHandler;
 
+use App\Model\User\Aggregate\UserAggregate;
 use App\Model\User\Command\CreateUserCommand;
 use App\Model\User\Event\UserHasBeenCreated;
 use App\Model\User\Projector\UserProjector;
@@ -51,6 +52,9 @@ class CreateUserCommandHandler
         $event = UserHasBeenCreated::fromParams(
             $aggregateId, $username, $encryptedPassword, $roles, $isEnabled
         );
+
+        $aggregate = UserAggregate::withId($aggregateId);
+        $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);
         $this->userProjector->apply($event);

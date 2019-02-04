@@ -52,12 +52,12 @@ class ChangeUserPasswordCommandHandler
         }
 
         $newPassword = $this->userManager->encryptPassword($command->password());
+
         $aggregateId = $userId;
-
-        // This is a simple check if the aggregate exists, so we do not need to apply any event
-        $this->aggregateRepository->findAggregateById($aggregateId, false);
-
         $event = UserPasswordHasBeenChanged::fromParams($aggregateId, $newPassword);
+        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate->apply($event);
+
         $this->aggregateRepository->storeEvent($event);
         $this->userProjector->apply($event);
     }
