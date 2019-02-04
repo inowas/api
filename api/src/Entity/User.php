@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
- * @ApiResource
+ *
+ * @ApiResource(attributes={"access_control"="is_granted('ROLE_ADMIN')"})
  */
 final class User implements UserInterface
 {
