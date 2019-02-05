@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Domain\Common\DomainEvent;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
@@ -15,7 +16,7 @@ use Ramsey\Uuid\Uuid;
  * @ORM\Table(name="events")
  * @ORM\HasLifecycleCallbacks
  */
-class Event
+class Event extends DomainEvent
 {
     /**
      * @ORM\Id
@@ -26,19 +27,19 @@ class Event
 
     /**
      * @var Uuid
-     * @ORM\Column(type="string", length=36)
+     * @ORM\Column(type="string", length=36, nullable=false)
      */
     protected $aggregateId;
 
     /**
      * @var Uuid
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     protected $aggregateName;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     protected $eventName;
 
@@ -55,11 +56,11 @@ class Event
     protected $payload = [];
 
     /**
-     * @var \datetime $created
+     * @var \DateTimeImmutable $createdAt
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime_immutable")
      */
-    protected $created;
+    protected $createdAt;
 
     /**
      * @return string
@@ -138,9 +139,15 @@ class Event
         return $this->version;
     }
 
+    /**
+     * @param int $version
+     * @return Event
+     * @throws \Exception
+     */
     public function withVersion(int $version): self
     {
         $this->version = $version;
+        $this->createdAt = new \DateTimeImmutable('now');
         return $this;
     }
 
@@ -153,12 +160,20 @@ class Event
     }
 
     /**
+     * @return \DateTimeImmutable
+     */
+    public function createdAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @ORM\PrePersist
      * @throws \Exception
      */
     public function onPrePersist(): void
     {
-        $this->created = new \DateTime('now');
+        $this->createdAt = new \DateTimeImmutable('now');
     }
 
     /**

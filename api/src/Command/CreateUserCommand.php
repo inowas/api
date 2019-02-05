@@ -53,8 +53,8 @@ final class CreateUserCommand extends Command
             throw new \Exception('Username ist not available already exits');
         }
 
-        /** @var \App\Model\User\Command\CreateUserCommand $command */
-        $command = \App\Model\User\Command\CreateUserCommand::fromParams($username, $password);
+        /** @var \App\Domain\User\Command\CreateUserCommand $command */
+        $command = \App\Domain\User\Command\CreateUserCommand::fromParams($username, $password);
         $command->withAddedMetadata('user_id', 'CLI');
         $this->commandBus->dispatch($command);
         $output->writeln('User successfully generated!');

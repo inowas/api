@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Event;
-use App\Model\Common\Aggregate;
-use App\Model\User\Aggregate\UserAggregate;
+use App\Domain\Common\Aggregate;
+use App\Domain\User\Aggregate\UserAggregate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 

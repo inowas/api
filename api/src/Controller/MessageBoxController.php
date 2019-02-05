@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Entity\User;
-use App\Model\Common\Command;
-use App\Model\User\Command\ArchiveUserCommand;
-use App\Model\User\Command\ChangeUsernameCommand;
-use App\Model\User\Command\ChangeUserPasswordCommand;
-use App\Model\User\Command\ChangeUserProfileCommand;
-use App\Model\User\Command\CreateUserCommand;
-use App\Model\User\Command\DeleteUserCommand;
-use App\Model\User\Command\ReactivateUserCommand;
+use App\Domain\Common\Command;
+use App\Domain\User\Command\ArchiveUserCommand;
+use App\Domain\User\Command\ChangeUsernameCommand;
+use App\Domain\User\Command\ChangeUserPasswordCommand;
+use App\Domain\User\Command\ChangeUserProfileCommand;
+use App\Domain\User\Command\CreateUserCommand;
+use App\Domain\User\Command\DeleteUserCommand;
+use App\Domain\User\Command\ReactivateUserCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -49,7 +50,8 @@ final class MessageBoxController
             'changeUserPassword' => ChangeUserPasswordCommand::class,
             'changeUserProfile' => ChangeUserProfileCommand::class,
             'deleteUser' => DeleteUserCommand::class,
-            'reactivateUser' => ReactivateUserCommand::class
+            'reactivateUser' => ReactivateUserCommand::class,
+            'createToolInstance' => CreateToolInstanceCommand::class
         ];
 
         try {

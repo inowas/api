@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Model\Common\Projector;
-use App\Model\User\Projector\UserProjector;
+use App\Domain\Common\Projector;
+use App\Domain\User\Projector\UserProjector;
 use App\Repository\AggregateRepository;
 
 use Doctrine\Common\Collections\ArrayCollection;
