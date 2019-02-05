@@ -7,7 +7,7 @@ namespace App\Domain\ToolInstance\CommandHandler;
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
-use App\Domain\ToolInstance\Projector\ToolInstanceProjector;
+use App\Domain\ToolInstance\Projection\ToolInstanceProjector;
 use App\Repository\AggregateRepository;
 
 class CreateToolInstanceCommandHandler

@@ -2,8 +2,8 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\ToolInstance;
-use App\Entity\User;
+use App\Model\ToolInstance;
+use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 

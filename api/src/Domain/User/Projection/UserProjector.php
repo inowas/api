@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\Projector;
+namespace App\Domain\User\Projection;
 
-use App\Entity\User;
-use App\Domain\Common\Projector;
+use App\Model\User;
+use App\Model\Projector;
 use App\Domain\User\Aggregate\UserAggregate;
 use App\Domain\User\Event\UserHasBeenArchived;
 use App\Domain\User\Event\UserHasBeenCreated;

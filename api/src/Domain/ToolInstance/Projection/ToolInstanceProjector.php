@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\ToolInstance\Projector;
+namespace App\Domain\ToolInstance\Projection;
 
-use App\Domain\Common\Projector;
+use App\Model\Projector;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
-use App\Entity\ToolInstance;
-use App\Entity\User;
+use App\Model\ToolInstance;
+use App\Model\User;
 use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 

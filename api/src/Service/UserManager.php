@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
+use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

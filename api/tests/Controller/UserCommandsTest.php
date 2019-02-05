@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\User;
+use App\Model\User;
 
 class UserCommandsTest extends CommandTestBaseClass
 {

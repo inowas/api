@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
-use App\Entity\User;
-use App\Domain\Common\Command;
+use App\Model\User;
+use App\Model\Command;
 use App\Domain\User\Command\ArchiveUserCommand;
 use App\Domain\User\Command\ChangeUsernameCommand;
 use App\Domain\User\Command\ChangeUserPasswordCommand;

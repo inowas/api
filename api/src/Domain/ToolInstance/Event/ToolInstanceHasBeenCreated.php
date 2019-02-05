@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Event;
 
-use App\Domain\Common\DomainEvent;
+use App\Model\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 
 final class ToolInstanceHasBeenCreated extends DomainEvent

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Common;
+namespace App\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

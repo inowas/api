@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Aggregate;
 
-use App\Domain\Common\Aggregate;
+use App\Model\Aggregate;
 use App\Domain\User\Event\UserHasBeenArchived;
 use App\Domain\User\Event\UserHasBeenCreated;
 use App\Domain\User\Event\UserHasBeenDeleted;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Domain\Common\Aggregate;
-use App\Domain\Common\DomainEvent;
+use App\Model\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
+use App\Model\Aggregate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 

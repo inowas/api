@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Command;
 
-use App\Domain\Common\Command;
+use App\Model\Command;
 
 class UpdateToolInstanceCommand extends Command
 {

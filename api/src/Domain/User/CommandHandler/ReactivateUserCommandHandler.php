@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\User\CommandHandler;
 
-use App\Entity\User;
+use App\Model\User;
 use App\Domain\User\Command\ReactivateUserCommand;
 use App\Domain\User\Event\UserHasBeenReactivated;
-use App\Domain\User\Projector\UserProjector;
+use App\Domain\User\Projection\UserProjector;
 use App\Repository\AggregateRepository;
 use App\Service\UserManager;
 

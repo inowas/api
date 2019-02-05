@@ -35,5 +35,5 @@ services:
         resource: '../src/Domain/*/Projector'
         tags: ['app.projector']        
         
-    App\Domain\Common\ProjectorCollection:
+    App\Model\ProjectorCollection:
         arguments: [!tagged app.projector]

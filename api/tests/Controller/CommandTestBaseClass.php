@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\User;
+use App\Model\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

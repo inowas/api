@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\User\CommandHandler;
 
-use App\Entity\User;
+use App\Repository\AggregateRepository;
 use App\Domain\User\Command\ChangeUsernameCommand;
 use App\Domain\User\Event\UsernameHasBeenChanged;
-use App\Domain\User\Projector\UserProjector;
-use App\Repository\AggregateRepository;
+use App\Domain\User\Projection\UserProjector;
+use App\Model\User;
 use App\Service\UserManager;
 
 class ChangeUsernameCommandHandler

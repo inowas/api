@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Event;
 
-use App\Domain\Common\DomainEvent;
+use App\Model\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 
 final class UserProfileHasBeenChanged extends DomainEvent
