@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Event;
 
-use App\Entity\Event;
+use App\Domain\Common\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 
-final class UserHasBeenCreated extends Event
+final class UserHasBeenCreated extends DomainEvent
 {
 
     private $username;

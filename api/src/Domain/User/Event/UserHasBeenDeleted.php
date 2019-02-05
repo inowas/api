@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Event;
 
-use App\Entity\Event;
+use App\Domain\Common\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 
-final class UserHasBeenDeleted extends Event
+final class UserHasBeenDeleted extends DomainEvent
 {
     /**
      * @param string $aggregateId
