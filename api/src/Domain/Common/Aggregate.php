@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Common;
 
-use App\Entity\Event;
-
 abstract class Aggregate
 {
 
@@ -51,7 +49,7 @@ abstract class Aggregate
         return self::NAME;
     }
 
-    public function apply(Event $e): void
+    public function apply(DomainEvent $e): void
     {
         if (!in_array(get_class($e), static::$registeredEvents)){
             throw new \InvalidArgumentException(sprintf('Class %s is not in the list of registeredEvents', get_class($e)));
@@ -62,7 +60,7 @@ abstract class Aggregate
         }
     }
 
-    protected function determineEventMethodFor(Event $e): string
+    protected function determineEventMethodFor(DomainEvent $e): string
     {
         return 'when' . implode(\array_slice(explode('\\', \get_class($e)), -1));
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Event;
 use App\Domain\Common\Aggregate;
+use App\Domain\Common\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +28,7 @@ final class AggregateRepository
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->eventRepository = $entityManager->getRepository(Event::class);
+        $this->eventRepository = $entityManager->getRepository(DomainEvent::class);
 
         /** @var Aggregate $aggregate */
         foreach ($this->aggregates as $aggregate) {
@@ -94,17 +94,17 @@ final class AggregateRepository
     }
 
     /**
-     * @param Event $event
+     * @param DomainEvent $event
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Exception
      */
-    public function storeEvent(Event $event): bool
+    public function storeEvent(DomainEvent $event): bool
     {
         $version = $this->eventRepository->getVersion($event->aggregateId());
         $event->withVersion($version);
 
-        if (is_subclass_of($event, Event::class)) {
+        if (is_subclass_of($event, DomainEvent::class)) {
             $event = $event->toBaseClass();
         }
 
@@ -122,7 +122,7 @@ final class AggregateRepository
     {
         $events = new ArrayCollection($this->eventRepository->findBy($criteria, $orderBy));
         return $events->map(function ($event) {
-            /** @var Event $event */
+            /** @var DomainEvent $event */
             if (!array_key_exists($event->getEventName(), $this->eventMap)) {
                 throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
             }
