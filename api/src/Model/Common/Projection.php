@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Common;
 
 use App\Entity\Event;
+use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class Projection
 {
@@ -18,10 +19,10 @@ abstract class Projection
         $this->onEvent($e);
     }
 
-    public function recreateFromHistory(array $events): void
+    public function recreateFromHistory(ArrayCollection $events): void
     {
         $this->truncateTable();
-        foreach ($events as $event) {
+        foreach ($events->getIterator() as $event) {
             $this->onEvent($event);
         }
     }

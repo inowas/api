@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\Event;
 use App\Model\Common\Aggregate;
 use App\Model\User\Aggregate\UserAggregate;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class AggregateRepository
@@ -36,83 +37,60 @@ final class AggregateRepository
         }
     }
 
-    public function getEventsByAggregateName(string $aggregateName): array
+    /**
+     * @param string $aggregateName
+     * @return ArrayCollection
+     */
+    public function findAllEventsByAggregateName(string $aggregateName): ArrayCollection
     {
-        $events = $this->eventRepository->findBy(
+        return $this->getEventCollectionBy(
             ['aggregateName' => $aggregateName],
             ['id' => 'ASC']
         );
-
-        /**
-         * @var int $key
-         * @var  Event $event
-         */
-        foreach ($events as $key => &$event) {
-            if (!array_key_exists($event->getEventName(), $this->eventMap)) {
-                throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
-            }
-
-            $classname = $this->eventMap[$event->getEventName()];
-            $event = $classname::fromBaseClass($event);
-        }
-
-        return $events;
     }
 
     /**
      * @param string $aggregateId
-     * @param bool $applyEvents
      * @return Aggregate
      * @throws \Exception
      */
     public function findAggregateById(string $aggregateId): Aggregate
     {
-        $event = $this->eventRepository->findOneBy(
-            ['aggregateId' => $aggregateId],
-            ['id' => 'ASC']
-        );
+        /** @var ArrayCollection $events */
+        $events = $this->findEventsByAggregateId($aggregateId);
 
-        if (!$event instanceof Event) {
+        if ($events->isEmpty()) {
             throw new \Exception('Unknown AggregateId');
         }
 
-        if (!array_key_exists($event->aggregateName(), $this->aggregateMap)) {
+        if (!array_key_exists($events->first()->aggregateName(), $this->aggregateMap)) {
             throw new \RuntimeException(sprintf('Missing aggregateType in aggregateMap class %s', \get_class($this)));
         }
 
-        $classname = $this->aggregateMap[$event->aggregateName()];
+        $classname = $this->aggregateMap[$events->first()->aggregateName()];
 
         /** @var Aggregate $aggregate */
         $aggregate = $classname::withId($aggregateId);
+
+        /** @var ArrayCollection $events */
         $events = $this->findEventsByAggregateId($aggregateId);
-        foreach ($events as $event) {
+        foreach ($events->getIterator() as $event) {
             $aggregate->apply($event);
         }
 
         return $aggregate;
     }
 
-    public function findEventsByAggregateId(string $aggregateId): array
+    /**
+     * @param string $aggregateId
+     * @return ArrayCollection
+     */
+    public function findEventsByAggregateId(string $aggregateId): ArrayCollection
     {
-        $events = $this->eventRepository->findBy(
+        return $this->getEventCollectionBy(
             ['aggregateId' => $aggregateId],
             ['version' => 'ASC']
         );
-
-        /**
-         * @var int $key
-         * @var  Event $event
-         */
-        foreach ($events as $key => &$event) {
-            if (!array_key_exists($event->getEventName(), $this->eventMap)) {
-                throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
-            }
-
-            $classname = $this->eventMap[$event->getEventName()];
-            $event = $classname::fromBaseClass($event);
-        }
-
-        return $events;
     }
 
     /**
@@ -133,5 +111,25 @@ final class AggregateRepository
         $this->entityManager->persist($event);
         $this->entityManager->flush();
         return true;
+    }
+
+    /**
+     * @param array $criteria
+     * @param array $orderBy
+     * @return ArrayCollection
+     */
+    private function getEventCollectionBy(array $criteria, array $orderBy = []): ArrayCollection
+    {
+        $events = new ArrayCollection($this->eventRepository->findBy($criteria, $orderBy));
+        return $events->map(function ($event) {
+            /** @var Event $event */
+            if (!array_key_exists($event->getEventName(), $this->eventMap)) {
+                throw new \RuntimeException(sprintf('Missing eventType in eventMap class %s', \get_class($this)));
+            }
+
+            $classname = $this->eventMap[$event->getEventName()];
+            $event = $classname::fromBaseClass($event);
+            return $event;
+        });
     }
 }

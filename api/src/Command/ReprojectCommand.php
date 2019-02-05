@@ -8,6 +8,7 @@ use App\Model\Common\Projection;
 use App\Model\User\Projector\UserProjector;
 use App\Repository\AggregateRepository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -66,7 +67,9 @@ final class ReprojectCommand extends Command
          */
         foreach ($this->projections as $key => $projection) {
             if ($key+1 == $aggregateName || $projection->aggregateName() === $aggregateName) {
-                $events = $this->aggregateRepository->getEventsByAggregateName($projection->aggregateName());
+
+                /** @var ArrayCollection $events */
+                $events = $this->aggregateRepository->findAllEventsByAggregateName($projection->aggregateName());
                 $projection->recreateFromHistory($events);
                 $output->writeln(sprintf('Projection %s successfully recreated with %d events.', $projection->aggregateName(), count($events)));
                 return;
