@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Projection;
 
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Model\Projector;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Model\ToolInstance;
@@ -44,6 +45,30 @@ final class ToolInstanceProjector extends Projector
         $toolInstance->setDescription($event->description());
         $toolInstance->setIsPublic($event->isPublic());
         $toolInstance->setData($event->data());
+        $toolInstance->setUserId($event->userId());
+        $toolInstance->setUsername($username);
+        $toolInstance->setCreatedAt($event->createdAt());
+        $this->entityManager->persist($toolInstance);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param ToolInstanceHasBeenCloned $event
+     * @throws \Exception
+     */
+    protected function onToolInstanceHasBeenCloned(ToolInstanceHasBeenCloned $event): void
+    {
+        $user = $this->userManager->findUserById($event->userId());
+        $username = ($user instanceof User) ? $user->getUsername() : '';
+
+        $toolInstance = $this->toolInstanceRepository->findOneBy(['id' => $event->baseId()]);
+
+        if (!($toolInstance instanceof ToolInstance)) {
+            throw new \Exception('ToolInstance not found');
+        }
+
+        $toolInstance = clone $toolInstance;
+        $toolInstance->setId($event->aggregateId());
         $toolInstance->setUserId($event->userId());
         $toolInstance->setUsername($username);
         $toolInstance->setCreatedAt($event->createdAt());

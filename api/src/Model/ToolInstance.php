@@ -6,7 +6,6 @@ namespace App\Model;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity
@@ -27,7 +26,7 @@ final class ToolInstance
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
@@ -80,6 +79,10 @@ final class ToolInstance
      */
     protected $createdAt;
 
+    public function __clone()
+    {
+        $this->id = null;
+    }
 
     public static function createFromId(string $id, string $tool): ToolInstance
     {
@@ -101,9 +104,9 @@ final class ToolInstance
     }
 
     /**
-     * @param Uuid $id
+     * @param string $id
      */
-    public function setId(Uuid $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }

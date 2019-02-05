@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Model\User;
 use App\Model\Command;
@@ -51,7 +52,8 @@ final class MessageBoxController
             'changeUserProfile' => ChangeUserProfileCommand::class,
             'deleteUser' => DeleteUserCommand::class,
             'reactivateUser' => ReactivateUserCommand::class,
-            'createToolInstance' => CreateToolInstanceCommand::class
+            'cloneToolInstance' => CloneToolInstanceCommand::class,
+            'createToolInstance' => CreateToolInstanceCommand::class,
         ];
 
         try {
