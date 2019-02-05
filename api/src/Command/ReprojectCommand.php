@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Model\Common\Projection;
+use App\Model\Common\Projector;
 use App\Model\User\Projector\UserProjector;
 use App\Repository\AggregateRepository;
 
@@ -53,7 +53,7 @@ final class ReprojectCommand extends Command
             $output->writeln('');
 
             /**
-             * @var Projection $projection
+             * @var Projector $projection
              */
             foreach ($this->projections as $key => $projection) {
                 $output->writeln(sprintf('%d: %s', $key+1, $projection->aggregateName()));
@@ -63,7 +63,7 @@ final class ReprojectCommand extends Command
         }
 
         /**
-         * @var Projection $projection
+         * @var Projector $projection
          */
         foreach ($this->projections as $key => $projection) {
             if ($key+1 == $aggregateName || $projection->aggregateName() === $aggregateName) {

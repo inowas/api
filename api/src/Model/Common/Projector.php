@@ -7,7 +7,7 @@ namespace App\Model\Common;
 use App\Entity\Event;
 use Doctrine\Common\Collections\ArrayCollection;
 
-abstract class Projection
+abstract class Projector
 {
 
     abstract public function aggregateName(): string;

@@ -6,7 +6,7 @@ namespace App\Model\User\Projector;
 
 use App\Entity\Event;
 use App\Entity\User;
-use App\Model\Common\Projection;
+use App\Model\Common\Projector;
 use App\Model\User\Aggregate\UserAggregate;
 use App\Model\User\Event\UserHasBeenArchived;
 use App\Model\User\Event\UserHasBeenCreated;
@@ -17,7 +17,7 @@ use App\Model\User\Event\UserPasswordHasBeenChanged;
 use App\Model\User\Event\UserProfileHasBeenChanged;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class UserProjector extends Projection
+final class UserProjector extends Projector
 {
 
     private $entityManager;
