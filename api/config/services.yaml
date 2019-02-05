@@ -30,3 +30,10 @@ services:
         resource: '../src/Domain/*/CommandHandler'
         tags: ['messenger.message_handler']
         
+    projectors:
+        namespace: App\Domain\
+        resource: '../src/Domain/*/Projector'
+        tags: ['app.projector']        
+        
+    App\Domain\Common\ProjectorCollection:
+        arguments: [!tagged app.projector]

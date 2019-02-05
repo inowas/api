@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Domain\Common\Projector;
-use App\Domain\User\Projector\UserProjector;
+use App\Domain\Common\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,10 +22,10 @@ final class ReprojectCommand extends Command
     protected $aggregateRepository;
     protected $projections;
 
-    public function __construct(AggregateRepository $aggregateRepository, UserProjector $userProjection)
+    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projections)
     {
         $this->aggregateRepository = $aggregateRepository;
-        $this->projections[] = $userProjection;
+        $this->projections = $projections->toArray();
         parent::__construct();
     }
 
