@@ -12,11 +12,11 @@ class DeleteToolInstanceCommand extends Command
     private $id;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public static function commandName(): string
+    public static function getJsonSchema(): ?string
     {
-        return 'deleteToolInstance';
+        return 'https://schema.inowas.com/commands/deleteToolInstance.json';
     }
 
     /**

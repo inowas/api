@@ -56,7 +56,6 @@ class CommandTestBaseClass extends WebTestCase
     {
         $headers = $token ? ['HTTP_Authorization' => sprintf('Bearer %s',  $token)] : [];
         $headers['CONTENT_TYPE'] = 'application/json';
-
         $client = static::createClient();
         $client->request(
             'POST',

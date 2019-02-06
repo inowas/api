@@ -17,6 +17,9 @@ use App\Domain\User\Command\ChangeUserProfileCommand;
 use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Command\DeleteUserCommand;
 use App\Domain\User\Command\ReactivateUserCommand;
+use Swaggest\JsonSchema\Exception;
+use Swaggest\JsonSchema\InvalidValue;
+use Swaggest\JsonSchema\Schema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -71,9 +74,19 @@ final class MessageBoxController
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 
-        $message_name = $this->getMessageName($request);
-        $payload = $this->getPayload($request);
-        $commandClass = $this->availableCommands[$message_name];
+        # extract message
+        $message = $this->getMessage($request);
+        $messageName = $message['message_name'];
+        $payload = $message['payload'];
+
+        /** @var Command $commandClass */
+        $commandClass = $this->availableCommands[$messageName];
+
+        try {
+            $commandClass::getJsonSchema() && $this->validateSchema($commandClass::getJsonSchema(), $request->getContent());
+        } catch (\Exception $e) {
+            return new JsonResponse(['message' => $e->getMessage()], 322);
+        }
 
         /** @var Command $command */
         $command = $commandClass::fromPayload($payload);
@@ -104,9 +117,18 @@ final class MessageBoxController
             return new JsonResponse(['message' => $e->getMessage()], 322);
         }
 
-        $message_name = $this->getMessageName($request);
-        $payload = $this->getPayload($request);
-        $commandClass = $this->availableCommands[$message_name];
+        $message = $this->getMessage($request);
+        $messageName = $message['message_name'];
+        $payload = $message['payload'];
+
+        /** @var Command $commandClass */
+        $commandClass = $this->availableCommands[$messageName];
+
+        try {
+            $commandClass::getJsonSchema() && $this->validateSchema($commandClass::getJsonSchema(), $request->getContent());
+        } catch (\Exception $e) {
+            return new JsonResponse(['message' => $e->getMessage()], 322);
+        }
 
         /** @var Command $command */
         $command = $commandClass::fromPayload($payload);
@@ -160,13 +182,20 @@ final class MessageBoxController
         }
     }
 
-    private function getMessageName(Request $request): string
+    private function getMessage(Request $request): array
     {
-        return json_decode($request->getContent(), true)['message_name'];
+        return json_decode($request->getContent(), true);
     }
 
-    private function getPayload(Request $request): array
+    /**
+     * @param $schema
+     * @param $content
+     * @throws Exception
+     * @throws InvalidValue
+     */
+    private function validateSchema(string $schema, string $content): void
     {
-        return json_decode($request->getContent(), true)['payload'];
+        $schema = Schema::import($schema);
+        $schema->in(json_decode($content));
     }
 }

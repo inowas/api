@@ -9,8 +9,6 @@ use Ramsey\Uuid\Uuid;
 
 class ToolInstanceCommandsTest extends CommandTestBaseClass
 {
-
-
     /**
      * @test
      * @throws \Exception
@@ -32,7 +30,9 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $toolInstanceId = Uuid::uuid4()->toString();
 
         $command = [
+            'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'createToolInstance',
+            'metadata' => (object) [],
             'payload' => [
                 'id' => $toolInstanceId,
                 'tool' => 'T0TEST',
@@ -80,7 +80,9 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $user = self::$container->get('doctrine')->getRepository(User::class)->findOneByUsername($username);
 
         $command = [
+            'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'cloneToolInstance',
+            'metadata' => (object) [],
             'payload' => [
                 'id' => $newId,
                 'base_id' => $oldToolInstance->getId()
@@ -126,7 +128,9 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $user = self::$container->get('doctrine')->getRepository(User::class)->findOneByUsername($username);
 
         $command = [
+            'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'updateToolInstance',
+            'metadata' => (object) [],
             'payload' => [
                 'id' => $toolInstance->getId(),
                 'name' => 'ToolNewName',
@@ -168,7 +172,9 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
 
         static::createClient();
         $command = [
+            'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'deleteToolInstance',
+            'metadata' => (object) [],
             'payload' => [
                 'id' => $toolInstance->getId(),
             ]

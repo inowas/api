@@ -8,18 +8,15 @@ use App\Model\Command;
 
 class CloneToolInstanceCommand extends Command
 {
-
-
-
     private $id;
     private $baseId;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public static function commandName(): string
+    public static function getJsonSchema(): ?string
     {
-        return 'cloneToolInstance';
+        return 'https://schema.inowas.com/commands/cloneToolInstance.json';
     }
 
     /**

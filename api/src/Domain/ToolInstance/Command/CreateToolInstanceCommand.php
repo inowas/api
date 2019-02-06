@@ -17,11 +17,11 @@ class CreateToolInstanceCommand extends Command
     private $data;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public static function commandName(): string
+    public static function getJsonSchema(): ?string
     {
-        return 'createToolInstance';
+        return 'https://schema.inowas.com/commands/createToolInstance.json';
     }
 
     /**
