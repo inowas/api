@@ -31,7 +31,6 @@ class CreateToolInstanceCommandHandler
      */
     public function __invoke(CreateToolInstanceCommand $command)
     {
-
         $userId = $command->metadata()['user_id'];
 
         $id = $command->id();
@@ -40,7 +39,6 @@ class CreateToolInstanceCommandHandler
         $description = $command->description();
         $isPublic = $command->isPublic();
         $data = $command->data();
-
 
         $aggregateId = $id;
         $event = ToolInstanceHasBeenCreated::fromParams($userId, $aggregateId, $tool, $name, $description, $isPublic, $data);

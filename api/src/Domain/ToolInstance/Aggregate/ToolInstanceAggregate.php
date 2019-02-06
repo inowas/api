@@ -8,7 +8,7 @@ use App\Model\Aggregate;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 
-class ToolInstanceAggregate extends Aggregate
+final class ToolInstanceAggregate extends Aggregate
 {
     public const NAME = 'toolInstance';
 
@@ -16,4 +16,32 @@ class ToolInstanceAggregate extends Aggregate
         ToolInstanceHasBeenCreated::class,
         ToolInstanceHasBeenCloned::class
     ];
+
+    protected $userId;
+
+    protected $isPublic;
+
+    protected function whenToolInstanceHasBeenCloned(ToolInstanceHasBeenCloned $event): void
+    {
+        $this->aggregateId = $event->aggregateId();
+        $this->userId = $event->userId();
+        $this->isPublic = $event->isPublic();
+    }
+
+    protected function whenToolInstanceHasBeenCreated(ToolInstanceHasBeenCreated $event): void
+    {
+        $this->aggregateId = $event->aggregateId();
+        $this->userId = $event->userId();
+        $this->isPublic = $event->isPublic();
+    }
+
+    public function userId(): string
+    {
+        return $this->userId;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->isPublic;
+    }
 }

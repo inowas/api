@@ -12,16 +12,9 @@ abstract class Aggregate
     /**
      * @var string
      */
-    protected $id;
+    protected $aggregateId;
 
     public static $registeredEvents = [];
-
-    public static function withId(string $id): Aggregate
-    {
-        $self = new static();
-        $self->id = $id;
-        return $self;
-    }
 
     public static function eventMap(): array
     {
@@ -33,17 +26,22 @@ abstract class Aggregate
         return $eventMap;
     }
 
-    /**
-     * @return string
-     */
-    public function id(): string
+    public static function withId(string $id): Aggregate
     {
-        return $this->id;
+        $self = new static();
+        $self->aggregateId = $id;
+        return $self;
     }
 
-    /**
-     * @return string
-     */
+    protected function __construct()
+    {
+    }
+
+    public function aggregateId(): string
+    {
+        return $this->aggregateId;
+    }
+
     public function name(): string
     {
         return self::NAME;
@@ -51,7 +49,7 @@ abstract class Aggregate
 
     public function apply(DomainEvent $e): void
     {
-        if (!in_array(get_class($e), static::$registeredEvents)){
+        if (!in_array(get_class($e), static::$registeredEvents)) {
             throw new \InvalidArgumentException(sprintf('Class %s is not in the list of registeredEvents', get_class($e)));
         }
         $handler = $this->determineEventMethodFor($e);

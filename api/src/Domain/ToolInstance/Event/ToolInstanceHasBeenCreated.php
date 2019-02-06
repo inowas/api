@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Event;
 
+use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Model\DomainEvent;
-use App\Domain\User\Aggregate\UserAggregate;
 
 final class ToolInstanceHasBeenCreated extends DomainEvent
 {
@@ -30,7 +30,7 @@ final class ToolInstanceHasBeenCreated extends DomainEvent
      */
     public static function fromParams(string $userId, string $aggregateId, string $tool, string $name, string $description, bool $isPublic, array $data = [])
     {
-        $self = new self($aggregateId, UserAggregate::NAME, self::getEventNameFromClassname(), [
+        $self = new self($aggregateId, ToolInstanceAggregate::NAME, self::getEventNameFromClassname(), [
             'user_id' => $userId,
             'tool' => $tool,
             'name' => $name,

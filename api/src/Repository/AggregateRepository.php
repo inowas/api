@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Model\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 use App\Model\Aggregate;
@@ -13,7 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 final class AggregateRepository
 {
     private $aggregates = [
-        UserAggregate::class
+        UserAggregate::class,
+        ToolInstanceAggregate::class
     ];
 
     private $aggregateMap = [];
@@ -74,6 +76,7 @@ final class AggregateRepository
 
         /** @var ArrayCollection $events */
         $events = $this->findEventsByAggregateId($aggregateId);
+
         foreach ($events->getIterator() as $event) {
             $aggregate->apply($event);
         }

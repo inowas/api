@@ -31,17 +31,32 @@ class CloneToolInstanceCommandHandler
      */
     public function __invoke(CloneToolInstanceCommand $command)
     {
-
         $userId = $command->metadata()['user_id'];
         $baseId = $command->baseId();
-        $newId = $command->id();
+        $originId = $command->baseId();
+        $cloneId = $command->id();
 
-        $aggregateId = $newId;
-        $event = ToolInstanceHasBeenCloned::fromParams($userId, $newId, $baseId);
+        # Get the original toolInstance
+        /** @var ToolInstanceAggregate $original */
+        $original = $this->aggregateRepository->findAggregateById($originId);
+
+        # The user needs to be the owner of the model or the model has to be public
+        $canBeCloned = ($userId === $original->userId() || true === $original->isPublic());
+        if (!$canBeCloned) {
+            throw new \Exception('The tool cannot be cloned due to permission problems.');
+        }
+
+        $aggregateId = $cloneId;
         $aggregate = ToolInstanceAggregate::withId($aggregateId);
+        $event = ToolInstanceHasBeenCloned::fromParams($userId, $aggregateId, $baseId, $original->isPublic());
+
+        # Then the event can be applied
         $aggregate->apply($event);
 
+        # Stored
         $this->aggregateRepository->storeEvent($event);
+
+        # Projected
         $this->toolInstanceProjector->apply($event);
     }
 }
