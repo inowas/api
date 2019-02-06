@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
+use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
 use App\Model\User;
 use App\Model\Command;
 use App\Domain\User\Command\ArchiveUserCommand;
@@ -54,6 +55,7 @@ final class MessageBoxController
             'reactivateUser' => ReactivateUserCommand::class,
             'cloneToolInstance' => CloneToolInstanceCommand::class,
             'createToolInstance' => CreateToolInstanceCommand::class,
+            'updateToolInstance' => UpdateToolInstanceCommand::class,
         ];
 
         try {

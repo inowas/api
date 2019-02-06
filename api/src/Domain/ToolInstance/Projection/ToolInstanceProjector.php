@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Projection;
 
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 use App\Model\Projector;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Model\ToolInstance;
@@ -72,6 +73,31 @@ final class ToolInstanceProjector extends Projector
         $toolInstance->setUserId($event->userId());
         $toolInstance->setUsername($username);
         $toolInstance->setCreatedAt($event->createdAt());
+        $this->entityManager->persist($toolInstance);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param ToolInstanceHasBeenUpdated $event
+     * @throws \Exception
+     */
+    protected function onToolInstanceHasBeenUpdated(ToolInstanceHasBeenUpdated $event): void
+    {
+        $user = $this->userManager->findUserById($event->userId());
+        $username = ($user instanceof User) ? $user->getUsername() : '';
+
+        $toolInstance = $this->toolInstanceRepository->findOneBy(['id' => $event->aggregateId()]);
+
+        if (!($toolInstance instanceof ToolInstance)) {
+            throw new \Exception('ToolInstance not found');
+        }
+
+        $event->name() && $toolInstance->setName($event->name());
+        $event->description() && $toolInstance->setDescription($event->description());
+        $event->isPublic() && $toolInstance->setIsPublic($event->isPublic());
+        $event->data() && $toolInstance->setData($event->data());
+        $toolInstance->setUsername($username);
+
         $this->entityManager->persist($toolInstance);
         $this->entityManager->flush();
     }

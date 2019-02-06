@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Aggregate;
 
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 use App\Model\Aggregate;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
@@ -14,7 +15,8 @@ final class ToolInstanceAggregate extends Aggregate
 
     public static $registeredEvents = [
         ToolInstanceHasBeenCreated::class,
-        ToolInstanceHasBeenCloned::class
+        ToolInstanceHasBeenCloned::class,
+        ToolInstanceHasBeenUpdated::class
     ];
 
     protected $userId;

@@ -38,27 +38,27 @@ class UpdateToolInstanceCommand extends Command
         return $self;
     }
 
-    public function getId(): string
+    public function id(): string
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function getDescription(): string
+    public function description(): string
     {
         return $this->description;
     }
 
-    public function getPublic(): bool
+    public function isPublic(): bool
     {
         return $this->public;
     }
 
-    public function getData(): array
+    public function data(): array
     {
         return $this->data;
     }
