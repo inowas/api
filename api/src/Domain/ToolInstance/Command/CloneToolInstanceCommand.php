@@ -9,6 +9,8 @@ use App\Model\Command;
 class CloneToolInstanceCommand extends Command
 {
 
+
+
     private $id;
     private $baseId;
 

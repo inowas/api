@@ -47,28 +47,33 @@ final class MessageBoxController
      */
     public function messagebox(Request $request): JsonResponse
     {
-        $this->availableCommands = [
-            'archiveUser' => ArchiveUserCommand::class,
-            'changeUsername' => ChangeUsernameCommand::class,
-            'changeUserPassword' => ChangeUserPasswordCommand::class,
-            'changeUserProfile' => ChangeUserProfileCommand::class,
-            'deleteUser' => DeleteUserCommand::class,
-            'reactivateUser' => ReactivateUserCommand::class,
-            'cloneToolInstance' => CloneToolInstanceCommand::class,
-            'createToolInstance' => CreateToolInstanceCommand::class,
-            'deleteToolInstance' => DeleteToolInstanceCommand::class,
-            'updateToolInstance' => UpdateToolInstanceCommand::class,
+        $availableCommands = [
+            ArchiveUserCommand::class,
+            ChangeUsernameCommand::class,
+            ChangeUserPasswordCommand::class,
+            ChangeUserProfileCommand::class,
+            DeleteUserCommand::class,
+            ReactivateUserCommand::class,
+            CloneToolInstanceCommand::class,
+            CreateToolInstanceCommand::class,
+            DeleteToolInstanceCommand::class,
+            UpdateToolInstanceCommand::class,
         ];
 
+        $this->setAvailableCommands($availableCommands);
+
         try {
-            $commandClass = $this->extractCommandClass($request);
-            $payload = $this->extractPayload($request);
+            $this->assertIsValidRequest($request);
         } catch (\Exception $e) {
             return new JsonResponse(['message' => $e->getMessage()], 322);
         }
 
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+
+        $message_name = $this->getMessageName($request);
+        $payload = $this->getPayload($request);
+        $commandClass = $this->availableCommands[$message_name];
 
         /** @var Command $command */
         $command = $commandClass::fromPayload($payload);
@@ -83,20 +88,25 @@ final class MessageBoxController
      * @Route("/register", name="register", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
+     * @throws \Exception
      */
     public function register(Request $request): JsonResponse
     {
-
-        $this->availableCommands = [
-            'createUser' => CreateUserCommand::class
+        $availableCommands = [
+            CreateUserCommand::class
         ];
 
+        $this->setAvailableCommands($availableCommands);
+
         try {
-            $commandClass = $this->extractCommandClass($request);
-            $payload = $this->extractPayload($request);
+            $this->assertIsValidRequest($request);
         } catch (\Exception $e) {
             return new JsonResponse(['message' => $e->getMessage()], 322);
         }
+
+        $message_name = $this->getMessageName($request);
+        $payload = $this->getPayload($request);
+        $commandClass = $this->availableCommands[$message_name];
 
         /** @var Command $command */
         $command = $commandClass::fromPayload($payload);
@@ -104,12 +114,18 @@ final class MessageBoxController
         return new JsonResponse([], 202);
     }
 
+    private function setAvailableCommands(array $availableCommands): void
+    {
+        foreach ($availableCommands as $command) {
+            $this->availableCommands[$command::getMessageName()] = $command;
+        }
+    }
+
     /**
      * @param Request $request
-     * @return Command
      * @throws \Exception
      */
-    private function extractCommandClass(Request $request): string
+    private function assertIsValidRequest(Request $request): void
     {
 
         if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -125,34 +141,16 @@ final class MessageBoxController
         $message_name = $body['message_name'] ?? null;
 
         if (!$message_name) {
-            throw new \Exception(sprintf('Unknown Message Name: %s', $message_name));
+            throw new \Exception(sprintf('Parameter message_name not given or null.'));
         }
 
-        /** @var string $commandClass */
-        $commandClass = $this->availableCommands[$message_name] ?? null;
-
-        if (!$commandClass) {
-            throw new \Exception(sprintf('Unknown Message Name: %s', $message_name));
-        }
-
-        return $commandClass;
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     * @throws \Exception
-     */
-    private function extractPayload(Request $request): array
-    {
-        if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
-            throw new \Exception('Expecting Header: Content-Type: application/json');
-        }
-
-        $body = \json_decode($request->getContent(), true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception('Invalid JSON received.');
+        if (!array_key_exists($message_name, $this->availableCommands)) {
+            throw new \Exception(
+                sprintf(
+                    'MessageName: %s not in the list of available commands. Available commands are: %s.',
+                    $message_name, implode(', ', array_keys($this->availableCommands))
+                )
+            );
         }
 
         $payload = $body['payload'] ?? null;
@@ -160,11 +158,15 @@ final class MessageBoxController
         if (null === $payload) {
             throw new \Exception('Parameter payload expected.');
         }
+    }
 
-        if (!is_array($payload)) {
-            throw new \Exception('Payload is expected to be an object or array.');
-        }
+    private function getMessageName(Request $request): string
+    {
+        return json_decode($request->getContent(), true)['message_name'];
+    }
 
-        return $payload;
+    private function getPayload(Request $request): array
+    {
+        return json_decode($request->getContent(), true)['payload'];
     }
 }

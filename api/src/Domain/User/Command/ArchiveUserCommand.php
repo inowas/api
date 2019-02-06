@@ -6,7 +6,7 @@ namespace App\Domain\User\Command;
 
 use App\Model\Command;
 
-class ArchiveUserCommand extends Command
+final class ArchiveUserCommand extends Command
 {
     private $userId;
 
