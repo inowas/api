@@ -30,7 +30,7 @@ class DeleteToolInstanceCommand extends Command
         return $self;
     }
 
-    public function getId(): string
+    public function id(): string
     {
         return $this->id;
     }

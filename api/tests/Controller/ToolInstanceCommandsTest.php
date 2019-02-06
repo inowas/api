@@ -152,4 +152,34 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $this->assertEquals($user->getId()->toString(), $toolInstance->getUserId());
         $this->assertEquals($user->getUsername(), $toolInstance->getUsername());
     }
+
+    /**
+     * @test
+     * @depends aToolCanBeCreated
+     * @param array $credentials
+     * @throws \Exception
+     */
+    public function aToolCanBeDeleted(array $credentials)
+    {
+        /** @var ToolInstance $toolInstance */
+        $toolInstance = $credentials['toolInstance'];
+        $username = $credentials['username'];
+        $password = $credentials['password'];
+
+        static::createClient();
+        $command = [
+            'message_name' => 'deleteToolInstance',
+            'payload' => [
+                'id' => $toolInstance->getId(),
+            ]
+        ];
+
+        $token = $this->getToken($username, $password);
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ToolInstance $toolInstance */
+        $toolInstance = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($toolInstance->getId());
+        $this->assertNull($toolInstance);
+    }
 }

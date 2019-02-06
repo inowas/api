@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Projection;
 
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 use App\Model\Projector;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
@@ -99,6 +100,17 @@ final class ToolInstanceProjector extends Projector
         $toolInstance->setUsername($username);
 
         $this->entityManager->persist($toolInstance);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param ToolInstanceHasBeenDeleted $event
+     * @throws \Exception
+     */
+    protected function onToolInstanceHasBeenDeleted(ToolInstanceHasBeenDeleted $event): void
+    {
+        $toolInstance = $this->toolInstanceRepository->findOneBy(['id' => $event->aggregateId()]);
+        $this->entityManager->remove($toolInstance);
         $this->entityManager->flush();
     }
 

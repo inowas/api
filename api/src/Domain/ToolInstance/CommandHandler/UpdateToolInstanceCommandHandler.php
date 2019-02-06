@@ -52,8 +52,14 @@ class UpdateToolInstanceCommandHandler
         $data = $command->data() == $toolInstanceFromProjection->getData() ? null : $command->data();
 
         $aggregateId = $id;
+        /** @var ToolInstanceAggregate $aggregate */
+        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
         $event = ToolInstanceHasBeenUpdated::fromParams($userId, $aggregateId, $name, $description, $isPublic, $data);
-        $aggregate = ToolInstanceAggregate::withId($aggregateId);
+
+        if ($aggregate->userId() !== $userId) {
+            throw new \Exception('The tool cannot be cloned due to permission problems.');
+        }
+
         $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);

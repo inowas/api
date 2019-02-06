@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Aggregate;
 
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 use App\Model\Aggregate;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 
 final class ToolInstanceAggregate extends Aggregate
 {
@@ -16,6 +17,7 @@ final class ToolInstanceAggregate extends Aggregate
     public static $registeredEvents = [
         ToolInstanceHasBeenCreated::class,
         ToolInstanceHasBeenCloned::class,
+        ToolInstanceHasBeenDeleted::class,
         ToolInstanceHasBeenUpdated::class
     ];
 
