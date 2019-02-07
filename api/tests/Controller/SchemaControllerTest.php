@@ -15,13 +15,12 @@ class SchemaControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request(
             'GET',
-            '/schema/',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json']
+            '/schema'
         );
 
-        $this->assertEquals('commands, geojson, modflow', $client->getResponse()->getContent());
+        $this->assertContains('<a href="/schema/commands">commands</a>', $client->getResponse()->getContent());
+        $this->assertContains('<a href="/schema/geojson">geojson</a>', $client->getResponse()->getContent());
+        $this->assertContains('<a href="/schema/modflow">modflow</a>', $client->getResponse()->getContent());
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
     /**
