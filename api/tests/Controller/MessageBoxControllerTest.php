@@ -4,7 +4,7 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class MessageBoxTest extends WebTestCase
+class MessageBoxControllerTest extends WebTestCase
 {
     /**
      * @test

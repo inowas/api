@@ -16,7 +16,7 @@ class DeleteToolInstanceCommand extends Command
      */
     public static function getJsonSchema(): ?string
     {
-        return 'https://schema.inowas.com/commands/deleteToolInstance.json';
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/deleteToolInstance.json');
     }
 
     /**

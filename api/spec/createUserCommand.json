@@ -1,7 +1,0 @@
-{
-    "message_name": "createUser",
-    "payload": {
-        "username": "robert",
-        "password": "12345"
-    }
-}

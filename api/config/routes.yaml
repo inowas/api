@@ -2,15 +2,12 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-controllers:
-    resource: '../src/Controller/'
-    type:     annotation
-    prefix:   'api'
-    
-api:
-    resource: '.'
-    type: 'api_platform'
-    prefix: 'api'    
-
 api_login_check:
     path: /api/login_check
+
+schema:
+    path: /schema/{path}
+    controller: App\Controller\SchemaController::index
+    methods: [GET]
+    requirements: 
+        path: .*

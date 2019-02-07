@@ -16,7 +16,7 @@ class CloneToolInstanceCommand extends Command
      */
     public static function getJsonSchema(): ?string
     {
-        return 'https://schema.inowas.com/commands/cloneToolInstance.json';
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/cloneToolInstance.json');
     }
 
     /**

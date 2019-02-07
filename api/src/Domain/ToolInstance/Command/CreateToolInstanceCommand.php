@@ -21,7 +21,7 @@ class CreateToolInstanceCommand extends Command
      */
     public static function getJsonSchema(): ?string
     {
-        return 'https://schema.inowas.com/commands/createToolInstance.json';
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/createToolInstance.json');
     }
 
     /**

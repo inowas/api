@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://schema.inowas.com/",
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "message_name": {
+      "type": "string",
+      "pattern": "^updateBoundary$"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "boundary_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_\\-]{3,255}$"
+        },
+        "boundary": {
+          "$ref": "/modflow/boundary/boundary"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "boundary",
+        "boundary_id"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "uuid",
+    "message_name",
+    "metadata",
+    "payload"
+  ]
+}

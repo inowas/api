@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "point",
+    "description": "Point as defined by GeoJSON",
+    "type": "object",
+    "required": [
+        "type",
+        "coordinates"
+    ],
+    "properties": {
+        "type": {
+            "enum": [
+                "Point"
+            ]
+        },
+        "coordinates": {
+            "$ref": "#/definitions/position"
+        }
+    },
+    "definitions": {
+        "position": {
+            "description": "A single position",
+            "type": "array",
+            "minItems": 2,
+            "items": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "number"
+                }
+            ],
+            "additionalItems": false
+        }
+    }
+}

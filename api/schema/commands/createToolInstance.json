@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://schema.inowas.com/",
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "message_name": {
+      "type": "string",
+      "pattern": "^createToolInstance$"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "tool": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 255
+        },
+        "description": {
+          "type": "string"
+        },
+        "data": {},
+        "public": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "tool",
+        "name",
+        "description",
+        "public"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "uuid",
+    "message_name",
+    "metadata",
+    "payload"
+  ]
+}
