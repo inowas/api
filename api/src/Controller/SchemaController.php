@@ -4,15 +4,37 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class SchemaController
+final class SchemaController extends AbstractController
 {
+    /**
+     * @return Response
+     */
+    public function index(): Response
+    {
+        $schemaBasePath = __DIR__ . '/../../schema/';
+        $realBase = realpath($schemaBasePath);
+
+        try {
+            $scandir = scandir($realBase);
+        } catch (\Exception $e) {
+            return new Response('Not found', Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->render(
+            'schema_folders.html.twig',
+            ['path' => '/', 'scandir' => $scandir]
+        );
+    }
+
     /**
      * @param string $path
      * @return Response
      */
-    public function index(string $path): Response
+    public function withPath(string $path): Response
     {
 
         $schemaBasePath = __DIR__ . '/../../schema/';
@@ -27,7 +49,8 @@ final class SchemaController
 
         if ($this->endsWith($path, '.json')) {
             try {
-                return new Response(file_get_contents($realUserPath));
+                $content = file_get_contents($realUserPath);
+                return new JsonResponse($content, 200, [], true);
             } catch (\Exception $exception) {
                 return new Response('Not found', Response::HTTP_NOT_FOUND);
             }
@@ -39,8 +62,12 @@ final class SchemaController
             return new Response('Not found', Response::HTTP_NOT_FOUND);
         }
 
-        return new Response(implode(', ', array_diff($scandir, ['.', '..'])));
+        return $this->render(
+            'schema_folders.html.twig',
+            ['path' => $path, 'scandir' => $scandir]
+        );
     }
+
 
     private function endsWith($haystack, $needle)
     {

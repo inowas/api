@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index of {{ app.request.pathinfo }}</title>
+</head>
+<body>
+<h1>Index of {{ app.request.pathinfo }}</h1>
+<table>
+    <tr>
+        <th>Name</th>
+    </tr>
+    <tr>
+        <th colspan="5">
+            <hr>
+        </th>
+    </tr>
+    {% for folder in scandir %}
+        <tr>
+            <td><a href="{{ app.request.pathinfo }}/{{ folder }}">{{ folder }}</a></td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <th colspan="5">
+            <hr>
+        </th>
+    </tr>
+</table>
+</body>
+</html>

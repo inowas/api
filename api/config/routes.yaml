@@ -5,9 +5,14 @@
 api_login_check:
     path: /api/login_check
 
-schema:
-    path: /schema/{path}
+schema_home:
+    path: /schema
     controller: App\Controller\SchemaController::index
     methods: [GET]
-    requirements: 
+
+schema_path:
+    path: /schema/{path}
+    controller: App\Controller\SchemaController::withPath
+    methods: [GET]
+    requirements:
         path: .*
