@@ -41,8 +41,8 @@
         "active_cells": {
           "$ref": "/modflow/activeCells"
         },
-        "stress_periods": {
-          "$ref": "/modflow/stressPeriods"
+        "stressperiods": {
+          "$ref": "/modflow/stressperiods"
         },
         "length_unit": {
           "description": "0: undefined, 1: feet, 2: meters, 3: centimeters",

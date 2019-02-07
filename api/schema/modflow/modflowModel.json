@@ -45,8 +45,8 @@
             "$ref": "/modflow/activeCells"
         },
         "mt3dms": {},
-        "stress_periods": {
-            "$ref": "/modflow/stressPeriods"
+        "stressperiods": {
+            "$ref": "/modflow/stressperiods"
         }
     },
     "additionalProperties": true,

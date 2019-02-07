@@ -15,10 +15,10 @@
             "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
             "enum": [0, 1, 2, 3, 4, 5]
         },
-        "stress_periods": {
+        "stressperiods": {
             "type": "array",
             "items": {
-                "$ref": "/modflow/stressPeriod"
+                "$ref": "/modflow/stressperiod"
             },
             "minItems": 1
         }
@@ -28,6 +28,6 @@
         "start_date_time",
         "end_date_time",
         "time_unit",
-        "stress_periods"
+        "stressperiods"
     ]
 }
