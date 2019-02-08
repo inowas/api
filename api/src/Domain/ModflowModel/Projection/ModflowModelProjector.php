@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Domain\ModflowModel\Projection;
 
 use App\Domain\ModflowModel\Aggregate\ModflowModelAggregate;
+use App\Domain\ModflowModel\Event\CalculationStateHasBeenChanged;
 use App\Domain\ModflowModel\Event\ModflowModelHasBeenCreated;
 use App\Domain\ModflowModel\Event\ModflowModelHasBeenDeleted;
 use App\Domain\ModflowModel\Event\ModflowModelHasBeenUpdated;
+use App\Domain\ModflowModel\Event\OptimizationStateHasBeenChanged;
 use App\Model\ModflowModel;
 use App\Model\Projector;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +28,19 @@ class ModflowModelProjector extends Projector
     public function aggregateName(): string
     {
         return ModflowModelAggregate::NAME;
+    }
+
+    /**
+     * @param CalculationStateHasBeenChanged $event
+     * @throws \Exception
+     */
+    protected function onCalculationStateHasBeenChanged(CalculationStateHasBeenChanged $event): void
+    {
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->modflowModelRepository->findOneBy(['id' => $event->aggregateId()]);
+        $modflowModel->setCalculation($event->calculation());
+        $this->entityManager->persist($modflowModel);
+        $this->entityManager->flush();
     }
 
     /**
@@ -80,6 +95,19 @@ class ModflowModelProjector extends Projector
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->modflowModelRepository->findOneBy(['id' => $event->aggregateId()]);
         $this->entityManager->remove($modflowModel);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param OptimizationStateHasBeenChanged $event
+     * @throws \Exception
+     */
+    protected function onOptimizationStateHasBeenChanged(OptimizationStateHasBeenChanged $event): void
+    {
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->modflowModelRepository->findOneBy(['id' => $event->aggregateId()]);
+        $modflowModel->setOptimization($event->optimization());
+        $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }
 

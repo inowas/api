@@ -6,11 +6,13 @@ namespace App\Domain\ModflowModel\CommandHandler;
 
 use App\Domain\ModflowModel\Aggregate\ModflowModelAggregate;
 use App\Domain\ModflowModel\Command\CalculateModflowModelCommand;
+use App\Domain\ModflowModel\Command\CalculateOptimizationCommand;
 use App\Domain\ModflowModel\Event\CalculationStateHasBeenChanged;
+use App\Domain\ModflowModel\Event\OptimizationStateHasBeenChanged;
 use App\Domain\ModflowModel\Projection\ModflowModelProjector;
 use App\Repository\AggregateRepository;
 
-class CalculateModflowModelCommandHandler
+class CalculateOptimizationCommandHandler
 {
     /** @var AggregateRepository */
     private $aggregateRepository;
@@ -26,12 +28,14 @@ class CalculateModflowModelCommandHandler
     }
 
     /**
-     * @param CalculateModflowModelCommand $command
+     * @param CalculateOptimizationCommand $command
      * @throws \Exception
      */
-    public function __invoke(CalculateModflowModelCommand $command)
+    public function __invoke(CalculateOptimizationCommand $command)
     {
         $modelId = $command->id();
+        $optimizationId = $command->optimizationId();
+        $isInitial = $command->isInitial();
         $userId = $command->metadata()['user_id'];
 
         /** @var ModflowModelAggregate $modelAggregate */
@@ -42,12 +46,12 @@ class CalculateModflowModelCommandHandler
         }
 
         # Todo
-        # send to calculate
+        # send to optimize
 
         # Todo define calculation
-        $calculation = [];
+        $optimization = [];
 
-        $event = CalculationStateHasBeenChanged::fromParams($userId, $modelId, $calculation);
+        $event = OptimizationStateHasBeenChanged::fromParams($userId, $modelId, $optimization);
         $modelAggregate->apply($event);
 
         # Stored
