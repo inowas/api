@@ -61,6 +61,13 @@ final class ModflowModel
     /**
      * @var array
      *
+     * @ORM\Column(name="soilmodel", type="json_array")
+     */
+    private $soilmodel = [];
+
+    /**
+     * @var array
+     *
      * @ORM\Column(name="boundaries", type="json_array")
      */
     private $boundaries = [];
@@ -75,16 +82,16 @@ final class ModflowModel
     /**
      * @var array
      *
-     * @ORM\Column(name="soilmodel", type="json_array")
+     * @ORM\Column(name="calculation", type="json_array")
      */
-    private $soilmodel = [];
+    private $calculation = [];
 
     /**
      * @var array
      *
-     * @ORM\Column(name="calculation", type="json_array")
+     * @ORM\Column(name="optimization", type="json_array")
      */
-    private $calculation = [];
+    private $optimization = [];
 
     /**
      * @var array
@@ -297,6 +304,22 @@ final class ModflowModel
     public function setIsPublic(bool $isPublic): void
     {
         $this->isPublic = $isPublic;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptimization(): array
+    {
+        return $this->optimization;
+    }
+
+    /**
+     * @param array $optimization
+     */
+    public function setOptimization(array $optimization): void
+    {
+        $this->optimization = $optimization;
     }
 
     /**
