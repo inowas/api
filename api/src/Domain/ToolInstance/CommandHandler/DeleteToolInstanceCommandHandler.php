@@ -37,7 +37,7 @@ class DeleteToolInstanceCommandHandler
         $aggregateId = $id;
 
         /** @var ToolInstanceAggregate $aggregate */
-        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById(ToolInstanceAggregate::class, $aggregateId);
         $event = ToolInstanceHasBeenDeleted::fromParams($userId, $aggregateId);
 
         if ($aggregate->userId() !== $userId) {

@@ -12,16 +12,15 @@ class UpdateModflowModelCommand extends Command
     private $id;
     private $name;
     private $description;
+    private $public;
+
     private $geometry;
     private $boundingBox;
-
     private $gridSize;
     private $activeCells;
     private $stressperiods;
-
     private $lengthUnit;
     private $timeUnit;
-    private $public;
 
     /**
      * @return string|null
@@ -45,7 +44,7 @@ class UpdateModflowModelCommand extends Command
         $self->boundingBox = $payload['bounding_box'] ?? null;
         $self->gridSize = $payload['grid_size'] ?? null;
         $self->activeCells = $payload['active_cells'] ?? null;
-        $self->stressperiods = $payload['stress_periods'] ?? null;
+        $self->stressperiods = $payload['stressperiods'] ?? null;
         $self->lengthUnit = $payload['length_unit'] ?? null;
         $self->timeUnit = $payload['time_unit'] ?? null;
         $self->public = $payload['public'] ?? null;
@@ -67,43 +66,21 @@ class UpdateModflowModelCommand extends Command
         return $this->description;
     }
 
-    public function geometry(): ?array
-    {
-        return $this->geometry;
-    }
-
-    public function boundingBox(): ?array
-    {
-        return $this->boundingBox;
-    }
-
-    public function gridSize(): ?array
-    {
-        return $this->gridSize;
-    }
-
-    public function activeCells(): ?array
-    {
-        return $this->activeCells;
-    }
-
-    public function lengthUnit(): ?int
-    {
-        return $this->lengthUnit;
-    }
-
-    public function timeUnit(): ?int
-    {
-        return $this->timeUnit;
-    }
-
-    public function stressPeriods(): ?array
-    {
-        return $this->stressperiods;
-    }
-
     public function isPublic(): ?bool
     {
         return $this->public;
+    }
+
+    public function discretization(): array
+    {
+        return [
+            'geometry' => $this->geometry,
+            'bounding_box' => $this->boundingBox,
+            'grid_size' => $this->gridSize,
+            'active_cells' => $this->activeCells,
+            'stressperiods' => $this->stressperiods,
+            'length_unit' => $this->lengthUnit,
+            'time_unit' => $this->timeUnit
+        ];
     }
 }

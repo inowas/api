@@ -38,7 +38,7 @@ class CloneToolInstanceCommandHandler
 
         # Get the original toolInstance
         /** @var ToolInstanceAggregate $original */
-        $original = $this->aggregateRepository->findAggregateById($originId);
+        $original = $this->aggregateRepository->findAggregateById(ToolInstanceAggregate::class, $originId);
 
         # The user needs to be the owner of the model or the model has to be public
         $canBeCloned = ($userId === $original->userId() || true === $original->isPublic());

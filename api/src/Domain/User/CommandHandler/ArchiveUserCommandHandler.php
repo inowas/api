@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\CommandHandler;
 
+use App\Domain\User\Aggregate\UserAggregate;
 use App\Repository\AggregateRepository;
 use App\Domain\User\Command\ArchiveUserCommand;
 use App\Domain\User\Event\UserHasBeenArchived;
@@ -53,7 +54,7 @@ class ArchiveUserCommandHandler
 
         $aggregateId = $userId;
         $event = UserHasBeenArchived::fromParams($aggregateId);
-        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById(UserAggregate::class, $aggregateId);
         $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);

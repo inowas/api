@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\CommandHandler;
 
+use App\Domain\User\Aggregate\UserAggregate;
 use App\Model\User;
 use App\Domain\User\Command\DeleteUserCommand;
 use App\Domain\User\Event\UserHasBeenDeleted;
@@ -58,7 +59,7 @@ class DeleteUserCommandHandler
 
         $aggregateId = $userToDeleteId;
         $event = UserHasBeenDeleted::fromParams($aggregateId);
-        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById(UserAggregate::class, $aggregateId);
         $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);

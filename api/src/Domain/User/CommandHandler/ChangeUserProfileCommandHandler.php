@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\CommandHandler;
 
+use App\Domain\User\Aggregate\UserAggregate;
 use App\Repository\AggregateRepository;
 use App\Domain\User\Command\ChangeUserProfileCommand;
 use App\Domain\User\Event\UserProfileHasBeenChanged;
@@ -57,7 +58,7 @@ class ChangeUserProfileCommandHandler
 
         $aggregateId = $userId;
         $event = UserProfileHasBeenChanged::fromParams($aggregateId, $command->profile());
-        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById(UserAggregate::class, $aggregateId);
         $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);

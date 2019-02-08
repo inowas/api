@@ -53,7 +53,7 @@ class UpdateToolInstanceCommandHandler
 
         $aggregateId = $id;
         /** @var ToolInstanceAggregate $aggregate */
-        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById(ToolInstanceAggregate::class, $aggregateId);
         $event = ToolInstanceHasBeenUpdated::fromParams($userId, $aggregateId, $name, $description, $isPublic, $data);
 
         if ($aggregate->userId() !== $userId) {

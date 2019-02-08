@@ -52,30 +52,32 @@ final class AggregateRepository
     }
 
     /**
+     * @param $aggregateClass
      * @param string $aggregateId
      * @return Aggregate
      * @throws \Exception
      */
-    public function findAggregateById(string $aggregateId): Aggregate
+    public function findAggregateById($aggregateClass, string $aggregateId): Aggregate
     {
+        /** @var string $aggregateName */
+        $aggregateName = $aggregateClass::NAME;
+
         /** @var ArrayCollection $events */
-        $events = $this->findEventsByAggregateId($aggregateId);
+        $events = $this->findEventsByAggregateId($aggregateName, $aggregateId);
 
         if ($events->isEmpty()) {
             throw new \Exception('Unknown AggregateId');
         }
 
-        if (!array_key_exists($events->first()->aggregateName(), $this->aggregateMap)) {
+        if (!array_key_exists($aggregateName, $this->aggregateMap)) {
             throw new \RuntimeException(sprintf('Missing aggregateType in aggregateMap class %s', \get_class($this)));
         }
 
-        $classname = $this->aggregateMap[$events->first()->aggregateName()];
-
-        /** @var Aggregate $aggregate */
-        $aggregate = $classname::withId($aggregateId);
+        /** @var Aggregate $aggregateClass */
+        $aggregate = $aggregateClass::withId($aggregateId);
 
         /** @var ArrayCollection $events */
-        $events = $this->findEventsByAggregateId($aggregateId);
+        $events = $this->findEventsByAggregateId($aggregateName, $aggregateId);
 
         foreach ($events->getIterator() as $event) {
             $aggregate->apply($event);
@@ -85,13 +87,17 @@ final class AggregateRepository
     }
 
     /**
+     * @param string $aggregateName
      * @param string $aggregateId
      * @return ArrayCollection
      */
-    public function findEventsByAggregateId(string $aggregateId): ArrayCollection
+    public function findEventsByAggregateId(string $aggregateName, string $aggregateId): ArrayCollection
     {
         return $this->getEventCollectionBy(
-            ['aggregateId' => $aggregateId],
+            [
+                'aggregateName' => $aggregateName,
+                'aggregateId' => $aggregateId
+            ],
             ['version' => 'ASC']
         );
     }

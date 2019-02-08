@@ -20,10 +20,21 @@ class DeleteToolInstanceCommand extends Command
     }
 
     /**
+     * @param string $id
+     * @return DeleteToolInstanceCommand
+     */
+    public static function fromParams(string $id): DeleteToolInstanceCommand
+    {
+        $self = new self();
+        $self->id = $id;
+        return $self;
+    }
+
+    /**
      * @param array $payload
      * @return DeleteToolInstanceCommand
      */
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): DeleteToolInstanceCommand
     {
         $self = new self();
         $self->id = $payload['id'];

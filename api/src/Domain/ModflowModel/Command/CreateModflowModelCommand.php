@@ -12,6 +12,8 @@ class CreateModflowModelCommand extends Command
     private $id;
     private $name;
     private $description;
+    private $public;
+
     private $geometry;
     private $boundingBox;
     private $gridSize;
@@ -19,7 +21,6 @@ class CreateModflowModelCommand extends Command
     private $stressperiods;
     private $lengthUnit;
     private $timeUnit;
-    private $public;
 
     /**
      * @return string|null
@@ -43,7 +44,7 @@ class CreateModflowModelCommand extends Command
         $self->boundingBox = $payload['bounding_box'];
         $self->gridSize = $payload['grid_size'];
         $self->activeCells = $payload['active_cells'];
-        $self->stressperiods = $payload['stress_periods'];
+        $self->stressperiods = $payload['stressperiods'];
         $self->lengthUnit = $payload['length_unit'];
         $self->timeUnit = $payload['time_unit'];
         $self->public = $payload['public'];
@@ -65,43 +66,21 @@ class CreateModflowModelCommand extends Command
         return $this->description;
     }
 
-    public function geometry(): array
-    {
-        return $this->geometry;
-    }
-
-    public function boundingBox(): array
-    {
-        return $this->boundingBox;
-    }
-
-    public function gridSize(): array
-    {
-        return $this->gridSize;
-    }
-
-    public function activeCells(): array
-    {
-        return $this->activeCells;
-    }
-
-    public function lengthUnit(): int
-    {
-        return $this->lengthUnit;
-    }
-
-    public function timeUnit(): int
-    {
-        return $this->timeUnit;
-    }
-
-    public function stressPeriods(): array
-    {
-        return $this->stressperiods;
-    }
-
     public function isPublic(): bool
     {
         return $this->public;
+    }
+
+    public function discretization(): array
+    {
+        return [
+            'geometry' => $this->geometry,
+            'bounding_box' => $this->boundingBox,
+            'grid_size' => $this->gridSize,
+            'active_cells' => $this->activeCells,
+            'stressperiods' => $this->stressperiods,
+            'length_unit' => $this->lengthUnit,
+            'time_unit' => $this->timeUnit
+        ];
     }
 }

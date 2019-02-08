@@ -24,10 +24,29 @@ class UpdateToolInstanceCommand extends Command
     }
 
     /**
+     * @param string $id
+     * @param string $name
+     * @param string $description
+     * @param bool $public
+     * @param array $data
+     * @return UpdateToolInstanceCommand
+     */
+    public static function fromParams(string $id, string $name, string $description, bool $public, array $data = []): UpdateToolInstanceCommand
+    {
+        $self = new self();
+        $self->id = $id;
+        $self->name = $name;
+        $self->description = $description;
+        $self->public = $public;
+        $self->data = $data;
+        return $self;
+    }
+
+    /**
      * @param array $payload
      * @return UpdateToolInstanceCommand
      */
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): UpdateToolInstanceCommand
     {
         $self = new self();
         $self->id = $payload['id'];

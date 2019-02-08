@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\CommandHandler;
 
+use App\Domain\User\Aggregate\UserAggregate;
 use App\Repository\AggregateRepository;
 use App\Domain\User\Command\ChangeUsernameCommand;
 use App\Domain\User\Event\UsernameHasBeenChanged;
@@ -58,7 +59,7 @@ class ChangeUsernameCommandHandler
 
         $aggregateId = $userId;
         $event = UsernameHasBeenChanged::fromParams($aggregateId, $command->username());
-        $aggregate = $this->aggregateRepository->findAggregateById($aggregateId);
+        $aggregate = $this->aggregateRepository->findAggregateById(UserAggregate::class, $aggregateId);
         $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);

@@ -25,10 +25,31 @@ class CreateToolInstanceCommand extends Command
     }
 
     /**
+     * @param string $id
+     * @param string $tool
+     * @param string $name
+     * @param string $description
+     * @param bool $public
+     * @param array $data
+     * @return CreateToolInstanceCommand
+     */
+    public static function fromParams(string $id, string $tool, string $name, string $description, bool $public, array $data = []): CreateToolInstanceCommand
+    {
+        $self = new self();
+        $self->id = $id;
+        $self->tool = $tool;
+        $self->name = $name;
+        $self->description = $description;
+        $self->public = $public;
+        $self->data = $data;
+        return $self;
+    }
+
+    /**
      * @param array $payload
      * @return CreateToolInstanceCommand
      */
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): CreateToolInstanceCommand
     {
         $self = new self();
         $self->id = $payload['id'];

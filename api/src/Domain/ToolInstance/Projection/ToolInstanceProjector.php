@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\Projection;
 
+use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
+use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 use App\Model\Projector;
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Model\ToolInstance;
 use App\Model\User;
 use App\Service\UserManager;
@@ -30,7 +31,7 @@ final class ToolInstanceProjector extends Projector
 
     public function aggregateName(): string
     {
-        return \App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate::NAME;
+        return ToolInstanceAggregate::NAME;
     }
 
     /**
