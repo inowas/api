@@ -17,7 +17,6 @@ final class ToolInstanceAggregate extends Aggregate
     public const NAME = 'toolInstance';
 
     public static $registeredEvents = [
-        ModflowModelHasBeenCreated::class,
         ToolInstanceHasBeenCreated::class,
         ToolInstanceHasBeenCloned::class,
         ToolInstanceHasBeenDeleted::class,
@@ -30,14 +29,6 @@ final class ToolInstanceAggregate extends Aggregate
     protected $userId;
 
     protected $isPublic;
-
-    protected function whenModflowModelHasBeenCreated(ModflowModelHasBeenCreated $event): void
-    {
-        $this->aggregateId = $event->aggregateId();
-        $this->userId = $event->userId();
-        $this->isPublic = $event->isPublic();
-        $this->tool = $event->tool();
-    }
 
     protected function whenToolInstanceHasBeenCreated(ToolInstanceHasBeenCreated $event): void
     {

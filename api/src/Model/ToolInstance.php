@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ApiResource(attributes={"access_control"="is_granted('ROLE_USER')"})
  */
-final class SimpleTool
+final class ToolInstance
 {
     /**
      * @var string
@@ -56,7 +56,7 @@ final class SimpleTool
         $this->id = null;
     }
 
-    public static function createWith(string $id, string $tool): SimpleTool
+    public static function createWith(string $id, string $tool): ToolInstance
     {
         return new self($id, $tool);
     }

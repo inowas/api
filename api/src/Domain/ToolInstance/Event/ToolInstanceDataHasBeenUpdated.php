@@ -15,21 +15,30 @@ use App\Model\DomainEvent;
 final class ToolInstanceDataHasBeenUpdated extends DomainEvent
 {
 
+    public const MERGE_STRATEGY_ADD = 0;
+    public const MERGE_STRATEGY_REPLACE = 1;
+    public const MERGE_STRATEGY_MERGE = 2;
+    public const MERGE_STRATEGY_DELETE = 3;
+
     private $userId;
     private $data;
+    private $mergeStrategy;
+
 
     /**
      * @param string $userId
      * @param string $aggregateId
      * @param array $data
+     * @param int $mergeStrategy
      * @return ToolInstanceDataHasBeenUpdated
      * @throws \Exception
      */
-    public static function fromParams(string $userId, string $aggregateId, array $data)
+    public static function fromParams(string $userId, string $aggregateId, array $data, int $mergeStrategy = self::MERGE_STRATEGY_REPLACE)
     {
         $self = new self($aggregateId, ToolInstanceAggregate::NAME, self::getEventNameFromClassname(), [
             'user_id' => $userId,
-            'data' => $data
+            'data' => $data,
+            'merge_strategy' => $mergeStrategy
         ]);
 
         $self->userId = $userId;
@@ -51,5 +60,13 @@ final class ToolInstanceDataHasBeenUpdated extends DomainEvent
             $this->data = $this->payload['data'];
         }
         return $this->data;
+    }
+
+    public function mergeStrategy(): int
+    {
+        if (null === $this->mergeStrategy) {
+            $this->mergeStrategy = $this->payload['merge_strategy'];
+        }
+        return $this->mergeStrategy;
     }
 }

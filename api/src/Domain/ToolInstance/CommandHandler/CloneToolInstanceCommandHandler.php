@@ -8,7 +8,7 @@ use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
+use App\Domain\ToolInstance\Projection\ToolInstancesProjector;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
@@ -60,6 +60,6 @@ class CloneToolInstanceCommandHandler
 
         # Projected
         $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
+        $this->projectors->getProjector(ToolInstancesProjector::class)->apply($event);
     }
 }
