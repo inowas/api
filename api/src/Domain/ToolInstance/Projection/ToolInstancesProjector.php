@@ -104,7 +104,23 @@ final class ToolInstancesProjector extends Projector
             return;
         }
 
-        $simpleTool->setData($event->data());
+        $data = $event->data();
+
+        switch ($event->mergeStrategy()) {
+            case($event::MERGE_STRATEGY_REPLACE):
+                $data = $event->data();
+                break;
+            case($event::MERGE_STRATEGY_MERGE):
+                $data = $this->array_merge_recursive_distinct($simpleTool->getData(), $data);
+                break;
+            case($event::MERGE_STRATEGY_DELETE):
+                $data = $this->array_remove_element($simpleTool->getData(), $data);
+                break;
+            default:
+                $data = $event->data();
+        }
+
+        $simpleTool->setData($data);
         $this->entityManager->persist($simpleTool);
         $this->entityManager->flush();
     }
