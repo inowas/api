@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Aggregate;
 
 use App\Model\Aggregate;
-use App\Domain\ToolInstance\Event\ModflowModelHasBeenCreated;
 use App\Domain\ToolInstance\Event\ToolInstanceDataHasBeenUpdated;
 use App\Domain\ToolInstance\Event\ToolInstanceMetadataHasBeenUpdated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
