@@ -6,38 +6,35 @@ namespace App\Domain\ToolInstance\Event;
 
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Model\DomainEvent;
+use App\Model\Modflow\Discretization;
 use App\Model\ToolMetadata;
 
-final class ToolInstanceHasBeenCreated extends DomainEvent
+final class ModflowModelHasBeenCreated extends DomainEvent
 {
 
     private $userId;
-    private $tool;
     private $metadata;
-    private $data;
+    private $discretization;
 
     /**
      * @param string $userId
-     * @param string $aggregateId
-     * @param string $tool
+     * @param string $modelId
      * @param ToolMetadata $metadata
-     * @param array $data
-     * @return ToolInstanceHasBeenCreated
+     * @param Discretization $discretization
+     * @return ModflowModelHasBeenCreated
      * @throws \Exception
      */
-    public static function fromParams(string $userId, string $aggregateId, string $tool, ToolMetadata $metadata, array $data = [])
+    public static function fromParams(string $userId, string $modelId, ToolMetadata $metadata, Discretization $discretization): ModflowModelHasBeenCreated
     {
-        $self = new self($aggregateId, ToolInstanceAggregate::NAME, self::getEventNameFromClassname(), [
+        $self = new self($modelId, ToolInstanceAggregate::NAME, self::getEventNameFromClassname(), [
             'user_id' => $userId,
-            'tool' => $tool,
             'metadata' => $metadata->toArray(),
-            'data' => $data
+            'discretization' => $discretization->toArray()
         ]);
 
         $self->userId = $userId;
-        $self->tool = $tool;
         $self->metadata = $metadata;
-        $self->data = $data;
+        $self->discretization = $discretization;
         return $self;
     }
 
@@ -49,14 +46,6 @@ final class ToolInstanceHasBeenCreated extends DomainEvent
         return $this->userId;
     }
 
-    public function tool(): string
-    {
-        if (null === $this->tool) {
-            $this->tool = $this->payload['tool'];
-        }
-        return $this->tool;
-    }
-
     public function metadata(): ToolMetadata
     {
         if (null === $this->metadata) {
@@ -65,16 +54,21 @@ final class ToolInstanceHasBeenCreated extends DomainEvent
         return $this->metadata;
     }
 
-    public function data(): array
+    public function discretization(): Discretization
     {
-        if (null === $this->data) {
-            $this->data = $this->payload['data'];
+        if (null === $this->discretization) {
+            $this->discretization = Discretization::fromArray($this->payload['discretization']);
         }
-        return $this->data;
+        return $this->discretization;
     }
 
     public function isPublic(): bool
     {
         return ToolMetadata::fromArray($this->payload['metadata'])->isPublic();
+    }
+
+    public function tool(): string
+    {
+        return 'T03';
     }
 }

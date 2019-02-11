@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
-use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
+use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
+use App\Domain\ToolInstance\Event\ModflowModelHasBeenCreated;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
+use App\Domain\ToolInstance\Projection\ModflowModelProjector;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
-class CreateToolInstanceCommandHandler
+class CreateModflowModelCommandHandler
 {
     /** @var AggregateRepository */
     private $aggregateRepository;
@@ -28,21 +28,19 @@ class CreateToolInstanceCommandHandler
     }
 
     /**
-     * @param CreateToolInstanceCommand $command
+     * @param CreateModflowModelCommand $command
      * @throws \Exception
      */
-    public function __invoke(CreateToolInstanceCommand $command)
+    public function __invoke(CreateModflowModelCommand $command)
     {
+        $modelId = $command->id();
         $userId = $command->metadata()['user_id'];
-        $metadata = $command->toolMetadata();
+        $toolMetadata = $command->toolMetadata();
+        $discretization = $command->discretization();
 
-        $id = $command->id();
-        $tool = $command->tool();
-        $data = $command->data();
-
-        $aggregateId = $id;
-        $event = ToolInstanceHasBeenCreated::fromParams($userId, $aggregateId, $tool, $metadata, $data);
-        $aggregate = ToolInstanceAggregate::withId($aggregateId);
+        # Create ModflowModel
+        $aggregate = ToolInstanceAggregate::withId($modelId);
+        $event = ModflowModelHasBeenCreated::fromParams($userId, $modelId, $toolMetadata, $discretization);
 
         # Then the event can be applied
         $aggregate->apply($event);
@@ -52,6 +50,6 @@ class CreateToolInstanceCommandHandler
 
         # Projected
         $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
+        $this->projectors->getProjector(ModflowModelProjector::class)->apply($event);
     }
 }

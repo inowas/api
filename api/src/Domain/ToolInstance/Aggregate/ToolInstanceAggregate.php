@@ -5,25 +5,47 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Aggregate;
 
 use App\Model\Aggregate;
+use App\Domain\ToolInstance\Event\ModflowModelHasBeenCreated;
+use App\Domain\ToolInstance\Event\ToolInstanceDataHasBeenUpdated;
+use App\Domain\ToolInstance\Event\ToolInstanceMetadataHasBeenUpdated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenUpdated;
 
 final class ToolInstanceAggregate extends Aggregate
 {
     public const NAME = 'toolInstance';
 
     public static $registeredEvents = [
+        ModflowModelHasBeenCreated::class,
         ToolInstanceHasBeenCreated::class,
         ToolInstanceHasBeenCloned::class,
         ToolInstanceHasBeenDeleted::class,
-        ToolInstanceHasBeenUpdated::class
+        ToolInstanceDataHasBeenUpdated::class,
+        ToolInstanceMetadataHasBeenUpdated::class
     ];
+
+    private $tool;
 
     protected $userId;
 
     protected $isPublic;
+
+    protected function whenModflowModelHasBeenCreated(ModflowModelHasBeenCreated $event): void
+    {
+        $this->aggregateId = $event->aggregateId();
+        $this->userId = $event->userId();
+        $this->isPublic = $event->isPublic();
+        $this->tool = $event->tool();
+    }
+
+    protected function whenToolInstanceHasBeenCreated(ToolInstanceHasBeenCreated $event): void
+    {
+        $this->aggregateId = $event->aggregateId();
+        $this->userId = $event->userId();
+        $this->isPublic = $event->isPublic();
+        $this->tool = $event->tool();
+    }
 
     protected function whenToolInstanceHasBeenCloned(ToolInstanceHasBeenCloned $event): void
     {
@@ -32,11 +54,9 @@ final class ToolInstanceAggregate extends Aggregate
         $this->isPublic = $event->isPublic();
     }
 
-    protected function whenToolInstanceHasBeenCreated(ToolInstanceHasBeenCreated $event): void
+    public function getTool(): string
     {
-        $this->aggregateId = $event->aggregateId();
-        $this->userId = $event->userId();
-        $this->isPublic = $event->isPublic();
+        return $this->tool;
     }
 
     public function userId(): string

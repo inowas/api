@@ -19,4 +19,15 @@ final class ProjectorCollection
     {
         return $this->projectors;
     }
+
+    public function getProjector($class): ?Projector
+    {
+        foreach ($this->projectors as $projector) {
+            if (get_class($projector) === $class) {
+                return $projector;
+            }
+        }
+
+        return null;
+    }
 }

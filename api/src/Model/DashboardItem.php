@@ -9,11 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="tool_instances")
+ * @ORM\Table(name="dashboard_items")
  *
  * @ApiResource(attributes={"access_control"="is_granted('ROLE_USER')"})
  */
-final class ToolInstance
+final class DashboardItem
 {
     /**
      * @var string
@@ -66,13 +66,6 @@ final class ToolInstance
     private $isPublic;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="data", type="json_array")
-     */
-    private $data;
-
-    /**
      * @var \DateTimeImmutable $created
      *
      * @ORM\Column(name="created_at", type="datetime_immutable")
@@ -84,7 +77,7 @@ final class ToolInstance
         $this->id = null;
     }
 
-    public static function createFromId(string $id, string $tool): ToolInstance
+    public static function createFromId(string $id, string $tool): DashboardItem
     {
         return new self($id, $tool);
     }
@@ -205,22 +198,6 @@ final class ToolInstance
     public function setIsPublic(bool $isPublic): void
     {
         $this->isPublic = $isPublic;
-    }
-
-    /**
-     * @return array
-     */
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    /**
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        $this->data = $data;
     }
 
     /**

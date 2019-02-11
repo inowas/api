@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use App\Model\ToolMetadata;
 
 class CreateToolInstanceCommand extends Command
 {
 
     private $id;
     private $tool;
+
     private $name;
     private $description;
     private $public;
+
     private $data;
 
     /**
@@ -71,19 +74,9 @@ class CreateToolInstanceCommand extends Command
         return $this->tool;
     }
 
-    public function name(): string
+    public function toolMetadata(): ToolMetadata
     {
-        return $this->name;
-    }
-
-    public function description(): string
-    {
-        return $this->description;
-    }
-
-    public function isPublic(): bool
-    {
-        return $this->public;
+        return ToolMetadata::fromParams($this->name, $this->description, $this->public);
     }
 
     public function data(): array

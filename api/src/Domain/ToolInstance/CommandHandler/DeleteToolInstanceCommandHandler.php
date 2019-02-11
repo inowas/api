@@ -7,7 +7,9 @@ namespace App\Domain\ToolInstance\CommandHandler;
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
-use App\Domain\ToolInstance\Projection\ToolInstanceProjector;
+use App\Domain\ToolInstance\Projection\DashboardProjector;
+use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
+use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
 class DeleteToolInstanceCommandHandler
@@ -15,14 +17,14 @@ class DeleteToolInstanceCommandHandler
     /** @var AggregateRepository */
     private $aggregateRepository;
 
-    /** @var ToolInstanceProjector */
-    private $toolInstanceProjector;
+    /** @var ProjectorCollection */
+    private $projectors;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, ToolInstanceProjector $toolInstanceProjector)
+    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projectors)
     {
         $this->aggregateRepository = $aggregateRepository;
-        $this->toolInstanceProjector = $toolInstanceProjector;
+        $this->projectors = $projectors;
     }
 
     /**
@@ -44,9 +46,14 @@ class DeleteToolInstanceCommandHandler
             throw new \Exception('The tool cannot be cloned due to permission problems.');
         }
 
+        # Then the event can be applied
         $aggregate->apply($event);
 
+        # Stored
         $this->aggregateRepository->storeEvent($event);
-        $this->toolInstanceProjector->apply($event);
+
+        # Projected
+        $this->projectors->getProjector(DashboardProjector::class)->apply($event);
+        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
     }
 }

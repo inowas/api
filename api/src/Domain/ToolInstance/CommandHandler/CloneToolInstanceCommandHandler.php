@@ -7,7 +7,9 @@ namespace App\Domain\ToolInstance\CommandHandler;
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
-use App\Domain\ToolInstance\Projection\ToolInstanceProjector;
+use App\Domain\ToolInstance\Projection\DashboardProjector;
+use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
+use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
 class CloneToolInstanceCommandHandler
@@ -15,14 +17,14 @@ class CloneToolInstanceCommandHandler
     /** @var AggregateRepository */
     private $aggregateRepository;
 
-    /** @var ToolInstanceProjector */
-    private $toolInstanceProjector;
+    /** @var ProjectorCollection */
+    private $projectors;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, ToolInstanceProjector $toolInstanceProjector)
+    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projectors)
     {
         $this->aggregateRepository = $aggregateRepository;
-        $this->toolInstanceProjector = $toolInstanceProjector;
+        $this->projectors = $projectors;
     }
 
     /**
@@ -57,6 +59,7 @@ class CloneToolInstanceCommandHandler
         $this->aggregateRepository->storeEvent($event);
 
         # Projected
-        $this->toolInstanceProjector->apply($event);
+        $this->projectors->getProjector(DashboardProjector::class)->apply($event);
+        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
     }
 }

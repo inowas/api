@@ -32,7 +32,7 @@ services:
         
     projectors:
         namespace: App\Domain\
-        resource: '../src/Domain/*/Projector'
+        resource: '../src/Domain/*/Projection'
         tags: ['app.projector']        
         
     App\Model\ProjectorCollection:

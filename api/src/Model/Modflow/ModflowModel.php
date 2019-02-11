@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Modflow;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Model\ToolMetadata;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,30 +27,16 @@ final class ModflowModel
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
-     */
-    private $description;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="user_id", type="string", length=36, nullable=false)
      */
     private $userId;
 
     /**
-     * @var boolean
+     * @var array
      *
-     * @ORM\Column(name="public", type="boolean")
+     * @ORM\Column(name="metadata", type="json_array")
      */
-    private $isPublic;
+    private $metadata = [];
 
     /**
      * @var array
@@ -100,12 +87,6 @@ final class ModflowModel
      */
     private $packages = [];
 
-    /**
-     * @var \DateTimeImmutable $created
-     *
-     * @ORM\Column(name="created_at", type="datetime_immutable")
-     */
-    protected $createdAt;
 
     public function __clone()
     {
@@ -147,51 +128,35 @@ final class ModflowModel
     }
 
     /**
-     * @return string
+     * @return ToolMetadata
      */
-    public function getName(): string
+    public function getMetadata(): ToolMetadata
     {
-        return $this->name;
+        return ToolMetadata::fromArray($this->metadata);
     }
 
     /**
-     * @param string $name
+     * @param ToolMetadata $metadata
      */
-    public function setName(string $name): void
+    public function setMetadata(ToolMetadata $metadata): void
     {
-        $this->name = $name;
+        $this->metadata = $metadata->toArray();
     }
 
     /**
-     * @return string
+     * @return Discretization
      */
-    public function getDescription(): string
+    public function getDiscretization(): Discretization
     {
-        return $this->description;
+        return Discretization::fromArray($this->discretization);
     }
 
     /**
-     * @param string $description
+     * @param Discretization $discretization
      */
-    public function setDescription(string $description): void
+    public function setDiscretization(Discretization $discretization): void
     {
-        $this->description = $description;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDiscretization(): array
-    {
-        return $this->discretization;
-    }
-
-    /**
-     * @param array $discretization
-     */
-    public function setDiscretization(array $discretization): void
-    {
-        $this->discretization = $discretization;
+        $this->discretization = $discretization->toArray();
     }
 
     /**
@@ -291,22 +256,6 @@ final class ModflowModel
     }
 
     /**
-     * @return bool
-     */
-    public function isPublic(): bool
-    {
-        return $this->isPublic;
-    }
-
-    /**
-     * @param bool $isPublic
-     */
-    public function setIsPublic(bool $isPublic): void
-    {
-        $this->isPublic = $isPublic;
-    }
-
-    /**
      * @return array
      */
     public function getOptimization(): array
@@ -321,21 +270,4 @@ final class ModflowModel
     {
         $this->optimization = $optimization;
     }
-
-    /**
-     * @return \DateTimeImmutable
-     */
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTimeImmutable $createdAt
-     */
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
 }

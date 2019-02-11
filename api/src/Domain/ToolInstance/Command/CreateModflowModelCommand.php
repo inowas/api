@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\ModflowModel\Command;
+namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use App\Model\Modflow\Discretization;
+use App\Model\ToolMetadata;
 
 class CreateModflowModelCommand extends Command
 {
@@ -56,24 +58,14 @@ class CreateModflowModelCommand extends Command
         return $this->id;
     }
 
-    public function name(): string
+    public function toolMetadata(): ToolMetadata
     {
-        return $this->name;
+        return ToolMetadata::fromParams($this->name, $this->description, $this->public);
     }
 
-    public function description(): string
+    public function discretization(): Discretization
     {
-        return $this->description;
-    }
-
-    public function isPublic(): bool
-    {
-        return $this->public;
-    }
-
-    public function discretization(): array
-    {
-        return [
+        return Discretization::fromArray([
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
@@ -81,6 +73,6 @@ class CreateModflowModelCommand extends Command
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit
-        ];
+        ]);
     }
 }

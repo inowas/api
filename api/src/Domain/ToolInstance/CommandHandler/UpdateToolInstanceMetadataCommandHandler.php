@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
-use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
+use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
+use App\Domain\ToolInstance\Event\ToolInstanceMetadataHasBeenUpdated;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
 use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
-class CreateToolInstanceCommandHandler
+class UpdateToolInstanceMetadataCommandHandler
 {
     /** @var AggregateRepository */
     private $aggregateRepository;
@@ -28,23 +28,24 @@ class CreateToolInstanceCommandHandler
     }
 
     /**
-     * @param CreateToolInstanceCommand $command
+     * @param UpdateToolInstanceMetadataCommand $command
      * @throws \Exception
      */
-    public function __invoke(CreateToolInstanceCommand $command)
+    public function __invoke(UpdateToolInstanceMetadataCommand $command)
     {
         $userId = $command->metadata()['user_id'];
-        $metadata = $command->toolMetadata();
+        $aggregateId = $command->id();
 
-        $id = $command->id();
-        $tool = $command->tool();
-        $data = $command->data();
 
-        $aggregateId = $id;
-        $event = ToolInstanceHasBeenCreated::fromParams($userId, $aggregateId, $tool, $metadata, $data);
-        $aggregate = ToolInstanceAggregate::withId($aggregateId);
+        /** @var ToolInstanceAggregate $aggregate */
+        $aggregate = $this->aggregateRepository->findAggregateById(ToolInstanceAggregate::class, $aggregateId);
+
+        if ($aggregate->userId() !== $userId) {
+            throw new \Exception('The tool cannot be cloned due to permission problems.');
+        }
 
         # Then the event can be applied
+        $event = ToolInstanceMetadataHasBeenUpdated::fromParams($userId, $aggregateId, $command->toolMetadata());
         $aggregate->apply($event);
 
         # Stored
