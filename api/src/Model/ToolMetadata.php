@@ -4,44 +4,46 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-class ToolMetadata
+class ToolMetadata extends ValueObject
 {
 
     private $name;
     private $description;
     private $isPublic;
 
-    public static function fromParams(string $name, string $description, bool $isPublic): ToolMetadata
+    public static function fromParams(?string $name, ?string $description, ?bool $isPublic): ToolMetadata
     {
-        return new self($name, $description, $isPublic);
+        $self = new self();
+        $self->name = $name;
+        $self->description = $description;
+        $self->isPublic = $isPublic;
+        return $self;
     }
 
-    public static function fromArray(array $arr): ToolMetadata
+    public static function fromArray(array $arr): self
     {
-        $name = $arr['name'];
-        $description = $arr['description'];
-        $isPublic = $arr['public'];
-        return new self($name, $description, $isPublic);
+        $self = new self();
+        $self->name = $arr['name'] ?? null;
+        $self->description = $arr['description'] ?? null;
+        $self->isPublic = $arr['public'] ?? null;
+        return $self;
     }
 
-    private function __construct(string $name, string $description, bool $isPublic)
+    private function __construct()
     {
-        $this->name = $name;
-        $this->description = $description;
-        $this->isPublic = $isPublic;
     }
 
-    public function name(): string
+    public function name(): ?string
     {
         return $this->name;
     }
 
-    public function description(): string
+    public function description(): ?string
     {
         return $this->description;
     }
 
-    public function isPublic(): bool
+    public function isPublic(): ?bool
     {
         return $this->isPublic;
     }

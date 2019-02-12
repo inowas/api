@@ -8,7 +8,7 @@ use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceMetadataHasBeenUpdated;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\ToolInstancesProjector;
+use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
@@ -53,6 +53,6 @@ class UpdateToolInstanceMetadataCommandHandler
 
         # Projected
         $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(ToolInstancesProjector::class)->apply($event);
+        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
     }
 }

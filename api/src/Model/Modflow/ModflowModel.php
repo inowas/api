@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="modflow_models")
+ * @ORM\Table(name="modflowmodel_instances")
  *
  * @ApiResource(attributes={"access_control"="is_granted('ROLE_USER')"})
  */
@@ -87,28 +87,36 @@ final class ModflowModel
      */
     private $packages = [];
 
-
-    public function __clone()
-    {
-        $this->id = null;
-    }
-
     /**
      * @param string $id
+     * @param string $userId
      * @return ModflowModel
      */
-    public static function createFromId(string $id): ModflowModel
+    public static function fromParams(string $id, string $userId): ModflowModel
     {
-        return new self($id);
+        $self = new self();
+        $self->id = $id;
+        $self->userId = $userId;
+        return $self;
     }
 
-    /**
-     * ModflowModel constructor.
-     * @param string $id
-     */
-    private function __construct(string $id)
+    public static function fromArray(array $arr): ModflowModel
     {
-        $this->id = $id;
+        $self = new self();
+        $self->id = $arr['id'];
+        $self->userId = $arr['user_id'];
+        $self->metadata = $arr['metadata'] ?? [];
+        $self->discretization = $arr['discretization'] ?? [];
+        $self->boundaries = $arr['boundaries'] ?? [];
+        $self->transport = $arr['transport'] ?? [];
+        $self->calculation = $arr['calculation'] ?? [];
+        $self->optimization = $arr['optimization'] ?? [];
+        $self->packages = $arr['packages'] ?? [];
+        return $self;
+    }
+
+    private function __construct()
+    {
     }
 
     /**
@@ -269,5 +277,20 @@ final class ModflowModel
     public function setOptimization(array $optimization): void
     {
         $this->optimization = $optimization;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'user_id' => $this->userId,
+            'metadata' => $this->metadata,
+            'discretization' => $this->discretization,
+            'boundaries' => $this->boundaries,
+            'transport' => $this->transport,
+            'calculation' => $this->calculation,
+            'optimization' => $this->optimization,
+            'packages' => $this->packages
+        ];
     }
 }

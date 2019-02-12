@@ -6,9 +6,10 @@ namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
+use App\Domain\ToolInstance\Event\ModflowModelHasBeenCreated;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\ToolInstancesProjector;
+use App\Domain\ToolInstance\Projection\ModflowModelProjector;
+use App\Model\Modflow\ModflowModel;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
@@ -37,11 +38,15 @@ class CreateModflowModelCommandHandler
         $userId = $command->metadata()['user_id'];
         $toolMetadata = $command->toolMetadata();
         $discretization = $command->discretization();
-        $data = ['discretization' => $discretization->toArray()];
+
+        $modflowModel = ModflowModel::fromParams($modelId, $userId);
+        $modflowModel->setMetadata($toolMetadata);
+        $modflowModel->setDiscretization($discretization);
+
 
         # Create ModflowModel
         $aggregate = ToolInstanceAggregate::withId($modelId);
-        $event = ToolInstanceHasBeenCreated::fromParams($userId, $modelId, 'T03', $toolMetadata, $data);
+        $event = ModflowModelHasBeenCreated::fromParams($userId, $modelId, $modflowModel);
 
         # Then the event can be applied
         $aggregate->apply($event);
@@ -51,6 +56,6 @@ class CreateModflowModelCommandHandler
 
         # Projected
         $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(ToolInstancesProjector::class)->apply($event);
+        $this->projectors->getProjector(ModflowModelProjector::class)->apply($event);
     }
 }

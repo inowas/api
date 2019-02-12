@@ -8,7 +8,7 @@ use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Model\DomainEvent;
 use App\Model\ToolMetadata;
 
-final class ToolInstanceMetadataHasBeenUpdated extends DomainEvent
+final class ModflowModelMetadataHasBeenUpdated extends DomainEvent
 {
 
     private $userId;
@@ -18,10 +18,10 @@ final class ToolInstanceMetadataHasBeenUpdated extends DomainEvent
      * @param string $userId
      * @param string $aggregateId
      * @param ToolMetadata $metadata
-     * @return ToolInstanceMetadataHasBeenUpdated
+     * @return ModflowModelMetadataHasBeenUpdated
      * @throws \Exception
      */
-    public static function fromParams(string $userId, string $aggregateId, ToolMetadata $metadata)
+    public static function fromParams(string $userId, string $aggregateId, ToolMetadata $metadata): ModflowModelMetadataHasBeenUpdated
     {
         $self = new self($aggregateId, ToolInstanceAggregate::NAME, self::getEventNameFromClassname(), [
             'user_id' => $userId,

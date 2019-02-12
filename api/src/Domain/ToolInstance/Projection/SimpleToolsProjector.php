@@ -11,11 +11,11 @@ use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
 use App\Domain\ToolInstance\Event\ToolInstanceMetadataHasBeenUpdated;
 use App\Model\Projector;
-use App\Model\ToolInstance;
+use App\Model\SimpleToolInstance;
 use App\Service\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class ToolInstancesProjector extends Projector
+final class SimpleToolsProjector extends Projector
 {
 
     private $entityManager;
@@ -26,7 +26,7 @@ final class ToolInstancesProjector extends Projector
     {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
-        $this->simpleToolRepository = $entityManager->getRepository(ToolInstance::class);
+        $this->simpleToolRepository = $entityManager->getRepository(SimpleToolInstance::class);
     }
 
     public function aggregateName(): string
@@ -46,7 +46,7 @@ final class ToolInstancesProjector extends Projector
         $data = $event->data();
         $userId = $event->userId();
 
-        $simpleTool = ToolInstance::createWith($aggregateId, $tool);
+        $simpleTool = SimpleToolInstance::createWith($aggregateId, $tool);
         $simpleTool->setMetadata($metadata);
         $simpleTool->setData($data);
         $simpleTool->setUserId($userId);
@@ -64,7 +64,7 @@ final class ToolInstancesProjector extends Projector
 
         $simpleTool = $this->simpleToolRepository->findOneBy(['id' => $event->baseId()]);
 
-        if (!($simpleTool instanceof ToolInstance)) {
+        if (!($simpleTool instanceof SimpleToolInstance)) {
             return;
         }
 
@@ -83,7 +83,7 @@ final class ToolInstancesProjector extends Projector
     {
         $simpleTool = $this->simpleToolRepository->findOneBy(['id' => $event->aggregateId()]);
 
-        if (!($simpleTool instanceof ToolInstance)) {
+        if (!($simpleTool instanceof SimpleToolInstance)) {
             return;
         }
 
@@ -100,7 +100,7 @@ final class ToolInstancesProjector extends Projector
     {
         $simpleTool = $this->simpleToolRepository->findOneBy(['id' => $event->aggregateId()]);
 
-        if (!($simpleTool instanceof ToolInstance)) {
+        if (!($simpleTool instanceof SimpleToolInstance)) {
             return;
         }
 
@@ -141,7 +141,7 @@ final class ToolInstancesProjector extends Projector
      */
     protected function truncateTable(): void
     {
-        $cmd = $this->entityManager->getClassMetadata(ToolInstance::class);
+        $cmd = $this->entityManager->getClassMetadata(SimpleToolInstance::class);
         $connection = $this->entityManager->getConnection();
         $dbPlatform = $connection->getDatabasePlatform();
         $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());

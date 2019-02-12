@@ -7,7 +7,7 @@ namespace App\Domain\ToolInstance\CommandHandler;
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceDataCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceDataHasBeenUpdated;
-use App\Domain\ToolInstance\Projection\ToolInstancesProjector;
+use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 
@@ -51,6 +51,6 @@ class UpdateToolInstanceDataCommandHandler
         $this->aggregateRepository->storeEvent($event);
 
         # Projected
-        $this->projectors->getProjector(ToolInstancesProjector::class)->apply($event);
+        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
     }
 }

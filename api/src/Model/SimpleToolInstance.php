@@ -9,11 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="simpletools")
+ * @ORM\Table(name="simpletool_instances")
  *
  * @ApiResource(attributes={"access_control"="is_granted('ROLE_USER')"})
  */
-final class ToolInstance
+final class SimpleToolInstance
 {
     /**
      * @var string
@@ -22,6 +22,13 @@ final class ToolInstance
      * @ORM\Column(name="id", type="string", unique=true, nullable=false)
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="user_id", type="string", length=36, nullable=false)
+     */
+    private $userId;
 
     /**
      * @var string
@@ -44,19 +51,12 @@ final class ToolInstance
      */
     private $data = [];
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="user_id", type="string", length=36, nullable=false)
-     */
-    private $userId;
-
     public function __clone()
     {
         $this->id = null;
     }
 
-    public static function createWith(string $id, string $tool): ToolInstance
+    public static function createWith(string $id, string $tool): SimpleToolInstance
     {
         return new self($id, $tool);
     }

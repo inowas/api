@@ -2,9 +2,10 @@
 
 namespace App\Model\Modflow;
 
-final class Discretization
-{
+use App\Model\ValueObject;
 
+final class Discretization extends ValueObject
+{
     private $geometry;
     private $boundingBox;
     private $gridSize;

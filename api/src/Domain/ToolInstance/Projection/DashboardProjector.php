@@ -44,8 +44,7 @@ final class DashboardProjector extends Projector
         $user = $this->userManager->findUserById($event->userId());
         $username = ($user instanceof User) ? $user->getUsername() : '';
         $metadata = $event->metadata();
-
-        $dashboardItem = DashboardItem::createFromId($event->aggregateId(), 'T03');
+        $dashboardItem = DashboardItem::createFromId($event->aggregateId(), $event->tool());
         $dashboardItem->setName($metadata->name());
         $dashboardItem->setDescription($metadata->description());
         $dashboardItem->setIsPublic($metadata->isPublic());
