@@ -6,6 +6,7 @@ namespace App\Domain\ToolInstance\Projection;
 
 use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Event\ModflowModelHasBeenCreated;
+use App\Domain\ToolInstance\Event\ModflowModelMetadataHasBeenUpdated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCloned;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
@@ -51,6 +52,30 @@ final class DashboardProjector extends Projector
         $dashboardItem->setUserId($event->userId());
         $dashboardItem->setUsername($username);
         $dashboardItem->setCreatedAt($event->createdAt());
+        $this->entityManager->persist($dashboardItem);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param ModflowModelMetadataHasBeenUpdated $event
+     * @throws \Exception
+     */
+    protected function onModflowModelMetadataHasBeenUpdated(ModflowModelMetadataHasBeenUpdated $event): void
+    {
+        $user = $this->userManager->findUserById($event->userId());
+        $username = ($user instanceof User) ? $user->getUsername() : '';
+        $metadata = $event->metadata();
+
+        $dashboardItem = $this->dashboardItemRepository->findOneBy(['id' => $event->aggregateId()]);
+        if (!($dashboardItem instanceof DashboardItem)) {
+            throw new \Exception('DashboardItem not found');
+        }
+
+        $dashboardItem->setName($metadata->name());
+        $dashboardItem->setDescription($metadata->description());
+        $dashboardItem->setIsPublic($metadata->isPublic());
+        $dashboardItem->setUserId($event->userId());
+        $dashboardItem->setUsername($username);
         $this->entityManager->persist($dashboardItem);
         $this->entityManager->flush();
     }

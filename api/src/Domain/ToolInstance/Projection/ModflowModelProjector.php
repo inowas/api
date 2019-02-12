@@ -62,10 +62,7 @@ final class ModflowModelProjector extends Projector
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $event->aggregateId()]);
-
-        $metadata = $modflowModel->getMetadata();
-
-        $modflowModel = $event->modflowModel();
+        $modflowModel->setMetadata($event->metadata());
         $modflowModel->setId($aggregateId);
         $modflowModel->setUserId($userId);
 

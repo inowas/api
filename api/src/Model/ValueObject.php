@@ -23,6 +23,27 @@ abstract class ValueObject implements ArraySerializableInterface
         return $this->array_recursive_diff($newData->toArray(), $this->toArray());
     }
 
+    public function shallow_diff($newData): ?array
+    {
+        if (!method_exists($newData, 'toArray')) {
+            return null;
+        }
+
+        $new = $newData->toArray();
+        $existing = $this->toArray();
+        return $this->array_shallow_diff($new, $existing);
+    }
+
+    public function merge_shallow_diff(array $diff): self
+    {
+        $arr = $this->toArray();
+        foreach ($diff as $key => $value) {
+            $arr[$key] = $value;
+        }
+
+        return static::fromArray($arr);
+    }
+
     public function merge(array $diff): self
     {
         $arr = $this->toArray();
@@ -31,7 +52,7 @@ abstract class ValueObject implements ArraySerializableInterface
 
     protected function array_recursive_diff($aArray1, $aArray2)
     {
-        $aReturn = array();
+        $aReturn = [];
 
         foreach ($aArray1 as $mKey => $mValue) {
             if (array_key_exists($mKey, $aArray2)) {
@@ -67,5 +88,20 @@ abstract class ValueObject implements ArraySerializableInterface
         }
 
         return $merged;
+    }
+
+    protected function array_shallow_diff(array &$new, &$existing = null): array
+    {
+        $aReturn = [];
+
+        foreach ($new as $key => $value) {
+            if ($existing[$key] == $new[$key]) {
+                continue;
+            }
+
+            $aReturn[$key] = $value;
+        }
+
+        return $aReturn;
     }
 }

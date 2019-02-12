@@ -168,83 +168,83 @@ final class ModflowModel
     }
 
     /**
-     * @return array
+     * @return Boundaries
      */
-    public function getBoundaries(): array
+    public function getBoundaries(): Boundaries
     {
-        return $this->boundaries;
+        return Boundaries::fromArray($this->boundaries);
     }
 
     /**
-     * @param array $boundaries
+     * @param Boundaries $boundaries
      */
-    public function setBoundaries(array $boundaries): void
+    public function setBoundaries(Boundaries $boundaries): void
     {
-        $this->boundaries = $boundaries;
+        $this->boundaries = $boundaries->toArray();
     }
 
     /**
-     * @return array
+     * @return Transport
      */
-    public function getTransport(): array
+    public function getTransport(): Transport
     {
-        return $this->transport;
+        return Transport::fromArray($this->transport);
     }
 
     /**
-     * @param array $transport
+     * @param Transport $transport
      */
-    public function setTransport(array $transport): void
+    public function setTransport(Transport $transport): void
     {
-        $this->transport = $transport;
+        $this->transport = $transport->toArray();
     }
 
     /**
-     * @return array
+     * @return Soilmodel
      */
-    public function getSoilmodel(): array
+    public function getSoilmodel(): Soilmodel
     {
-        return $this->soilmodel;
+        return Soilmodel::fromArray($this->soilmodel);
     }
 
     /**
-     * @param array $soilmodel
+     * @param Soilmodel $soilmodel
      */
-    public function setSoilmodel(array $soilmodel): void
+    public function setSoilmodel(Soilmodel $soilmodel): void
     {
-        $this->soilmodel = $soilmodel;
+        $this->soilmodel = $soilmodel->toArray();
     }
 
     /**
-     * @return array
+     * @return Calculation
      */
-    public function getCalculation(): array
+    public function getCalculation(): Calculation
     {
-        return $this->calculation;
+        return Calculation::fromArray($this->calculation);
     }
 
     /**
-     * @param array $calculation
+     * @param Calculation $calculation
      */
-    public function setCalculation(array $calculation): void
+    public function setCalculation(Calculation $calculation): void
     {
-        $this->calculation = $calculation;
+        $this->calculation = $calculation->toArray();
     }
 
     /**
-     * @return array
+     * @return Packages
      */
-    public function getPackages(): array
+    public function getPackages(): Packages
     {
-        return $this->packages;
+        return Packages::fromArray($this->packages);
     }
 
     /**
-     * @param array $packages
+     * @param Packages $packages
      */
-    public function setPackages(array $packages): void
+    public function setPackages(Packages $packages): void
     {
-        $this->packages = $packages;
+        $this->packages = $packages->toArray();
     }
 
     /**
@@ -263,22 +263,6 @@ final class ModflowModel
         $this->userId = $userId;
     }
 
-    /**
-     * @return array
-     */
-    public function getOptimization(): array
-    {
-        return $this->optimization;
-    }
-
-    /**
-     * @param array $optimization
-     */
-    public function setOptimization(array $optimization): void
-    {
-        $this->optimization = $optimization;
-    }
-
     public function toArray(): array
     {
         return [
@@ -289,7 +273,6 @@ final class ModflowModel
             'boundaries' => $this->boundaries,
             'transport' => $this->transport,
             'calculation' => $this->calculation,
-            'optimization' => $this->optimization,
             'packages' => $this->packages
         ];
     }

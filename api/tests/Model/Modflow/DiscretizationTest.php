@@ -164,4 +164,31 @@ class DiscretizationTest extends TestCase
         $diff = $disc->diff(Discretization::fromArray($arr2));
         $this->assertEquals($arr2, $disc->merge($diff)->toArray());
     }
+
+    /**
+     * @test
+     */
+    public function it_can_create_and_merge_a_shallow_diff(): void
+    {
+        $arr1 = $arr2 = [
+            'geometry' => $this->geometry,
+            'bounding_box' => $this->boundingBox,
+            'grid_size' => $this->gridSize,
+            'active_cells' => $this->activeCells,
+            'stressperiods' => $this->stressperiods,
+            'length_unit' => $this->lengthUnit,
+            'time_unit' => $this->timeUnit
+        ];
+
+        $arr2['geometry']['coordinates'] = [[5, 5], [5, 6], [5, 7], [5, 6]];
+
+        $expected = ['geometry' => $arr2['geometry']];
+        $disc = Discretization::fromArray($arr1);
+        $diff = $disc->shallow_diff(Discretization::fromArray($arr2));
+        $this->assertEquals($expected, $diff);
+
+        /** @var Discretization $disc **/
+        $disc = $disc->merge_shallow_diff($diff);
+        $this->assertEquals($arr2['geometry'], $disc->getGeometry());
+    }
 }
