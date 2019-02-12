@@ -31,13 +31,13 @@ class UpdateModflowModelDiscretizationCommand extends Command
         $self->id = $payload['id'];
 
         $self->discretization = [
-            'geometry' => $payload['geometry'] ?? null,
-            'bounding_box' => $payload['bounding_box'] ?? null,
-            'grid_size' => $payload['grid_size'] ?? null,
-            'active_cells' => $payload['active_cells'] ?? null,
-            'stressperiods' => $payload['stressperiods'] ?? null,
-            'length_unit' => $payload['length_unit'] ?? null,
-            'time_unit' => $payload['time_unit'] ?? null
+            'geometry' => $payload['geometry'],
+            'bounding_box' => $payload['bounding_box'],
+            'grid_size' => $payload['grid_size'],
+            'active_cells' => $payload['active_cells'],
+            'stressperiods' => $payload['stressperiods'],
+            'length_unit' => $payload['length_unit'],
+            'time_unit' => $payload['time_unit']
         ];
 
         return $self;

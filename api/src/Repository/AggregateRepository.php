@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Model\DomainEvent;
 use App\Domain\User\Aggregate\UserAggregate;
 use App\Model\Aggregate;
@@ -15,7 +14,6 @@ final class AggregateRepository
 {
     private $aggregates = [
         UserAggregate::class,
-        ToolInstanceAggregate::class
     ];
 
     private $aggregateMap = [];

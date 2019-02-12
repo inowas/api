@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
-use App\Domain\ToolInstance\Event\ToolInstanceHasBeenDeleted;
-use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
-use App\Model\ProjectorCollection;
-use App\Repository\AggregateRepository;
+use App\Model\ToolInstance;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteToolInstanceCommandHandler
 {
-    /** @var AggregateRepository */
-    private $aggregateRepository;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
-    /** @var ProjectorCollection */
-    private $projectors;
-
-
-    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projectors)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->aggregateRepository = $aggregateRepository;
-        $this->projectors = $projectors;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -36,24 +27,13 @@ class DeleteToolInstanceCommandHandler
         $userId = $command->metadata()['user_id'];
         $id = $command->id();
 
-        $aggregateId = $id;
-
-        /** @var ToolInstanceAggregate $aggregate */
-        $aggregate = $this->aggregateRepository->findAggregateById(ToolInstanceAggregate::class, $aggregateId);
-        $event = ToolInstanceHasBeenDeleted::fromParams($userId, $aggregateId);
-
-        if ($aggregate->userId() !== $userId) {
+        /** @var ToolInstance $toolInstance */
+        $toolInstance = $this->entityManager->getRepository(ToolInstance::class)->findOneBy(['id' => $id]);
+        if ($toolInstance->getUserId() !== $userId) {
             throw new \Exception('The tool cannot be cloned due to permission problems.');
         }
 
-        # Then the event can be applied
-        $aggregate->apply($event);
-
-        # Stored
-        $this->aggregateRepository->storeEvent($event);
-
-        # Projected
-        $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
+        $this->entityManager->remove($toolInstance);
+        $this->entityManager->flush();
     }
 }

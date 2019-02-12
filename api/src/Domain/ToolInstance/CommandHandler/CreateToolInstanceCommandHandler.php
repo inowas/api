@@ -8,23 +8,21 @@ use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
+use App\Domain\ToolInstance\Projection\ToolInstanceProjector;
 use App\Model\ProjectorCollection;
+use App\Model\ToolInstance;
 use App\Repository\AggregateRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CreateToolInstanceCommandHandler
 {
-    /** @var AggregateRepository */
-    private $aggregateRepository;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
-    /** @var ProjectorCollection */
-    private $projectors;
-
-
-    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projectors)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->aggregateRepository = $aggregateRepository;
-        $this->projectors = $projectors;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -40,18 +38,12 @@ class CreateToolInstanceCommandHandler
         $tool = $command->tool();
         $data = $command->data();
 
-        $aggregateId = $id;
-        $event = ToolInstanceHasBeenCreated::fromParams($userId, $aggregateId, $tool, $metadata, $data);
-        $aggregate = ToolInstanceAggregate::withId($aggregateId);
+        $toolInstance = ToolInstance::createWith($id, $tool);
+        $toolInstance->setUserId($userId);
+        $toolInstance->setMetadata($metadata);
+        $toolInstance->setData($data);
 
-        # Then the event can be applied
-        $aggregate->apply($event);
-
-        # Stored
-        $this->aggregateRepository->storeEvent($event);
-
-        # Projected
-        $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
+        $this->entityManager->persist($toolInstance);
+        $this->entityManager->flush();
     }
 }

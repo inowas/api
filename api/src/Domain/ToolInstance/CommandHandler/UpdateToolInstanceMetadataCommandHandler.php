@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
-use App\Domain\ToolInstance\Event\ToolInstanceMetadataHasBeenUpdated;
-use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\SimpleToolsProjector;
-use App\Model\ProjectorCollection;
-use App\Repository\AggregateRepository;
+use App\Model\ToolInstance;
+use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateToolInstanceMetadataCommandHandler
 {
-    /** @var AggregateRepository */
-    private $aggregateRepository;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
-    /** @var ProjectorCollection */
-    private $projectors;
-
-
-    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projectors)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->aggregateRepository = $aggregateRepository;
-        $this->projectors = $projectors;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -34,25 +25,22 @@ class UpdateToolInstanceMetadataCommandHandler
     public function __invoke(UpdateToolInstanceMetadataCommand $command)
     {
         $userId = $command->metadata()['user_id'];
-        $aggregateId = $command->id();
+        $id = $command->id();
 
 
-        /** @var ToolInstanceAggregate $aggregate */
-        $aggregate = $this->aggregateRepository->findAggregateById(ToolInstanceAggregate::class, $aggregateId);
+        /** @var ToolInstance $toolInstance */
+        $toolInstance = $this->entityManager->getRepository(ToolInstance::class)->findOneBy(['id' => $id]);
 
-        if ($aggregate->userId() !== $userId) {
-            throw new \Exception('The tool cannot be cloned due to permission problems.');
+        if (!$toolInstance instanceof ToolInstance) {
+            throw new \Exception('ToolInstance not found');
         }
 
-        # Then the event can be applied
-        $event = ToolInstanceMetadataHasBeenUpdated::fromParams($userId, $aggregateId, $command->toolMetadata());
-        $aggregate->apply($event);
+        if ($toolInstance->getUserId() !== $userId) {
+            throw new \Exception('The tool cannot be updated due to permission problems.');
+        }
 
-        # Stored
-        $this->aggregateRepository->storeEvent($event);
-
-        # Projected
-        $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(SimpleToolsProjector::class)->apply($event);
+        $toolInstance->setMetadata($command->toolMetadata());
+        $this->entityManager->persist($toolInstance);
+        $this->entityManager->flush();
     }
 }

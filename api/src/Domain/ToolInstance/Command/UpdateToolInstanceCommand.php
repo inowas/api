@@ -54,7 +54,7 @@ class UpdateToolInstanceCommand extends Command
         $self->name = $payload['name'];
         $self->description = $payload['description'];
         $self->public = $payload['public'];
-        $self->data = $payload['data'] ?? [];
+        $self->data = $payload['data'];
         return $self;
     }
 

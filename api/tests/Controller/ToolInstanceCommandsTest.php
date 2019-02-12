@@ -3,7 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Model\DashboardItem;
-use App\Model\SimpleToolInstance;
+use App\Model\ToolInstance;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -48,23 +48,14 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        /** @var SimpleToolInstance $simpleTool */
-        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($toolInstanceId);
+        /** @var ToolInstance $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($toolInstanceId);
         $this->assertEquals($command['payload']['tool'], $simpleTool->getTool());
         $this->assertEquals($command['payload']['name'], $simpleTool->getName());
         $this->assertEquals($command['payload']['description'], $simpleTool->getDescription());
         $this->assertEquals($command['payload']['public'], $simpleTool->isPublic());
         $this->assertEquals($command['payload']['data'], $simpleTool->getData());
         $this->assertEquals($user->getId()->toString(), $simpleTool->getUserId());
-
-        /** @var DashboardItem $dashboardItem */
-        $dashboardItem = self::$container->get('doctrine')->getRepository(DashboardItem::class)->findOneById($toolInstanceId);
-        $this->assertEquals($command['payload']['tool'], $dashboardItem->getTool());
-        $this->assertEquals($command['payload']['name'], $dashboardItem->getName());
-        $this->assertEquals($command['payload']['description'], $dashboardItem->getDescription());
-        $this->assertEquals($command['payload']['public'], $dashboardItem->isPublic());
-        $this->assertEquals($username, $dashboardItem->getUsername());
-        $this->assertEquals($user->getId()->toString(), $dashboardItem->getUserId());
 
         return ['user' => $user, 'command' => $command];
     }
@@ -84,8 +75,8 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $command = $data['command'];
         $toolInstanceId = $command['payload']['id'];
 
-        /** @var SimpleToolInstance $simpleTool */
-        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($toolInstanceId);
+        /** @var ToolInstance $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($toolInstanceId);
         $this->assertEquals($command['payload']['tool'], $simpleTool->getTool());
         $this->assertEquals($command['payload']['name'], $simpleTool->getName());
         $this->assertEquals($command['payload']['description'], $simpleTool->getDescription());
@@ -94,30 +85,6 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $this->assertEquals($user->getId()->toString(), $simpleTool->getUserId());
     }
 
-    /**
-     * @test
-     * @depends sendCreateToolInstanceCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function createToolInstanceCommandDashboardProjection(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $toolInstanceId = $command['payload']['id'];
-
-        /** @var DashboardItem $dashboardItem */
-        $dashboardItem = self::$container->get('doctrine')->getRepository(DashboardItem::class)->findOneById($toolInstanceId);
-        $this->assertEquals($command['payload']['tool'], $dashboardItem->getTool());
-        $this->assertEquals($command['payload']['name'], $dashboardItem->getName());
-        $this->assertEquals($command['payload']['description'], $dashboardItem->getDescription());
-        $this->assertEquals($command['payload']['public'], $dashboardItem->isPublic());
-        $this->assertEquals($user->getUsername(), $dashboardItem->getUsername());
-        $this->assertEquals($user->getId()->toString(), $dashboardItem->getUserId());
-    }
 
     /**
      * @test
@@ -169,14 +136,14 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $newId = $command['payload']['id'];
         $baseId = $command['payload']['base_id'];
 
-        $simpleTools = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findAll();
+        $simpleTools = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findAll();
         $this->assertCount(2, $simpleTools);
 
-        /** @var SimpleToolInstance $oldSimpleTool */
-        $oldSimpleTool = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($baseId);
+        /** @var ToolInstance $oldSimpleTool */
+        $oldSimpleTool = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($baseId);
 
-        /** @var SimpleToolInstance $simpleTool */
-        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($newId);
+        /** @var ToolInstance $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($newId);
 
         $this->assertEquals($oldSimpleTool->getTool(), $simpleTool->getTool());
         $this->assertEquals($oldSimpleTool->getName(), $simpleTool->getName());
@@ -184,39 +151,6 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $this->assertEquals($oldSimpleTool->isPublic(), $simpleTool->isPublic());
         $this->assertEquals($oldSimpleTool->getData(), $simpleTool->getData());
         $this->assertEquals($user->getId()->toString(), $simpleTool->getUserId());
-    }
-
-
-    /**
-     * @test
-     * @depends sendCloneToolInstanceCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function cloneToolInstanceCommandDashboardProjection(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $newId = $command['payload']['id'];
-        $baseId = $command['payload']['base_id'];
-
-        $dashBoardItems = self::$container->get('doctrine')->getRepository(DashboardItem::class)->findAll();
-        $this->assertCount(2, $dashBoardItems);
-
-        /** @var DashboardItem $oldDashboardItem */
-        $oldDashboardItem = self::$container->get('doctrine')->getRepository(DashboardItem::class)->findOneById($baseId);
-
-        /** @var DashboardItem $dashboardItem */
-        $dashboardItem = self::$container->get('doctrine')->getRepository(DashboardItem::class)->findOneById($newId);
-
-        $this->assertEquals($oldDashboardItem->getTool(), $dashboardItem->getTool());
-        $this->assertEquals($oldDashboardItem->getName(), $dashboardItem->getName());
-        $this->assertEquals($oldDashboardItem->getDescription(), $dashboardItem->getDescription());
-        $this->assertEquals($oldDashboardItem->isPublic(), $dashboardItem->isPublic());
-        $this->assertEquals($user->getId()->toString(), $dashboardItem->getUserId());
     }
 
     /**
@@ -262,30 +196,6 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
      * @param array $data
      * @throws \Exception
      */
-    public function updateToolInstanceCommandDashboardProjection(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $toolInstanceId = $command['payload']['id'];
-
-        /** @var DashboardItem $dashboardItem */
-        $dashboardItem = self::$container->get('doctrine')->getRepository(DashboardItem::class)->findOneById($toolInstanceId);
-        $this->assertEquals($command['payload']['name'], $dashboardItem->getName());
-        $this->assertEquals($command['payload']['description'], $dashboardItem->getDescription());
-        $this->assertEquals($command['payload']['public'], $dashboardItem->isPublic());
-        $this->assertEquals($user->getUsername(), $dashboardItem->getUsername());
-        $this->assertEquals($user->getId()->toString(), $dashboardItem->getUserId());
-    }
-
-    /**
-     * @test
-     * @depends sendUpdateCloneToolInstanceCommand
-     * @param array $data
-     * @throws \Exception
-     */
     public function updateToolInstanceCommandSimpleToolsProjection(array $data)
     {
         static::createClient();
@@ -295,8 +205,8 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $command = $data['command'];
         $toolInstanceId = $command['payload']['id'];
 
-        /** @var SimpleToolInstance $simpleTool */
-        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($toolInstanceId);
+        /** @var ToolInstance $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($toolInstanceId);
         $this->assertEquals($command['payload']['name'], $simpleTool->getName());
         $this->assertEquals($command['payload']['description'], $simpleTool->getDescription());
         $this->assertEquals($command['payload']['public'], $simpleTool->isPublic());
@@ -343,24 +253,6 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
      * @param array $data
      * @throws \Exception
      */
-    public function deleteToolInstanceCommandDashboardProjection(array $data)
-    {
-        static::createClient();
-
-        $command = $data['command'];
-        $toolInstanceId = $command['payload']['id'];
-
-        /** @var DashboardItem $dashboardItem */
-        $dashboardItem = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($toolInstanceId);
-        $this->assertNull($dashboardItem);
-    }
-
-    /**
-     * @test
-     * @depends sendDeleteToolInstanceCommand
-     * @param array $data
-     * @throws \Exception
-     */
     public function deleteToolInstanceCommandSimpleToolsProjection(array $data)
     {
         static::createClient();
@@ -368,8 +260,8 @@ class ToolInstanceCommandsTest extends CommandTestBaseClass
         $command = $data['command'];
         $toolInstanceId = $command['payload']['id'];
 
-        /** @var SimpleToolInstance $simpleTool */
-        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleToolInstance::class)->findOneById($toolInstanceId);
+        /** @var ToolInstance $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(ToolInstance::class)->findOneById($toolInstanceId);
         $this->assertNull($simpleTool);
     }
 }

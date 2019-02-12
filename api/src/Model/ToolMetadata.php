@@ -11,7 +11,7 @@ class ToolMetadata extends ValueObject
     private $description;
     private $isPublic;
 
-    public static function fromParams(?string $name, ?string $description, ?bool $isPublic): ToolMetadata
+    public static function fromParams(string $name, string $description, bool $isPublic): ToolMetadata
     {
         $self = new self();
         $self->name = $name;
@@ -23,9 +23,9 @@ class ToolMetadata extends ValueObject
     public static function fromArray(array $arr): self
     {
         $self = new self();
-        $self->name = $arr['name'] ?? null;
-        $self->description = $arr['description'] ?? null;
-        $self->isPublic = $arr['public'] ?? null;
+        $self->name = $arr['name'];
+        $self->description = $arr['description'];
+        $self->isPublic = $arr['public'];
         return $self;
     }
 
@@ -33,17 +33,17 @@ class ToolMetadata extends ValueObject
     {
     }
 
-    public function name(): ?string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function description(): ?string
+    public function description(): string
     {
         return $this->description;
     }
 
-    public function isPublic(): ?bool
+    public function isPublic(): bool
     {
         return $this->isPublic;
     }

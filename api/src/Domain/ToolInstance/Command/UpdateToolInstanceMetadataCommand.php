@@ -49,8 +49,8 @@ class UpdateToolInstanceMetadataCommand extends Command
         $self = new self();
         $self->id = $payload['id'];
         $self->name = $payload['name'];
-        $self->description = $payload['description'];
-        $self->public = $payload['public'];
+        $self->description = $payload['description'] ?? null;
+        $self->public = $payload['public'] ?? null;
         return $self;
     }
 

@@ -4,28 +4,20 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Aggregate\ToolInstanceAggregate;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
-use App\Domain\ToolInstance\Event\ModflowModelHasBeenCreated;
-use App\Domain\ToolInstance\Projection\DashboardProjector;
-use App\Domain\ToolInstance\Projection\ModflowModelProjector;
 use App\Model\Modflow\ModflowModel;
-use App\Model\ProjectorCollection;
-use App\Repository\AggregateRepository;
+use App\Model\ToolInstance;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CreateModflowModelCommandHandler
 {
-    /** @var AggregateRepository */
-    private $aggregateRepository;
-
-    /** @var ProjectorCollection */
-    private $projectors;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, ProjectorCollection $projectors)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->aggregateRepository = $aggregateRepository;
-        $this->projectors = $projectors;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -39,23 +31,15 @@ class CreateModflowModelCommandHandler
         $toolMetadata = $command->toolMetadata();
         $discretization = $command->discretization();
 
-        $modflowModel = ModflowModel::fromParams($modelId, $userId);
-        $modflowModel->setMetadata($toolMetadata);
+        $modflowModel = ModflowModel::create();
         $modflowModel->setDiscretization($discretization);
 
+        $toolInstance = ToolInstance::createWith($modelId, 'T03');
+        $toolInstance->setUserId($userId);
+        $toolInstance->setMetadata($toolMetadata);
+        $toolInstance->setData($modflowModel->toArray());
 
-        # Create ModflowModel
-        $aggregate = ToolInstanceAggregate::withId($modelId);
-        $event = ModflowModelHasBeenCreated::fromParams($userId, $modelId, $modflowModel);
-
-        # Then the event can be applied
-        $aggregate->apply($event);
-
-        # Stored
-        $this->aggregateRepository->storeEvent($event);
-
-        # Projected
-        $this->projectors->getProjector(DashboardProjector::class)->apply($event);
-        $this->projectors->getProjector(ModflowModelProjector::class)->apply($event);
+        $this->entityManager->persist($toolInstance);
+        $this->entityManager->flush();
     }
 }
