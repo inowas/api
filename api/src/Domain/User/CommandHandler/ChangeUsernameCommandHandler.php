@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\User\CommandHandler;
 
 use App\Domain\User\Aggregate\UserAggregate;
+use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 use App\Domain\User\Command\ChangeUsernameCommand;
 use App\Domain\User\Event\UsernameHasBeenChanged;
@@ -17,18 +18,18 @@ class ChangeUsernameCommandHandler
     /** @var AggregateRepository */
     private $aggregateRepository;
 
-    /** @var UserProjector */
-    private $userProjector;
+    /** @var ProjectorCollection */
+    private $projectors;
 
     /** @var UserManager */
     private $userManager;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, UserProjector $userProjector)
+    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, ProjectorCollection $projectors)
     {
         $this->aggregateRepository = $aggregateRepository;
+        $this->projectors = $projectors;
         $this->userManager = $userManager;
-        $this->userProjector = $userProjector;
     }
 
     /**
@@ -63,6 +64,6 @@ class ChangeUsernameCommandHandler
         $aggregate->apply($event);
 
         $this->aggregateRepository->storeEvent($event);
-        $this->userProjector->apply($event);
+        $this->projectors->getProjector(UserProjector::class)->apply($event);
     }
 }

@@ -184,11 +184,11 @@ class DiscretizationTest extends TestCase
 
         $expected = ['geometry' => $arr2['geometry']];
         $disc = Discretization::fromArray($arr1);
-        $diff = $disc->shallow_diff(Discretization::fromArray($arr2));
+        $diff = $disc->array_shallow_diff(Discretization::fromArray($arr2));
         $this->assertEquals($expected, $diff);
 
         /** @var Discretization $disc **/
-        $disc = $disc->merge_shallow_diff($diff);
+        $disc = $disc->array_merge_shallow_diff($diff);
         $this->assertEquals($arr2['geometry'], $disc->getGeometry());
     }
 }
