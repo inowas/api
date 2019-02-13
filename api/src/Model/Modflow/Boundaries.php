@@ -24,9 +24,28 @@ final class Boundaries extends ValueObject
     {
     }
 
+    public function first(): ?Boundary
+    {
+        if (count($this->boundaries) === 0) {
+            return null;
+        }
+
+        /** @noinspection PhpParamsInspection */
+        return Boundary::fromArray(array_values($this->boundaries)[0]);
+    }
+
     public function addBoundary(Boundary $boundary): void
     {
         $this->boundaries[$boundary->id()] = $boundary->toArray();
+    }
+
+    public function updateBoundary(string $boundaryId, Boundary $boundary): void
+    {
+        if (array_key_exists($boundaryId, $this->boundaries)) {
+            unset($this->boundaries[$boundary->id()]);
+        }
+
+        $this->addBoundary($boundary);
     }
 
     public function removeBoundary(string $id): void

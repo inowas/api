@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Model\Modflow\Boundaries;
+use App\Model\Modflow\Boundary;
 use App\Model\Modflow\Discretization;
 use App\Model\Modflow\ModflowModel;
 use App\Model\ToolMetadata;
@@ -381,14 +383,16 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $user = $this->createRandomUser();
         $modelId = $this->createRandomModflowModel($user)->id();
 
-        $command = array(
-            'uuid' => '69bcd92b-e77d-4b58-b819-95faf5c9996f',
+        $boundaryId = Uuid::uuid4()->toString();
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'addBoundary',
             'metadata' => (object)[],
             'payload' => [
                 'id' => $modelId,
                 'boundary' => [
-                    'id' => Uuid::uuid4()->toString(),
+                    'id' => $boundaryId,
                     'name' => 'New wel-Boundary',
                     'geometry' => [
                         'type' => 'Point',
@@ -404,7 +408,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                     ]],
                 ],
             ],
-        );
+        ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
         $response = $this->sendCommand('api/messagebox', $command, $token);
@@ -412,8 +416,84 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $this->assertEquals($command['payload']['boundary'], $modflowModel->boundaries()->findById($boundaryId)->toArray());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendUpdateBoundaryCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+
+        $boundary = $model->boundaries()->first();
+        $updatedBoundary = Boundary::fromArray([
+            'id' => $boundary->id(),
+            'name' => 'Updated',
+            'geometry' => [
+                'type' => 'Point',
+                'coordinates' => [12, 52]
+            ],
+            'type' => 'wel',
+            'active_cells' => [[2, 1]],
+            'affected_layers' => [1],
+            'metadata' => ['well_type' => 'puw'],
+            'date_time_values' => [[
+                'date_time' => '2005-05-11T00:00:00Z',
+                'values' => [2],
+            ]],
+        ]);
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'updateBoundary',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $model->id(),
+                'boundary_id' => $boundary->id(),
+                'boundary' => $updatedBoundary->toArray()
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
         $expected = [$command['payload']['boundary']['id'] => $command['payload']['boundary']];
         $this->assertEquals($expected, $modflowModel->boundaries()->toArray());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendRemoveBoundaryCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+
+        $boundaryId = $model->boundaries()->first()->id();
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'removeBoundary',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $model->id(),
+                'boundary_id' => $boundaryId,
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
+        $this->assertCount(0, $modflowModel->boundaries()->toArray());
     }
 
     /**
@@ -491,8 +571,29 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             ],
             'time_unit' => 4,
         ]);
-
         $modflowModel->setDiscretization($discretization);
+
+        $boundary = Boundary::fromArray([
+            'id' => Uuid::uuid4()->toString(),
+            'name' => 'New wel-Boundary',
+            'geometry' => [
+                'type' => 'Point',
+                'coordinates' => [13, 52]
+            ],
+            'type' => 'wel',
+            'active_cells' => [[1, 1]],
+            'affected_layers' => [0],
+            'metadata' => ['well_type' => 'puw'],
+            'date_time_values' => [[
+                'date_time' => '2005-05-17T00:00:00Z',
+                'values' => [0],
+            ]],
+        ]);
+
+        $boundaries = Boundaries::create();
+        $boundaries->addBoundary($boundary);
+        $modflowModel->setBoundaries($boundaries);
+
         $em->persist($modflowModel);
         $em->flush();
 

@@ -11,6 +11,8 @@ use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
+use App\Domain\ToolInstance\Command\RemoveBoundaryCommand;
+use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
 use App\Domain\ToolInstance\Command\UpdateMt3dmsCommand;
@@ -75,6 +77,8 @@ final class MessageBoxController
             DeleteModflowModelCommand::class,
             CreateToolInstanceCommand::class,
             DeleteToolInstanceCommand::class,
+            RemoveBoundaryCommand::class,
+            UpdateBoundaryCommand::class,
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
             UpdateMt3dmsCommand::class,
