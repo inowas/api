@@ -271,4 +271,71 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         );
         $this->assertEquals($expected, $modflowModel->discretization());
     }
+
+    /**
+     * @test
+     * @depends sendCreateModflowModelCommand
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function sendUpdateModflowModelStressperiodsCommand(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $toolInstanceId = $data['command']['payload']['id'];
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'updateStressperiods',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $toolInstanceId,
+                'stressperiods' => [
+                    'start_date_time' => '2000-01-03T00:00:00.000Z',
+                    'end_date_time' => '2019-12-29T00:00:00.000Z',
+                    'stressperiods' => [[
+                        'totim_start' => 2,
+                        'perlen' => 3,
+                        'nstp' => 4,
+                        'tsmult' => 4,
+                        'steady' => true
+                    ]],
+                    'time_unit' => 3,
+                ]
+            ]
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        return ['user' => $user, 'command' => $command];
+    }
+
+    /**
+     * @test
+     * @depends sendUpdateModflowModelStressperiodsCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function modflowModelStressperiodsWereUpdatedCorrectly(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $command = $data['command'];
+        $modelId = $command['payload']['id'];
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $this->assertInstanceOf(ModflowModel::class, $modflowModel);
+        $this->assertEquals('T03', $modflowModel->tool());
+        $this->assertEquals($user->getId()->toString(), $modflowModel->userId());
+        $this->assertInstanceOf(Discretization::class, $modflowModel->discretization());
+        $this->assertEquals($command['payload']['stressperiods'], $modflowModel->discretization()->stressperiods());
+    }
 }

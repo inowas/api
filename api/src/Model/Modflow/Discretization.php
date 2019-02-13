@@ -44,37 +44,42 @@ final class Discretization extends ValueObject
     {
     }
 
-    public function getGeometry(): array
+    public function geometry(): array
     {
         return $this->geometry;
     }
 
-    public function getBoundingBox(): array
+    public function boundingBox(): array
     {
         return $this->boundingBox;
     }
 
-    public function getGridSize(): array
+    public function gridSize(): array
     {
         return $this->gridSize;
     }
 
-    public function getActiveCells(): array
+    public function activeCells(): array
     {
         return $this->activeCells;
     }
 
-    public function getStressperiods(): array
+    public function stressperiods(): array
     {
         return $this->stressperiods;
     }
 
-    public function getLengthUnit(): int
+    public function setStressperiods(array $stressperiods): void
+    {
+        $this->stressperiods = $stressperiods;
+    }
+
+    public function lengthUnit(): int
     {
         return $this->lengthUnit;
     }
 
-    public function getTimeUnit(): int
+    public function timeUnit(): int
     {
         return $this->timeUnit;
     }

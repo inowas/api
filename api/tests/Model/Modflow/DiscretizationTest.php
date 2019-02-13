@@ -64,13 +64,13 @@ class DiscretizationTest extends TestCase
     {
         $disc = Discretization::fromParams($this->geometry, $this->boundingBox, $this->gridSize, $this->activeCells, $this->stressperiods, $this->lengthUnit, $this->timeUnit);
         $this->assertInstanceOf(Discretization::class, $disc);
-        $this->assertEquals($this->geometry, $disc->getGeometry());
-        $this->assertEquals($this->boundingBox, $disc->getBoundingBox());
-        $this->assertEquals($this->gridSize, $disc->getGridSize());
-        $this->assertEquals($this->activeCells, $disc->getActiveCells());
-        $this->assertEquals($this->stressperiods, $disc->getStressperiods());
-        $this->assertEquals($this->timeUnit, $disc->getTimeUnit());
-        $this->assertEquals($this->lengthUnit, $disc->getLengthUnit());
+        $this->assertEquals($this->geometry, $disc->geometry());
+        $this->assertEquals($this->boundingBox, $disc->boundingBox());
+        $this->assertEquals($this->gridSize, $disc->gridSize());
+        $this->assertEquals($this->activeCells, $disc->activeCells());
+        $this->assertEquals($this->stressperiods, $disc->stressperiods());
+        $this->assertEquals($this->timeUnit, $disc->timeUnit());
+        $this->assertEquals($this->lengthUnit, $disc->lengthUnit());
     }
 
     /**
@@ -189,6 +189,6 @@ class DiscretizationTest extends TestCase
 
         /** @var Discretization $disc **/
         $disc = $disc->array_merge_shallow_diff($diff);
-        $this->assertEquals($arr2['geometry'], $disc->getGeometry());
+        $this->assertEquals($arr2['geometry'], $disc->geometry());
     }
 }
