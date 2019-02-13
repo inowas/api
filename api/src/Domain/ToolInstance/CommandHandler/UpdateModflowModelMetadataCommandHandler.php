@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Model\Modflow\ModflowModel;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UpdateModflowModelDiscretizationCommandHandler
+class UpdateModflowModelMetadataCommandHandler
 {
     /** @var AggregateRepository */
     private $aggregateRepository;
@@ -29,10 +29,10 @@ class UpdateModflowModelDiscretizationCommandHandler
     }
 
     /**
-     * @param UpdateModflowModelDiscretizationCommand $command
+     * @param UpdateModflowModelMetadataCommand $command
      * @throws \Exception
      */
-    public function __invoke(UpdateModflowModelDiscretizationCommand $command)
+    public function __invoke(UpdateModflowModelMetadataCommand $command)
     {
         $modelId = $command->id();
         $userId = $command->metadata()['user_id'];
@@ -47,7 +47,7 @@ class UpdateModflowModelDiscretizationCommandHandler
             throw new \Exception('The Model cannot be updated due to permission problems.');
         }
 
-        $modflowModel->setDiscretization($command->discretization());
+        $modflowModel->setMetadata($command->toolMetadata());
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }

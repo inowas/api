@@ -9,7 +9,7 @@
         },
         "message_name": {
             "type": "string",
-            "pattern": "^updateModflowModel$"
+            "pattern": "^updateModflowModelMetadata$"
         },
         "metadata": {
             "type": "object"
@@ -29,35 +29,15 @@
                 "description": {
                     "type": "string"
                 },
-                "geometry": {
-                    "$ref": "/geojson/polygon"
-                },
-                "bounding_box": {
-                    "$ref": "/modflow/boundingBox"
-                },
-                "grid_size": {
-                    "$ref": "/modflow/gridSize"
-                },
-                "active_cells": {
-                    "$ref": "/modflow/activeCells"
-                },
-                "stressperiods": {
-                    "$ref": "/modflow/stressperiods"
-                },
-                "length_unit": {
-                    "description": "0: undefined, 1: feet, 2: meters, 3: centimeters",
-                    "enum": [0, 1, 2, 3]
-                },
-                "time_unit": {
-                    "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
-                    "enum": [0, 1, 2, 3, 4, 5]
-                },
                 "public": {
                     "type": "boolean"
                 }
             },
             "required": [
-                "id"
+                "id",
+                "name",
+                "description",
+                "public"
             ]
         }
     },

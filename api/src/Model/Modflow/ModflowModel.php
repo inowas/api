@@ -65,7 +65,7 @@ final class ModflowModel extends ToolInstance
         return $self;
     }
 
-    public function getDiscretization(): Discretization
+    public function discretization(): Discretization
     {
         return Discretization::fromArray($this->discretization);
     }

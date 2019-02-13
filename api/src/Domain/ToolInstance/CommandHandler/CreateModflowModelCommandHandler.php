@@ -6,7 +6,6 @@ namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Model\Modflow\ModflowModel;
-use App\Model\ToolInstance;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CreateModflowModelCommandHandler
@@ -26,20 +25,14 @@ class CreateModflowModelCommandHandler
      */
     public function __invoke(CreateModflowModelCommand $command)
     {
-        $modelId = $command->id();
+        $id = $command->id();
         $userId = $command->metadata()['user_id'];
-        $toolMetadata = $command->toolMetadata();
+        $metadata = $command->toolMetadata();
         $discretization = $command->discretization();
 
-        $modflowModel = ModflowModel::create();
+        $modflowModel = ModflowModel::createWithParams($id, $userId, 'T03', $metadata);
         $modflowModel->setDiscretization($discretization);
-
-        $toolInstance = ToolInstance::createWith($modelId, 'T03');
-        $toolInstance->setUserId($userId);
-        $toolInstance->setMetadata($toolMetadata);
-        $toolInstance->setData($modflowModel->toArray());
-
-        $this->entityManager->persist($toolInstance);
+        $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }
 }
