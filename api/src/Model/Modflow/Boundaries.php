@@ -24,9 +24,9 @@ final class Boundaries extends ValueObject
     {
     }
 
-    public function addBoundary(array $boundary): void
+    public function addBoundary(Boundary $boundary): void
     {
-        $this->boundaries[$boundary['id']] = $boundary;
+        $this->boundaries[$boundary->id()] = $boundary->toArray();
     }
 
     public function removeBoundary(string $id): void
@@ -34,9 +34,13 @@ final class Boundaries extends ValueObject
         unset($this->boundaries[$id]);
     }
 
-    public function findById(string $id): ?array
+    public function findById(string $id): ?Boundary
     {
-        return $this->boundaries[$id];
+        if (!array_key_exists($id, $this->boundaries)) {
+            return null;
+        }
+
+        return Boundary::fromArray($this->boundaries[$id]);
     }
 
     public function toArray(): array

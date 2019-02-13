@@ -3,8 +3,13 @@
 namespace App\Model;
 
 
-abstract class ValueObject implements ArraySerializableInterface
+abstract class ValueObject
 {
+
+    abstract public static function fromArray(array $arr);
+
+    abstract public function toArray();
+
     public function isEqualTo($toolMetadata): bool
     {
         if (!method_exists($toolMetadata, 'toArray')) {

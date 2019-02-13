@@ -75,7 +75,7 @@ final class ModflowModel extends ToolInstance
         $this->discretization = $discretization->toArray();
     }
 
-    public function getBoundaries(): Boundaries
+    public function boundaries(): Boundaries
     {
         return Boundaries::fromArray($this->boundaries);
     }

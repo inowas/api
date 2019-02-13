@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\ToolInstance\Command\AddBoundaryCommand;
 use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
@@ -67,6 +68,7 @@ final class MessageBoxController
             DeleteUserCommand::class,
             ReactivateUserCommand::class,
 
+            AddBoundaryCommand::class,
             CloneModflowModelCommand::class,
             CloneToolInstanceCommand::class,
             CreateModflowModelCommand::class,

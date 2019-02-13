@@ -4,6 +4,7 @@ namespace App\Tests\Controller;
 
 use App\Model\Modflow\Discretization;
 use App\Model\Modflow\ModflowModel;
+use App\Model\ToolMetadata;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -16,28 +17,24 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
      */
     public function sendCreateModflowModelCommand()
     {
-        static::createClient();
-
-        $username = sprintf('newUser_%d', rand(1000000, 10000000 - 1));
-        $password = sprintf('newUserPassword_%d', rand(1000000, 10000000 - 1));
-
-        $user = new User($username, $password, ['ROLE_USER']);
+        $user = $this->createRandomUser();
 
         /** @var EntityManagerInterface $em */
         $em = self::$container->get('doctrine')->getManager();
         $em->persist($user);
         $em->flush();
 
-        $toolInstanceId = Uuid::uuid4()->toString();
+        $modelId = Uuid::uuid4()->toString();
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'createModflowModel',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
+                'id' => $modelId,
                 'name' => 'New numerical groundwater model',
                 'description' => 'This is the model description',
+                'public' => true,
                 'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
                 'bounding_box' => [[13.785759, 51.133180], [13.788094, 51.134608]],
                 'geometry' => [
@@ -55,7 +52,6 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                     'n_y' => 2,
                 ],
                 'length_unit' => 2,
-                'public' => true,
                 'stressperiods' => [
                     'start_date_time' => '2000-01-01T00:00:00.000Z',
                     'end_date_time' => '2019-12-31T00:00:00.000Z',
@@ -72,27 +68,9 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             ],
         ];
 
-        $token = $this->getToken($username, $password);
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
-
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelWasStoredCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $modelId = $command['payload']['id'];
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
@@ -119,25 +97,19 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendUpdateModflowModelMetadataCommand(array $data)
+    public function sendUpdateModflowModelMetadataCommand(): void
     {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'updateModflowModelMetadata',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
+                'id' => $model->id(),
                 'name' => 'New numerical groundwater model - updated',
                 'description' => 'This is the model description - updated',
                 'public' => false
@@ -148,26 +120,8 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendUpdateModflowModelMetadataCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelMetadataWasUpdatedCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $modelId = $command['payload']['id'];
-
         /** @var ModflowModel $modflowModel */
-        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
         $this->assertInstanceOf(ModflowModel::class, $modflowModel);
 
         $this->assertEquals('T03', $modflowModel->tool());
@@ -179,25 +133,19 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendUpdateModflowModelDiscretizationCommand(array $data)
+    public function sendUpdateModflowModelDiscretizationCommand(): void
     {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'updateModflowModelDiscretization',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
+                'id' => $model->id(),
                 'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0], [10, 10]],
                 'bounding_box' => [[13, 51], [14, 52]],
                 'geometry' => [
@@ -235,26 +183,8 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendUpdateModflowModelDiscretizationCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelDiscretizationWasUpdatedCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $modelId = $command['payload']['id'];
-
         /** @var ModflowModel $modflowModel */
-        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
         $this->assertInstanceOf(ModflowModel::class, $modflowModel);
 
         $this->assertEquals('T03', $modflowModel->tool());
@@ -274,25 +204,19 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendUpdateModflowModelStressperiodsCommand(array $data)
+    public function sendUpdateModflowModelStressperiodsCommand(): void
     {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'updateStressperiods',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
+                'id' => $model->id(),
                 'stressperiods' => [
                     'start_date_time' => '2000-01-03T00:00:00.000Z',
                     'end_date_time' => '2019-12-29T00:00:00.000Z',
@@ -312,54 +236,28 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendUpdateModflowModelStressperiodsCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelStressperiodsWereUpdatedCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $modelId = $command['payload']['id'];
-
         /** @var ModflowModel $modflowModel */
-        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
         $this->assertInstanceOf(ModflowModel::class, $modflowModel);
-        $this->assertEquals('T03', $modflowModel->tool());
-        $this->assertEquals($user->getId()->toString(), $modflowModel->userId());
         $this->assertInstanceOf(Discretization::class, $modflowModel->discretization());
         $this->assertEquals($command['payload']['stressperiods'], $modflowModel->discretization()->stressperiods());
     }
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendUpdateMt3dmsCommand(array $data)
+    public function sendUpdateMt3dmsCommand(): void
     {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'updateMt3dms',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
+                'id' => $model->id(),
                 'mt3dms' => ['mt3dms-content']
             ]
         ];
@@ -368,54 +266,30 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendUpdateMt3dmsCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelMt3dmsUpdatedCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $command = $data['command'];
-        $modelId = $command['payload']['id'];
-
         /** @var ModflowModel $modflowModel */
-        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
         $this->assertInstanceOf(ModflowModel::class, $modflowModel);
-        $this->assertEquals('T03', $modflowModel->tool());
-        $this->assertEquals($user->getId()->toString(), $modflowModel->userId());
         $this->assertEquals($command['payload']['mt3dms'], $modflowModel->transport()->toArray());
     }
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendCloneModflowModelAsToolCommand(array $data)
+    public function sendCloneModflowModelAsToolCommand(): void
     {
-        static::createClient();
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
 
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $cloneId = Uuid::uuid4()->toString();
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'cloneModflowModel',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
-                'new_id' => Uuid::uuid4()->toString(),
+                'id' => $model->id(),
+                'new_id' => $cloneId,
                 'is_tool' => true
             ]
         ];
@@ -424,55 +298,34 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendCloneModflowModelAsToolCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelWasClonedAsToolCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $command = $data['command'];
-        $originalId = $command['payload']['id'];
-        $cloneId = $command['payload']['new_id'];
-
         /** @var ModflowModel $original */
-        $original = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($originalId);
+        $original = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
 
         /** @var ModflowModel $clone */
         $clone = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($cloneId);
+
         $this->assertEquals($clone->toArray(), $original->toArray());
         $this->assertFalse($clone->isScenario());
     }
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendCloneModflowModelAsScenarioCommand(array $data)
+    public function sendCloneModflowModelAsScenarioCommand(): void
     {
-        static::createClient();
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
 
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $cloneId = Uuid::uuid4()->toString();
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'cloneModflowModel',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
-                'new_id' => Uuid::uuid4()->toString(),
+                'id' => $model->id(),
+                'new_id' => $cloneId,
                 'is_tool' => false
             ]
         ];
@@ -481,26 +334,8 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
-    }
-
-    /**
-     * @test
-     * @depends sendCloneModflowModelAsScenarioCommand
-     * @param array $data
-     * @throws \Exception
-     */
-    public function modflowModelWasClonedAsScenarioCorrectly(array $data)
-    {
-        static::createClient();
-
-        /** @var User $user */
-        $command = $data['command'];
-        $originalId = $command['payload']['id'];
-        $cloneId = $command['payload']['new_id'];
-
         /** @var ModflowModel $original */
-        $original = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($originalId);
+        $original = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
 
         /** @var ModflowModel $clone */
         $clone = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($cloneId);
@@ -511,25 +346,20 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
     /**
      * @test
-     * @depends sendCreateModflowModelCommand
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
-    public function sendDeleteModflowModelCommand(array $data)
+    public function sendDeleteModflowModelCommand()
     {
-        static::createClient();
-
-        /** @var User $user */
-        $user = $data['user'];
-        $toolInstanceId = $data['command']['payload']['id'];
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+        $this->assertFalse($model->isArchived());
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
             'message_name' => 'deleteModflowModel',
             'metadata' => (object)[],
             'payload' => [
-                'id' => $toolInstanceId,
+                'id' => $model->id(),
             ]
         ];
 
@@ -537,25 +367,135 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $response = $this->sendCommand('api/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
-        return ['user' => $user, 'command' => $command];
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
+        $this->assertTrue($modflowModel->isArchived());
     }
 
     /**
      * @test
-     * @depends sendCloneModflowModelAsScenarioCommand
-     * @param array $data
      * @throws \Exception
      */
-    public function modflowModelWasDeletedCorrectly(array $data)
+    public function sendAddBoundaryCommand(): void
     {
-        static::createClient();
+        $user = $this->createRandomUser();
+        $modelId = $this->createRandomModflowModel($user)->id();
 
-        /** @var User $user */
-        $command = $data['command'];
-        $modelId = $command['payload']['id'];
+        $command = array(
+            'uuid' => '69bcd92b-e77d-4b58-b819-95faf5c9996f',
+            'message_name' => 'addBoundary',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $modelId,
+                'boundary' => [
+                    'id' => Uuid::uuid4()->toString(),
+                    'name' => 'New wel-Boundary',
+                    'geometry' => [
+                        'type' => 'Point',
+                        'coordinates' => [13, 52]
+                    ],
+                    'type' => 'wel',
+                    'active_cells' => [[1, 1]],
+                    'affected_layers' => [0],
+                    'metadata' => ['well_type' => 'puw'],
+                    'date_time_values' => [[
+                        'date_time' => '2005-05-17T00:00:00Z',
+                        'values' => [0],
+                    ]],
+                ],
+            ],
+        );
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
-        $this->assertTrue($modflowModel->isArchived());
+        $expected = [$command['payload']['boundary']['id'] => $command['payload']['boundary']];
+        $this->assertEquals($expected, $modflowModel->boundaries()->toArray());
+    }
+
+    /**
+     * @return User
+     * @throws \Exception
+     */
+    private function createRandomUser(): User
+    {
+        static::createClient();
+
+        $username = sprintf('newUser_%d', rand(1000000, 10000000 - 1));
+        $password = sprintf('newUserPassword_%d', rand(1000000, 10000000 - 1));
+
+        $user = new User($username, $password, ['ROLE_USER']);
+
+        /** @var EntityManagerInterface $em */
+        $em = self::$container->get('doctrine')->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        return $user;
+    }
+
+    /**
+     * @param User $user
+     * @return ModflowModel
+     * @throws \Exception
+     */
+    private function createRandomModflowModel(User $user): ModflowModel
+    {
+        /** @var EntityManagerInterface $em */
+        $em = self::$container->get('doctrine')->getManager();
+
+        $modelId = Uuid::uuid4()->toString();
+        $modflowModel = ModflowModel::createWithParams(
+            $modelId,
+            $user->getId()->toString(),
+            'T03',
+            ToolMetadata::fromParams(
+                sprintf('Model-Name %d', rand(1000000, 10000000 - 1)),
+                sprintf('Model-Description %d', rand(1000000, 10000000 - 1)),
+                true
+            )
+        );
+
+        $discretization = Discretization::fromArray([
+            'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
+            'bounding_box' => [[13.785759, 51.133180], [13.788094, 51.134608]],
+            'geometry' => [
+                'type' => 'Polygon',
+                'coordinates' => [[
+                    [13.785759, 51.134162],
+                    [13.786697, 51.134608],
+                    [13.788094, 51.133921],
+                    [13.786680, 51.133180],
+                    [13.785759, 51.134162]
+                ]]
+            ],
+            'grid_size' => [
+                'n_x' => 2,
+                'n_y' => 2,
+            ],
+            'length_unit' => 2,
+            'stressperiods' => [
+                'start_date_time' => '2000-01-01T00:00:00.000Z',
+                'end_date_time' => '2019-12-31T00:00:00.000Z',
+                'stressperiods' => [[
+                    'totim_start' => 0,
+                    'perlen' => 0,
+                    'nstp' => 1,
+                    'tsmult' => 1,
+                    'steady' => true
+                ]],
+                'time_unit' => 4,
+            ],
+            'time_unit' => 4,
+        ]);
+
+        $modflowModel->setDiscretization($discretization);
+        $em->persist($modflowModel);
+        $em->flush();
+
+        return $modflowModel;
     }
 }
