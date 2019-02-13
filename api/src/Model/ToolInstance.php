@@ -4,60 +4,72 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="toolinstances")
- *
- * @ApiResource(attributes={"access_control"="is_granted('ROLE_USER')"})
+ * @ORM\MappedSuperclass()
  */
-final class ToolInstance
+abstract class ToolInstance
 {
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="string", unique=true, nullable=false)
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(name="user_id", type="string", length=36, nullable=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
-     * @ORM\Column(name="tool", type="string", length=255, nullable=false)
+     * @ORM\Column(name="tool", type="string", length=36, nullable=false)
      */
-    private $tool;
+    protected $tool;
 
     /**
-     * @ORM\Column(name="metadata", type="json_array")
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $metadata = [];
+    protected $name;
 
     /**
-     * @ORM\Column(name="data", type="json_array")
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
-    private $data = [];
+    protected $description;
+
+    /**
+     * @ORM\Column(name="public", type="boolean", nullable=false)
+     */
+    protected $public;
+
+    /**
+     * @ORM\Column(name="archived", type="boolean", nullable=false)
+     */
+    protected $archived;
 
     public function __clone()
     {
         $this->id = null;
     }
 
-    public static function createWith(string $id, string $tool): ToolInstance
+    public static function createWithParams(string $id, string $userId, string $tool, ToolMetadata $metadata)
     {
-        return new self($id, $tool);
+        $static = new static();
+        $static->id = $id;
+        $static->userId = $userId;
+        $static->tool = $tool;
+        $static->name = $metadata->name();
+        $static->description = $metadata->description();
+        $static->public = $metadata->isPublic();
+        $static->archived = false;
+        return $static;
     }
 
-    private function __construct(string $id, string $tool)
+    protected function __construct()
     {
-        $this->id = $id;
-        $this->tool = $tool;
     }
 
-    public function getId(): string
+    public function id(): string
     {
         return $this->id;
     }
@@ -67,37 +79,17 @@ final class ToolInstance
         $this->id = $id;
     }
 
-    public function getTool(): string
+    public function tool(): string
     {
         return $this->tool;
     }
 
-    public function setTool(string $tool): void
+    public function metadata(): ToolMetadata
     {
-        $this->tool = $tool;
+        return ToolMetadata::fromParams($this->name, $this->description, $this->public);
     }
 
-    public function getMetadata(): ToolMetadata
-    {
-        return ToolMetadata::fromArray($this->metadata);
-    }
-
-    public function setMetadata(ToolMetadata $metadata): void
-    {
-        $this->metadata = $metadata->toArray();
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function setData(array $data): void
-    {
-        $this->data = $data;
-    }
-
-    public function getUserId(): string
+    public function userId(): string
     {
         return $this->userId;
     }
@@ -107,18 +99,35 @@ final class ToolInstance
         $this->userId = $userId;
     }
 
-    public function getName(): string
+    public function setMetadata(ToolMetadata $metadata): void
     {
-        return ToolMetadata::fromArray($this->metadata)->name();
+        $this->name = $metadata->name();
+        $this->description = $metadata->description();
+        $this->public = $metadata->isPublic();
     }
 
-    public function getDescription(): string
+    public function name(): string
     {
-        return ToolMetadata::fromArray($this->metadata)->description();
+        return $this->name;
+    }
+
+    public function description(): string
+    {
+        return $this->description;
     }
 
     public function isPublic(): bool
     {
-        return ToolMetadata::fromArray($this->metadata)->isPublic();
+        return $this->public;
+    }
+
+    public function isArchived()
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): void
+    {
+        $this->archived = $archived;
     }
 }

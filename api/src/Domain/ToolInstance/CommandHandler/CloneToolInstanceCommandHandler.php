@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
+use App\Model\Modflow\ModflowModel;
+use App\Model\SimpleTool\SimpleTool;
 use App\Model\ToolInstance;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -28,12 +30,19 @@ class CloneToolInstanceCommandHandler
         $originId = $command->baseId();
         $cloneId = $command->id();
 
-        # Get the original toolInstance
-        /** @var ToolInstance $original */
-        $original = $this->entityManager->getRepository(ToolInstance::class)->findOneBy(['id' => $originId]);
+        /** @var SimpleTool $original */
+        $original = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $originId]);
+
+        if (null === $original) {
+            $original = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $originId]);
+        }
+
+        if (!$original instanceof ToolInstance) {
+            throw new \Exception('ToolInstance not found');
+        }
 
         # The user needs to be the owner of the model or the model has to be public
-        $canBeCloned = ($userId === $original->getUserId() || true === $original->isPublic());
+        $canBeCloned = ($userId === $original->userId() || true === $original->isPublic());
         if (!$canBeCloned) {
             throw new \Exception('The tool cannot be cloned due to permission problems.');
         }

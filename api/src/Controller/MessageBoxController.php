@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
+use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
+use App\Domain\ToolInstance\Command\UpdateToolInstanceDataCommand;
+use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
 use App\Model\User;
 use App\Model\Command;
 use App\Domain\User\Command\ArchiveUserCommand;
@@ -58,9 +64,14 @@ final class MessageBoxController
             DeleteUserCommand::class,
             ReactivateUserCommand::class,
             CloneToolInstanceCommand::class,
+            CreateModflowModelCommand::class,
             CreateToolInstanceCommand::class,
             DeleteToolInstanceCommand::class,
+            UpdateModflowModelCommand::class,
+            UpdateModflowModelDiscretizationCommand::class,
             UpdateToolInstanceCommand::class,
+            UpdateToolInstanceDataCommand::class,
+            UpdateToolInstanceMetadataCommand::class
         ];
 
         $this->setAvailableCommands($availableCommands);

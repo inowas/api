@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
+use App\Model\Modflow\ModflowModel;
+use App\Model\SimpleTool\SimpleTool;
 use App\Model\ToolInstance;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -27,13 +29,23 @@ class DeleteToolInstanceCommandHandler
         $userId = $command->metadata()['user_id'];
         $id = $command->id();
 
-        /** @var ToolInstance $toolInstance */
-        $toolInstance = $this->entityManager->getRepository(ToolInstance::class)->findOneBy(['id' => $id]);
-        if ($toolInstance->getUserId() !== $userId) {
-            throw new \Exception('The tool cannot be cloned due to permission problems.');
+
+        $toolInstance = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $id]);
+
+        if (null === $toolInstance) {
+            $toolInstance = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
         }
 
-        $this->entityManager->remove($toolInstance);
+        if (!$toolInstance instanceof ToolInstance) {
+            throw new \Exception('ToolInstance not found');
+        }
+
+        if ($toolInstance->userId() !== $userId) {
+            throw new \Exception('The tool cannot be deleted due to permission problems.');
+        }
+
+        $toolInstance->setArchived(true);
+        $this->entityManager->persist($toolInstance);
         $this->entityManager->flush();
     }
 }

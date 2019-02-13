@@ -10,6 +10,7 @@ use App\Domain\ToolInstance\Event\ToolInstanceHasBeenCreated;
 use App\Domain\ToolInstance\Projection\DashboardProjector;
 use App\Domain\ToolInstance\Projection\ToolInstanceProjector;
 use App\Model\ProjectorCollection;
+use App\Model\SimpleTool\SimpleTool;
 use App\Model\ToolInstance;
 use App\Repository\AggregateRepository;
 use Doctrine\ORM\EntityManager;
@@ -31,19 +32,15 @@ class CreateToolInstanceCommandHandler
      */
     public function __invoke(CreateToolInstanceCommand $command)
     {
-        $userId = $command->metadata()['user_id'];
-        $metadata = $command->toolMetadata();
-
         $id = $command->id();
+        $userId = $command->metadata()['user_id'];
         $tool = $command->tool();
+        $metadata = $command->toolMetadata();
         $data = $command->data();
 
-        $toolInstance = ToolInstance::createWith($id, $tool);
-        $toolInstance->setUserId($userId);
-        $toolInstance->setMetadata($metadata);
-        $toolInstance->setData($data);
-
-        $this->entityManager->persist($toolInstance);
+        $simpleTool = SimpleTool::createWithParams($id, $userId, $tool, $metadata);
+        $simpleTool->setData($data);
+        $this->entityManager->persist($simpleTool);
         $this->entityManager->flush();
     }
 }
