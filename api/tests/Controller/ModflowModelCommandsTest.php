@@ -338,4 +338,119 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $this->assertInstanceOf(Discretization::class, $modflowModel->discretization());
         $this->assertEquals($command['payload']['stressperiods'], $modflowModel->discretization()->stressperiods());
     }
+
+    /**
+     * @test
+     * @depends sendCreateModflowModelCommand
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function sendCloneModflowModelAsToolCommand(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $toolInstanceId = $data['command']['payload']['id'];
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'cloneModflowModel',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $toolInstanceId,
+                'new_id' => Uuid::uuid4()->toString(),
+                'is_tool' => true
+            ]
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        return ['user' => $user, 'command' => $command];
+    }
+
+    /**
+     * @test
+     * @depends sendCloneModflowModelAsToolCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function modflowModelWasClonedAsToolCorrectly(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $command = $data['command'];
+        $originalId = $command['payload']['id'];
+        $cloneId = $command['payload']['new_id'];
+
+        /** @var ModflowModel $original */
+        $original = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($originalId);
+
+        /** @var ModflowModel $clone */
+        $clone = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($cloneId);
+        $this->assertEquals($clone->toArray(), $original->toArray());
+        $this->assertFalse($clone->isScenario());
+    }
+
+    /**
+     * @test
+     * @depends sendCreateModflowModelCommand
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function sendCloneModflowModelAsScenarioCommand(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $toolInstanceId = $data['command']['payload']['id'];
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'cloneModflowModel',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $toolInstanceId,
+                'new_id' => Uuid::uuid4()->toString(),
+                'is_tool' => false
+            ]
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        return ['user' => $user, 'command' => $command];
+    }
+
+    /**
+     * @test
+     * @depends sendCloneModflowModelAsScenarioCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function modflowModelWasClonedAsScenarioCorrectly(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $command = $data['command'];
+        $originalId = $command['payload']['id'];
+        $cloneId = $command['payload']['new_id'];
+
+        /** @var ModflowModel $original */
+        $original = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($originalId);
+
+        /** @var ModflowModel $clone */
+        $clone = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($cloneId);
+
+        $this->assertEquals($clone->toArray(), $original->toArray());
+        $this->assertTrue($clone->isScenario());
+    }
 }

@@ -44,7 +44,7 @@ class DeleteToolInstanceCommandHandler
             throw new \Exception('The tool cannot be deleted due to permission problems.');
         }
 
-        $toolInstance->setArchived(true);
+        $toolInstance->setIsArchived(true);
         $this->entityManager->persist($toolInstance);
         $this->entityManager->flush();
     }

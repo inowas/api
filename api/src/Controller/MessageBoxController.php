@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
@@ -63,6 +64,8 @@ final class MessageBoxController
             ChangeUserProfileCommand::class,
             DeleteUserCommand::class,
             ReactivateUserCommand::class,
+
+            CloneModflowModelCommand::class,
             CloneToolInstanceCommand::class,
             CreateModflowModelCommand::class,
             CreateToolInstanceCommand::class,

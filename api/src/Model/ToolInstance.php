@@ -43,9 +43,14 @@ abstract class ToolInstance
     protected $public;
 
     /**
-     * @ORM\Column(name="archived", type="boolean", nullable=false)
+     * @ORM\Column(name="is_archived", type="boolean", nullable=false)
      */
-    protected $archived;
+    protected $isArchived;
+
+    /**
+     * @ORM\Column(name="is_scenario", type="boolean", nullable=false)
+     */
+    protected $isScenario;
 
     public function __clone()
     {
@@ -61,7 +66,8 @@ abstract class ToolInstance
         $static->name = $metadata->name();
         $static->description = $metadata->description();
         $static->public = $metadata->isPublic();
-        $static->archived = false;
+        $static->isArchived = false;
+        $static->isScenario = false;
         return $static;
     }
 
@@ -123,11 +129,21 @@ abstract class ToolInstance
 
     public function isArchived()
     {
-        return $this->archived;
+        return $this->isArchived;
     }
 
-    public function setArchived(bool $archived): void
+    public function setIsArchived(bool $isArchived): void
     {
-        $this->archived = $archived;
+        $this->isArchived = $isArchived;
+    }
+
+    public function isScenario()
+    {
+        return $this->isScenario;
+    }
+
+    public function setIsScenario(bool $isScenario): void
+    {
+        $this->isScenario = $isScenario;
     }
 }
