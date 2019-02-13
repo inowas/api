@@ -8,6 +8,7 @@ use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
+use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
@@ -68,6 +69,7 @@ final class MessageBoxController
             CloneModflowModelCommand::class,
             CloneToolInstanceCommand::class,
             CreateModflowModelCommand::class,
+            DeleteModflowModelCommand::class,
             CreateToolInstanceCommand::class,
             DeleteToolInstanceCommand::class,
             UpdateModflowModelDiscretizationCommand::class,

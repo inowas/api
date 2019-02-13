@@ -453,4 +453,54 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $this->assertEquals($clone->toArray(), $original->toArray());
         $this->assertTrue($clone->isScenario());
     }
+
+    /**
+     * @test
+     * @depends sendCreateModflowModelCommand
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function sendDeleteModflowModelCommand(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $toolInstanceId = $data['command']['payload']['id'];
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'deleteModflowModel',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $toolInstanceId,
+            ]
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        return ['user' => $user, 'command' => $command];
+    }
+
+    /**
+     * @test
+     * @depends sendCloneModflowModelAsScenarioCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function modflowModelWasDeletedCorrectly(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $command = $data['command'];
+        $modelId = $command['payload']['id'];
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $this->assertTrue($modflowModel->isArchived());
+    }
 }
