@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
-use App\Model\ToolInstance;
+use App\Model\SimpleTool\SimpleTool;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateToolInstanceMetadataCommandHandler
@@ -28,19 +28,19 @@ class UpdateToolInstanceMetadataCommandHandler
         $id = $command->id();
 
 
-        /** @var ToolInstance $toolInstance */
-        $toolInstance = $this->entityManager->getRepository(ToolInstance::class)->findOneBy(['id' => $id]);
+        /** @var SimpleTool $simpleTool */
+        $simpleTool = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $id]);
 
-        if (!$toolInstance instanceof ToolInstance) {
+        if (!$simpleTool instanceof SimpleTool) {
             throw new \Exception('ToolInstance not found');
         }
 
-        if ($toolInstance->getUserId() !== $userId) {
+        if ($simpleTool->userId() !== $userId) {
             throw new \Exception('The tool cannot be updated due to permission problems.');
         }
 
-        $toolInstance->setMetadata($command->toolMetadata());
-        $this->entityManager->persist($toolInstance);
+        $simpleTool->setMetadata($command->toolMetadata());
+        $this->entityManager->persist($simpleTool);
         $this->entityManager->flush();
     }
 }

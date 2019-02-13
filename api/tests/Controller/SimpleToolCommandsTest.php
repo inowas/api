@@ -211,6 +211,120 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
      * @return array
      * @throws \Exception
      */
+    public function sendUpdateSimpleToolMetadataCommand(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+
+        $command = $data['command'];
+        $toolInstanceId = $command['payload']['id'];
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'updateToolInstanceMetadata',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $toolInstanceId,
+                'name' => 'ToolNewNameUpdated',
+                'description' => 'ToolNewDescriptionUpdated',
+                'public' => true
+            ]
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        return ['user' => $user, 'command' => $command];
+    }
+
+    /**
+     * @test
+     * @depends sendUpdateSimpleToolMetadataCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function sendUpdateSimpleToolMetadataWasUpdatedCorrectly(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $command = $data['command'];
+        $toolInstanceId = $command['payload']['id'];
+
+        /** @var SimpleTool $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleTool::class)->findOneById($toolInstanceId);
+        $this->assertEquals($command['payload']['name'], $simpleTool->name());
+        $this->assertEquals($command['payload']['description'], $simpleTool->description());
+        $this->assertEquals($command['payload']['public'], $simpleTool->isPublic());
+        $this->assertEquals($user->getId()->toString(), $simpleTool->userId());
+    }
+
+    /**
+     * @test
+     * @depends sendCreateSimpleToolCommand
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    public function sendUpdateSimpleToolDataCommand(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+
+        $command = $data['command'];
+        $toolInstanceId = $command['payload']['id'];
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'updateToolInstanceData',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $toolInstanceId,
+                'data' => ['a' => 'very', 'complex' => 'dataset', 'update' => 'now']
+            ]
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        return ['user' => $user, 'command' => $command];
+    }
+
+    /**
+     * @test
+     * @depends sendUpdateSimpleToolDataCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function simpleToolDataWasUpdatedCorrectly(array $data)
+    {
+        static::createClient();
+
+        /** @var User $user */
+        $user = $data['user'];
+        $command = $data['command'];
+        $toolInstanceId = $command['payload']['id'];
+
+        /** @var SimpleTool $simpleTool */
+        $simpleTool = self::$container->get('doctrine')->getRepository(SimpleTool::class)->findOneById($toolInstanceId);
+        $this->assertEquals($command['payload']['data'], $simpleTool->data());
+        $this->assertEquals($user->getId()->toString(), $simpleTool->userId());
+    }
+
+    /**
+     * @test
+     * @depends sendCreateSimpleToolCommand
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
     public function sendDeleteToolInstanceCommand(array $data)
     {
         static::createClient();
