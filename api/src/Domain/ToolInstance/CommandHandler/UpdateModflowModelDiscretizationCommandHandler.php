@@ -6,26 +6,16 @@ namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
 use App\Model\Modflow\ModflowModel;
-use App\Model\ProjectorCollection;
-use App\Repository\AggregateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateModflowModelDiscretizationCommandHandler
 {
-    /** @var AggregateRepository */
-    private $aggregateRepository;
-
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    /** @var ProjectorCollection */
-    private $projectors;
-
-    public function __construct(AggregateRepository $aggregateRepository, EntityManagerInterface $entityManager, ProjectorCollection $projectors)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->aggregateRepository = $aggregateRepository;
         $this->entityManager = $entityManager;
-        $this->projectors = $projectors;
     }
 
     /**

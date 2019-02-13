@@ -85,7 +85,7 @@ final class ModflowModel extends ToolInstance
         $this->boundaries = $boundaries->toArray();
     }
 
-    public function getTransport(): Transport
+    public function transport(): Transport
     {
         return Transport::fromArray($this->transport);
     }

@@ -12,6 +12,7 @@ use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
+use App\Domain\ToolInstance\Command\UpdateMt3dmsCommand;
 use App\Domain\ToolInstance\Command\UpdateStressperiodsCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceDataCommand;
@@ -74,6 +75,7 @@ final class MessageBoxController
             DeleteToolInstanceCommand::class,
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
+            UpdateMt3dmsCommand::class,
             UpdateStressperiodsCommand::class,
             UpdateToolInstanceCommand::class,
             UpdateToolInstanceDataCommand::class,

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Command\UpdateStressperiodsCommand;
+use App\Domain\ToolInstance\Command\UpdateMt3dmsCommand;
 use App\Model\Modflow\ModflowModel;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UpdateStressperiodsCommandHandler
+class UpdateMt3dmsCommandHandler
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -19,10 +19,10 @@ class UpdateStressperiodsCommandHandler
     }
 
     /**
-     * @param UpdateStressperiodsCommand $command
+     * @param UpdateMt3dmsCommand $command
      * @throws \Exception
      */
-    public function __invoke(UpdateStressperiodsCommand $command)
+    public function __invoke(UpdateMt3dmsCommand $command)
     {
         $modelId = $command->id();
         $userId = $command->metadata()['user_id'];
@@ -37,10 +37,7 @@ class UpdateStressperiodsCommandHandler
             throw new \Exception('The Model cannot be updated due to permission problems.');
         }
 
-        $discretization = $modflowModel->discretization();
-        $discretization->setStressperiods($command->stressperiods());
-
-        $modflowModel->setDiscretization($discretization);
+        $modflowModel->setTransport($command->mt3dms());
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }
