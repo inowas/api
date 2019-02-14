@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
+use App\Domain\ToolInstance\Command\AddLayerCommand;
 use App\Model\Modflow\ModflowModel;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class UpdateBoundaryCommandHandler
+final class AddLayerCommandHandler
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -19,10 +19,10 @@ final class UpdateBoundaryCommandHandler
     }
 
     /**
-     * @param UpdateBoundaryCommand $command
+     * @param AddLayerCommand $command
      * @throws \Exception
      */
-    public function __invoke(UpdateBoundaryCommand $command)
+    public function __invoke(AddLayerCommand $command)
     {
         $modelId = $command->id();
         $userId = $command->metadata()['user_id'];
@@ -37,9 +37,9 @@ final class UpdateBoundaryCommandHandler
             throw new \Exception('The Model cannot be updated due to permission problems.');
         }
 
-        $boundaries = $modflowModel->boundaries();
-        $boundaries->updateBoundary($command->boundary());
-        $modflowModel->setBoundaries($boundaries);
+        $soilmodel = $modflowModel->soilmodel();
+        $soilmodel->addLayer($command->layer());
+        $modflowModel->setSoilmodel($soilmodel);
 
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();

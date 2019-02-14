@@ -6,7 +6,6 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\Modflow\Boundary;
-use App\Model\Modflow\Transport;
 
 class AddBoundaryCommand extends Command
 {

@@ -21,19 +21,12 @@
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
-        "layer_id": {
-          "type": "string",
-          "pattern": "^[a-z0-9_\\-]{1,255}$",
-          "maxLength": 255
-        },
         "layer": {
           "$ref": "/modflow/soilmodel/layer"
         }
       },
-      "additionalProperties": false,
       "required": [
         "id",
-        "layer_id",
         "layer"
       ]
     }

@@ -5,7 +5,9 @@ namespace App\Tests\Controller;
 use App\Model\Modflow\Boundaries;
 use App\Model\Modflow\Boundary;
 use App\Model\Modflow\Discretization;
+use App\Model\Modflow\Layer;
 use App\Model\Modflow\ModflowModel;
+use App\Model\Modflow\Soilmodel;
 use App\Model\ToolMetadata;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -497,6 +499,152 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
     }
 
     /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendAddLayerCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $modelId = $this->createRandomModflowModel($user)->id();
+
+        $layerId = Uuid::uuid4()->toString();
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'addLayer',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $modelId,
+                'layer' => [
+                    'id' => $layerId,
+                    'name' => 'Added layer',
+                    'description' => 'Added layer description',
+                    'number' => 2,
+                    'top' => 10,
+                    'botm' => -10,
+                    'hk' => 100,
+                    'hani' => 2,
+                    'vka' => 10,
+                    'layavg' => 2,
+                    'laytyp' => 2,
+                    'laywet' => 2,
+                    'ss' => 0.3,
+                    'sy' => 0.3
+                ],
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($modelId);
+        $this->assertEquals($command['payload']['layer'], $modflowModel->soilmodel()->findLayer($layerId)->toArray());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendUpdateLayerCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+
+        $layerId = $model->soilmodel()->firstLayer()->id();
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'updateLayer',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $model->id(),
+                'layer' => [
+                    'id' => $layerId,
+                    'name' => 'Updated layer',
+                    'description' => 'Updated layer description',
+                    'number' => 3,
+                    'top' => 11,
+                    'botm' => -11,
+                    'hk' => 101,
+                    'hani' => 3,
+                    'vka' => 11,
+                    'layavg' => 12,
+                    'laytyp' => 12,
+                    'laywet' => 12,
+                    'ss' => 0.23,
+                    'sy' => 0.23
+                ],
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
+        $this->assertEquals($command['payload']['layer'], $modflowModel->soilmodel()->findLayer($layerId)->toArray());
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendRemoveLayerCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+
+        $layerId = $model->soilmodel()->firstLayer()->id();
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'removeLayer',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $model->id(),
+                'layer_id' => $layerId
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
+        $this->assertNull($modflowModel->soilmodel()->findLayer($layerId));
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function sendUpdateSoilmodelPropertiesCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'updateSoilmodelProperties',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $model->id(),
+                'properties' => ['the' => 'new', 'properties' => 1, 2, 3]
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
+        $this->assertEquals($command['payload']['properties'] ,$modflowModel->soilmodel()->properties());
+    }
+
+    /**
      * @return User
      * @throws \Exception
      */
@@ -539,6 +687,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             )
         );
 
+        # Discretization
         $discretization = Discretization::fromArray([
             'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
             'bounding_box' => [[13.785759, 51.133180], [13.788094, 51.134608]],
@@ -573,6 +722,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ]);
         $modflowModel->setDiscretization($discretization);
 
+        # Boundaries
         $boundary = Boundary::fromArray([
             'id' => Uuid::uuid4()->toString(),
             'name' => 'New wel-Boundary',
@@ -589,10 +739,30 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                 'values' => [0],
             ]],
         ]);
-
         $boundaries = Boundaries::create();
         $boundaries->addBoundary($boundary);
         $modflowModel->setBoundaries($boundaries);
+
+        # Soilmodel
+        $soilmodel = Soilmodel::create();
+        $layer = Layer::fromArray([
+            'id' => Uuid::uuid4()->toString(),
+            'name' => 'Default layer',
+            'description' => 'Default layer description',
+            'number' => 1,
+            'top' => 0,
+            'botm' => -100,
+            'hk' => 200,
+            'hani' => 1,
+            'vka' => 20,
+            'layavg' => 1,
+            'laytyp' => 1,
+            'laywet' => 1,
+            'ss' => 0.2,
+            'sy' => 0.2
+        ]);
+        $soilmodel->addLayer($layer);
+        $modflowModel->setSoilmodel($soilmodel);
 
         $em->persist($modflowModel);
         $em->flush();

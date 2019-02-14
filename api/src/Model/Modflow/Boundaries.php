@@ -36,16 +36,12 @@ final class Boundaries extends ValueObject
 
     public function addBoundary(Boundary $boundary): void
     {
-        $this->boundaries[$boundary->id()] = $boundary->toArray();
+        $this->updateBoundary($boundary);
     }
 
-    public function updateBoundary(string $boundaryId, Boundary $boundary): void
+    public function updateBoundary(Boundary $boundary): void
     {
-        if (array_key_exists($boundaryId, $this->boundaries)) {
-            unset($this->boundaries[$boundary->id()]);
-        }
-
-        $this->addBoundary($boundary);
+        $this->boundaries[$boundary->id()] = $boundary->toArray();
     }
 
     public function removeBoundary(string $id): void

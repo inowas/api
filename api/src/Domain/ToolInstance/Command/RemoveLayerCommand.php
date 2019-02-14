@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
-use App\Model\Modflow\Boundary;
 
-class UpdateBoundaryCommand extends Command
+class RemoveLayerCommand extends Command
 {
 
     private $id;
-    private $boundary;
+    private $layerId;
 
     /**
-     * @return string|null
+     * @return string
      */
-    public static function getJsonSchema(): ?string
+    public static function getJsonSchema(): string
     {
-        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateBoundary.json');
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/removeLayer.json');
     }
 
     /**
@@ -29,7 +28,7 @@ class UpdateBoundaryCommand extends Command
     {
         $self = new self();
         $self->id = $payload['id'];
-        $self->boundary = $payload['boundary'];
+        $self->layerId = $payload['layer_id'];
         return $self;
     }
 
@@ -38,8 +37,8 @@ class UpdateBoundaryCommand extends Command
         return $this->id;
     }
 
-    public function boundary(): Boundary
+    public function layerId(): string
     {
-        return Boundary::fromArray($this->boundary);
+        return $this->layerId;
     }
 }

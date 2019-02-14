@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
-use App\Model\Modflow\Boundary;
+use App\Model\Modflow\Layer;
 
-class UpdateBoundaryCommand extends Command
+class UpdateLayerCommand extends Command
 {
 
     private $id;
-    private $boundary;
+    private $layer;
 
     /**
      * @return string|null
      */
     public static function getJsonSchema(): ?string
     {
-        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateBoundary.json');
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateLayer.json');
     }
 
     /**
@@ -29,7 +29,7 @@ class UpdateBoundaryCommand extends Command
     {
         $self = new self();
         $self->id = $payload['id'];
-        $self->boundary = $payload['boundary'];
+        $self->layer = $payload['layer'];
         return $self;
     }
 
@@ -38,8 +38,8 @@ class UpdateBoundaryCommand extends Command
         return $this->id;
     }
 
-    public function boundary(): Boundary
+    public function layer(): Layer
     {
-        return Boundary::fromArray($this->boundary);
+        return Layer::fromArray($this->layer);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Domain\ToolInstance\Command\AddBoundaryCommand;
+use App\Domain\ToolInstance\Command\AddLayerCommand;
 use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
@@ -12,10 +13,13 @@ use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
 use App\Domain\ToolInstance\Command\RemoveBoundaryCommand;
+use App\Domain\ToolInstance\Command\RemoveLayerCommand;
 use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
+use App\Domain\ToolInstance\Command\UpdateLayerCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
 use App\Domain\ToolInstance\Command\UpdateMt3dmsCommand;
+use App\Domain\ToolInstance\Command\UpdateSoilmodelPropertiesCommand;
 use App\Domain\ToolInstance\Command\UpdateStressperiodsCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceDataCommand;
@@ -71,6 +75,7 @@ final class MessageBoxController
             ReactivateUserCommand::class,
 
             AddBoundaryCommand::class,
+            AddLayerCommand::class,
             CloneModflowModelCommand::class,
             CloneToolInstanceCommand::class,
             CreateModflowModelCommand::class,
@@ -78,10 +83,13 @@ final class MessageBoxController
             CreateToolInstanceCommand::class,
             DeleteToolInstanceCommand::class,
             RemoveBoundaryCommand::class,
+            RemoveLayerCommand::class,
             UpdateBoundaryCommand::class,
+            UpdateLayerCommand::class,
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
             UpdateMt3dmsCommand::class,
+            UpdateSoilmodelPropertiesCommand::class,
             UpdateStressperiodsCommand::class,
             UpdateToolInstanceCommand::class,
             UpdateToolInstanceDataCommand::class,

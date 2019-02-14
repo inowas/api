@@ -95,7 +95,7 @@ final class ModflowModel extends ToolInstance
         $this->transport = $transport->toArray();
     }
 
-    public function getSoilmodel(): Soilmodel
+    public function soilmodel(): Soilmodel
     {
         return Soilmodel::fromArray($this->soilmodel);
     }

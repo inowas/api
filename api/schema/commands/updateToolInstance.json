@@ -38,7 +38,8 @@
         "id",
         "name",
         "description",
-        "public"
+        "public",
+        "data"
       ]
     }
   },
