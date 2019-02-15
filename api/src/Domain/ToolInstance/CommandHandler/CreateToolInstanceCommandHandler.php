@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
+
+use App\Model\Mcda\Mcda;
 use App\Model\SimpleTool\SimpleTool;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -30,9 +32,16 @@ class CreateToolInstanceCommandHandler
         $metadata = $command->toolMetadata();
         $data = $command->data();
 
-        $simpleTool = SimpleTool::createWithParams($id, $userId, $tool, $metadata);
-        $simpleTool->setData($data);
-        $this->entityManager->persist($simpleTool);
+        switch ($tool) {
+            case 'T05':
+                $instance = Mcda::createWithParams($id, $userId, $tool, $metadata);
+                break;
+            default:
+                $instance = SimpleTool::createWithParams($id, $userId, $tool, $metadata);
+        }
+
+        $instance->setData($data);
+        $this->entityManager->persist($instance);
         $this->entityManager->flush();
     }
 }

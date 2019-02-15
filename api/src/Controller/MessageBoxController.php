@@ -12,6 +12,9 @@ use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
+use App\Domain\ToolInstance\Command\McdaDeleteCriterionCommand;
+use App\Domain\ToolInstance\Command\McdaUpdateCriterionCommand;
+use App\Domain\ToolInstance\Command\McdaUpdateProjectCommand;
 use App\Domain\ToolInstance\Command\RemoveBoundaryCommand;
 use App\Domain\ToolInstance\Command\RemoveLayerCommand;
 use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
@@ -79,9 +82,12 @@ final class MessageBoxController
             CloneModflowModelCommand::class,
             CloneToolInstanceCommand::class,
             CreateModflowModelCommand::class,
-            DeleteModflowModelCommand::class,
             CreateToolInstanceCommand::class,
+            DeleteModflowModelCommand::class,
             DeleteToolInstanceCommand::class,
+            McdaDeleteCriterionCommand::class,
+            McdaUpdateCriterionCommand::class,
+            McdaUpdateProjectCommand::class,
             RemoveBoundaryCommand::class,
             RemoveLayerCommand::class,
             UpdateBoundaryCommand::class,
