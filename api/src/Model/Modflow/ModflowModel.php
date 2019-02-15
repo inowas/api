@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace App\Model\Modflow;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Model\ToolInstance;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ApiResource(
+ *     collectionOperations={},
+ *     itemOperations={"get"},
+ *     attributes={"access_control"="is_granted('ROLE_USER')"}
+ *     )
  */
-final class ModflowModel extends ToolInstance
+class ModflowModel extends ToolInstance
 {
 
     /**

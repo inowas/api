@@ -8,8 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks
  */
-abstract class ToolInstance
+abstract class ToolInstance implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -38,9 +39,9 @@ abstract class ToolInstance
     protected $description;
 
     /**
-     * @ORM\Column(name="public", type="boolean", nullable=false)
+     * @ORM\Column(name="is_public", type="boolean", nullable=false)
      */
-    protected $public;
+    protected $isPublic;
 
     /**
      * @ORM\Column(name="is_archived", type="boolean", nullable=false)
@@ -51,6 +52,16 @@ abstract class ToolInstance
      * @ORM\Column(name="is_scenario", type="boolean", nullable=false)
      */
     protected $isScenario;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime_immutable", nullable=false)
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime_immutable", nullable=false)
+     */
+    protected $updatedAt;
 
     public function __clone()
     {
@@ -65,7 +76,7 @@ abstract class ToolInstance
         $static->tool = $tool;
         $static->name = $metadata->name();
         $static->description = $metadata->description();
-        $static->public = $metadata->isPublic();
+        $static->isPublic = $metadata->isPublic();
         $static->isArchived = false;
         $static->isScenario = false;
         return $static;
@@ -92,7 +103,7 @@ abstract class ToolInstance
 
     public function metadata(): ToolMetadata
     {
-        return ToolMetadata::fromParams($this->name, $this->description, $this->public);
+        return ToolMetadata::fromParams($this->name, $this->description, $this->isPublic);
     }
 
     public function userId(): string
@@ -109,7 +120,7 @@ abstract class ToolInstance
     {
         $this->name = $metadata->name();
         $this->description = $metadata->description();
-        $this->public = $metadata->isPublic();
+        $this->isPublic = $metadata->isPublic();
     }
 
     public function name(): string
@@ -124,7 +135,7 @@ abstract class ToolInstance
 
     public function isPublic(): bool
     {
-        return $this->public;
+        return $this->isPublic;
     }
 
     public function isArchived()
@@ -145,5 +156,58 @@ abstract class ToolInstance
     public function setIsScenario(bool $isScenario): void
     {
         $this->isScenario = $isScenario;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @throws \Exception
+     */
+    public function updateTimestamps(): void
+    {
+        $this->setUpdatedAt(new \DateTimeImmutable('now'));
+        if ($this->createdAt === null) {
+            $this->setCreatedAt(new \DateTimeImmutable('now'));
+        }
+    }
+
+    public function toArray() {
+        return [
+            'id' => $this->id,
+            'userId' => $this->userId,
+            'tool' => $this->tool,
+            'name' => $this->name,
+            'description' => $this->description,
+            'isPublic' => $this->isPublic,
+            'isArchived' => $this->isArchived,
+            'isScenario' => $this->isScenario,
+            'createdAt' => $this->getCreatedAt()->format(DATE_ATOM),
+            'updatedAt' => $this->getUpdatedAt()->format(DATE_ATOM)
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace App\Model\Mcda;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Model\ToolInstance;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ApiResource(
+ *     collectionOperations={"get"={"method"="GET", "path"="/tools/T05"}},
+ *     itemOperations={"get"={"method"="GET", "path"="/tools/T05/{id}"}},
+ *     attributes={"access_control"="is_granted('ROLE_USER')"}
+ *     )
  */
-final class Mcda extends ToolInstance
+class Mcda extends ToolInstance
 {
     /**
      * @ORM\Column(name="criteria", type="json_array", nullable=false)

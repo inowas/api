@@ -13,9 +13,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\Table(name="users")
  *
- * @ApiResource(attributes={"access_control"="is_granted('ROLE_ADMIN')"})
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"},
+ *     attributes={"access_control"="is_granted('ROLE_ADMIN')"})
  */
-final class User implements UserInterface
+class User implements UserInterface
 {
     /**
      * @var Uuid
