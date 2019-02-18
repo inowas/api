@@ -176,4 +176,14 @@ class User implements UserInterface
     {
         return null;
     }
+
+    public function setName(string $name): void
+    {
+        $this->profile['name'] = $name;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->profile['email'] = $email;
+    }
 }
