@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
+use App\Model\Mcda\Mcda;
 use App\Model\Modflow\ModflowModel;
 use App\Model\SimpleTool\SimpleTool;
 use App\Model\ToolInstance;
@@ -31,6 +32,10 @@ class DeleteToolInstanceCommandHandler
 
 
         $toolInstance = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $id]);
+
+        if (null === $toolInstance) {
+            $toolInstance = $this->entityManager->getRepository(Mcda::class)->findOneBy(['id' => $id]);
+        }
 
         if (null === $toolInstance) {
             $toolInstance = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);

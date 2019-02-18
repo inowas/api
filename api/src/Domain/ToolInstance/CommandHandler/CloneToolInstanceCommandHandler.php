@@ -35,11 +35,11 @@ class CloneToolInstanceCommandHandler
         $original = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $originId]);
 
         if (null === $original) {
-            $original = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $originId]);
+            $original = $this->entityManager->getRepository(Mcda::class)->findOneBy(['id' => $originId]);
         }
 
         if (null === $original) {
-            $original = $this->entityManager->getRepository(Mcda::class)->findOneBy(['id' => $originId]);
+            $original = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $originId]);
         }
 
         if (!$original instanceof ToolInstance) {
