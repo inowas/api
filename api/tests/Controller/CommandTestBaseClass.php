@@ -2,12 +2,59 @@
 
 namespace App\Tests\Controller;
 
+use App\Model\SimpleTool\SimpleTool;
+use App\Model\ToolMetadata;
 use App\Model\User;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CommandTestBaseClass extends WebTestCase
 {
+    /**
+     * @throws \Exception
+     */
+    protected function createRandomUser(): User
+    {
+        static::createClient();
+        $username = sprintf('newUser_%d', rand(1000000, 10000000 - 1));
+        $password = sprintf('newUserPassword_%d', rand(1000000, 10000000 - 1));
+        $user = new User($username, $password, ['ROLE_USER']);
+
+        /** @var EntityManager $em */
+        $em = self::$container->get('doctrine')->getManager();
+        $em->persist($user);
+        $em->flush($user);
+
+        return $user;
+    }
+
+    /**
+     * @param User $user
+     * @param bool $isPublic
+     * @return SimpleTool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
+    protected function createSimpleTool(User $user, bool $isPublic = true): SimpleTool
+    {
+        $id = Uuid::uuid4()->toString();
+        $simpleTool = SimpleTool::createWithParams($id, $user->getId(), 'T02', ToolMetadata::fromParams(
+            'Tool01_' . rand(10000, 99999),
+            'Description_' . rand(10000, 99999),
+            $isPublic
+        ));
+
+        $simpleTool->setData(['123' => 123]);
+
+        /** @var EntityManager $em */
+        $em = self::$container->get('doctrine')->getManager();
+        $em->persist($simpleTool);
+        $em->flush();
+
+        return $simpleTool;
+    }
 
     /**
      * @param $username
@@ -54,7 +101,7 @@ class CommandTestBaseClass extends WebTestCase
      */
     protected function sendCommand($endpoint, $command, $token = null)
     {
-        $headers = $token ? ['HTTP_Authorization' => sprintf('Bearer %s',  $token)] : [];
+        $headers = $token ? ['HTTP_Authorization' => sprintf('Bearer %s', $token)] : [];
         $headers['CONTENT_TYPE'] = 'application/json';
         $client = static::createClient();
         $client->request(
@@ -76,7 +123,7 @@ class CommandTestBaseClass extends WebTestCase
      */
     protected function sendRequest($endpoint, $token = null)
     {
-        $headers = $token ? ['HTTP_Authorization' => sprintf('Bearer %s',  $token)] : [];
+        $headers = $token ? ['HTTP_Authorization' => sprintf('Bearer %s', $token)] : [];
         $headers['CONTENT_TYPE'] = 'application/json';
         $client = static::createClient();
         $client->request(

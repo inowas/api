@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model\SimpleTool;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Model\ToolInstance;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ApiResource(
- *     collectionOperations={"get"={"method"="GET", "path"="/tools/{tool}"}},
- *     itemOperations={"get"={"method"="GET", "path"="/tools/{tool}/{id"}},
- *     attributes={"access_control"="is_granted('ROLE_USER')"}
- *     )
  */
 class SimpleTool extends ToolInstance
 {

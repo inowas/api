@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
+use App\Model\Mcda\Mcda;
 use App\Model\Modflow\ModflowModel;
 use App\Model\SimpleTool\SimpleTool;
 use App\Model\ToolInstance;
@@ -35,6 +36,10 @@ class CloneToolInstanceCommandHandler
 
         if (null === $original) {
             $original = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $originId]);
+        }
+
+        if (null === $original) {
+            $original = $this->entityManager->getRepository(Mcda::class)->findOneBy(['id' => $originId]);
         }
 
         if (!$original instanceof ToolInstance) {

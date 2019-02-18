@@ -643,28 +643,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
         $this->assertEquals($command['payload']['properties'] ,$modflowModel->soilmodel()->properties());
     }
-
-    /**
-     * @return User
-     * @throws \Exception
-     */
-    private function createRandomUser(): User
-    {
-        static::createClient();
-
-        $username = sprintf('newUser_%d', rand(1000000, 10000000 - 1));
-        $password = sprintf('newUserPassword_%d', rand(1000000, 10000000 - 1));
-
-        $user = new User($username, $password, ['ROLE_USER']);
-
-        /** @var EntityManagerInterface $em */
-        $em = self::$container->get('doctrine')->getManager();
-        $em->persist($user);
-        $em->flush();
-
-        return $user;
-    }
-
+    
     /**
      * @param User $user
      * @return ModflowModel
