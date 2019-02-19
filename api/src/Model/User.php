@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ApiResource(
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
+ *     )
  */
 class User implements UserInterface
 {
