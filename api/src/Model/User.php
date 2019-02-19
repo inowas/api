@@ -15,8 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ApiResource(
  *     collectionOperations={"get"},
- *     itemOperations={"get"},
- *     attributes={"access_control"="is_granted('ROLE_ADMIN')"})
+ *     itemOperations={"get"}
  */
 class User implements UserInterface
 {
