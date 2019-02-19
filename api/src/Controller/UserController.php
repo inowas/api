@@ -24,10 +24,9 @@ class UserController
     /**
      * @Route("/user", name="user", methods={"GET"})
      * @param Request $request
-     * @param string $tool
      * @return JsonResponse
      */
-    public function __invoke(Request $request, string $tool): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
