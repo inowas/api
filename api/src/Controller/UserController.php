@@ -22,7 +22,7 @@ class UserController
     }
 
     /**
-     * @Route("/user", name="dashboard", methods={"GET"})
+     * @Route("/user", name="user", methods={"GET"})
      * @param Request $request
      * @param string $tool
      * @return JsonResponse
