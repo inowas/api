@@ -39,7 +39,7 @@ services:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.basic.frontend.rule=Host:${HOST_URL}"
-      - "traefik.basic.port=8080"
+      - "traefik.basic.port=80"
       - "traefik.basic.protocol=http"
     networks:
       - web
