@@ -73,17 +73,22 @@ class LoadUsersFromFile extends Command
             /** @var User $user */
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $item['username']]);
 
-            if (!$user instanceof User) {
-                $user = new User($item['username'], $item['password'], $item['roles']);
-                $command = \App\Domain\User\Command\CreateUserCommand::fromParams($user->getUsername(), $user->getPassword(), $user->getRoles());
-                $command->withAddedMetadata('is_admin', true);
-
-                try {
-                    $this->commandBus->dispatch($command);
-                } catch (\Exception $exception) {
-                    $output->write(sprintf('Error creating user with username %s', $user->getUsername()));
-                }
+            if ($user instanceof User) {
+                $this->entityManager->remove($user);
+                $this->entityManager->flush();
             }
+
+            $roles = array_unique(array_merge(['ROLE_USER'], $item['roles']));
+            $user = new User($item['username'], $item['password'], $roles);
+            $command = \App\Domain\User\Command\CreateUserCommand::fromParams($user->getUsername(), $user->getPassword(), $user->getRoles());
+            $command->withAddedMetadata('is_admin', true);
+
+            try {
+                $this->commandBus->dispatch($command);
+            } catch (\Exception $exception) {
+                $output->write(sprintf('Error creating user with username %s', $user->getUsername()));
+            }
+
 
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $item['username']]);
 
