@@ -111,9 +111,9 @@ class Mcda extends ToolInstance
         return [
             'criteria' => $this->critera(),
             'constraints' => $this->constraints(),
-            'suitability' => $this->constraints(),
-            'weight_assignments' => $this->constraints(),
-            'with_ahp' => $this->constraints(),
+            'suitability' => $this->suitability(),
+            'weight_assignments' => $this->weightAssignments(),
+            'with_ahp' => $this->withAhp(),
         ];
     }
 
@@ -122,7 +122,7 @@ class Mcda extends ToolInstance
         $this->criteria = $data['criteria'] ?? $this->criteria;
         $this->constraints = $data['constraints'] ?? $this->constraints;
         $this->suitability = $data['suitability'] ?? $this->suitability;
-        $this->weightAssignments = $data['weightAssignments'] ?? $this->weightAssignments;
-        $this->withAhp = $data['withAhp'] ?? $this->withAhp;
+        $this->weightAssignments = $data['weight_assignments'] ?? $this->weightAssignments;
+        $this->withAhp = $data['with_ahp'] ?? $this->withAhp;
     }
 }
