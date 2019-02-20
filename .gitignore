@@ -2,6 +2,5 @@
 /docker-compose.override.yml
 docker
 /traefik/*
-
-
+.env
 

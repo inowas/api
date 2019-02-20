@@ -109,7 +109,7 @@ class Mcda extends ToolInstance
     public function data(): array
     {
         return [
-            'criteria' => $this->critera(),
+            'criteria' => array_values($this->critera()),
             'constraints' => $this->constraints(),
             'suitability' => $this->suitability(),
             'weight_assignments' => $this->weightAssignments(),
