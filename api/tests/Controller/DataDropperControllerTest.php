@@ -12,12 +12,10 @@ class DataDropperControllerTest extends CommandTestBaseClass
     {
         $user = $this->createRandomUser();
         $privateTool = $this->createSimpleTool($user, false);
-        $content = json_encode($privateTool->toArray());
-
-        $base64Content = base64_encode($content);
+        $content = json_encode($privateTool->toArray(), JSON_UNESCAPED_UNICODE);
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendPostRequest('v3/datadropper', $base64Content, $token);
+        $response = $this->sendPostRequest('v3/datadropper', $content, $token);
         $this->assertEquals(200, $response->getStatusCode());
 
         $response = json_decode($response->getContent(), true);
@@ -26,7 +24,6 @@ class DataDropperControllerTest extends CommandTestBaseClass
         $response = $this->sendRequest('v3/datadropper/' . $filename, $token);
         $this->assertEquals(200, $response->getStatusCode());
 
-        $base64Response = $response->getContent();
-        $this->assertEquals($content, base64_decode($base64Response));
+        $this->assertEquals($content, $response->getContent());
     }
 }

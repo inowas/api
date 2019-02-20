@@ -8,4 +8,3 @@ oneup_flysystem:
         default_filesystem:
             adapter: default_adapter
             alias: League\Flysystem\Filesystem
-            mount: prefix
