@@ -125,6 +125,11 @@ class ModflowModel extends ToolInstance
         $this->packages = $packages->toArray();
     }
 
+    public function data(): array
+    {
+        return ['discretization' => $this->discretization];
+    }
+
     public function toArray(): array
     {
         return [

@@ -106,6 +106,17 @@ class Mcda extends ToolInstance
         $this->suitability = $suitability;
     }
 
+    public function data(): array
+    {
+        return [
+            'criteria' => $this->critera(),
+            'constraints' => $this->constraints(),
+            'suitability' => $this->constraints(),
+            'weight_assignments' => $this->constraints(),
+            'with_ahp' => $this->constraints(),
+        ];
+    }
+
     public function setData(array $data): void
     {
         $this->criteria = $data['criteria'] ?? $this->criteria;

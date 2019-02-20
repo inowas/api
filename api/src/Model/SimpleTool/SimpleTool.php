@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SimpleTool extends ToolInstance
 {
     /**
+     * @var array
      * @ORM\Column(name="data", type="json_array")
      */
     private $data = [];

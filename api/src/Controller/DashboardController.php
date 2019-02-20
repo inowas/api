@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Model\Mcda\Mcda;
 use App\Model\Modflow\ModflowModel;
 use App\Model\SimpleTool\SimpleTool;
+use App\Model\ToolInstance;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,7 +41,7 @@ class DashboardController
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 
-        switch ($tool){
+        switch ($tool) {
             case ('T03'):
                 $toolClass = ModflowModel::class;
                 break;
@@ -70,6 +71,19 @@ class DashboardController
             'isScenario' => false,
             'isArchived' => false
         ]);
+
+        /** @var ToolInstance $instance */
+        foreach ($instances as $key => $instance) {
+            $instances[$key] = [
+                'id' => $instance->id(),
+                'tool' => $instance->tool(),
+                'name' => $instance->name(),
+                'description' => $instance->description(),
+                'created_at' => $instance->getCreatedAt()->format(DATE_ATOM),
+                'updated_at' => $instance->getCreatedAt()->format(DATE_ATOM),
+                'user_name' => $instance->getUser()->getUsername(),
+            ];
+        }
 
         return new JsonResponse($instances);
     }

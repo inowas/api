@@ -184,6 +184,8 @@ abstract class ToolInstance implements \JsonSerializable
         $this->updatedAt = $updatedAt;
     }
 
+    abstract public function data(): array;
+
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate

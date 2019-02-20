@@ -60,7 +60,7 @@ class LoadDefaultTools extends Command
             throw new \Exception(sprintf('User with username %s not found.', $username));
         }
 
-        $simpleTools = $this->entityManager->getRepository(SimpleTool::class)->findBy(['userId' => $user->getId()->toString()]);
+        $simpleTools = $this->entityManager->getRepository(SimpleTool::class)->findBy(['user' => $user]);
         /** @var SimpleTool $simpleTool */
         foreach ($simpleTools as $simpleTool) {
             if ($simpleTool->name() === 'Default') {
