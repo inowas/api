@@ -19,9 +19,10 @@ abstract class ToolInstance implements \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\Column(name="user_id", type="string", length=36, nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Model\User")
+     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @ORM\Column(name="tool", type="string", length=36, nullable=false)
@@ -68,11 +69,11 @@ abstract class ToolInstance implements \JsonSerializable
         $this->id = null;
     }
 
-    public static function createWithParams(string $id, string $userId, string $tool, ToolMetadata $metadata)
+    public static function createWithParams(string $id, User $user, string $tool, ToolMetadata $metadata)
     {
         $static = new static();
         $static->id = $id;
-        $static->userId = $userId;
+        $static->user = $user;
         $static->tool = $tool;
         $static->name = $metadata->name();
         $static->description = $metadata->description();
@@ -108,12 +109,17 @@ abstract class ToolInstance implements \JsonSerializable
 
     public function userId(): string
     {
-        return $this->userId;
+        return $this->getUser()->getId()->toString();
     }
 
-    public function setUserId(string $userId): void
+    public function getUser(): User
     {
-        $this->userId = $userId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
     }
 
     public function setMetadata(ToolMetadata $metadata): void
@@ -191,10 +197,11 @@ abstract class ToolInstance implements \JsonSerializable
         }
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
-            'userId' => $this->userId,
+            'userId' => $this->getUser()->getId()->toString(),
             'tool' => $this->tool,
             'name' => $this->name,
             'description' => $this->description,

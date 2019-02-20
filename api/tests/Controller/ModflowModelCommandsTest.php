@@ -132,7 +132,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $this->assertEquals($command['payload']['name'], $modflowModel->name());
         $this->assertEquals($command['payload']['description'], $modflowModel->description());
         $this->assertEquals($command['payload']['public'], $modflowModel->isPublic());
-        $this->assertEquals($user->getId()->toString(), $modflowModel->userId());
+        $this->assertEquals($user->getId()->toString(), $modflowModel->getUser()->getId()->toString());
     }
 
     /**
@@ -192,7 +192,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $this->assertInstanceOf(ModflowModel::class, $modflowModel);
 
         $this->assertEquals('T03', $modflowModel->tool());
-        $this->assertEquals($user->getId()->toString(), $modflowModel->userId());
+        $this->assertEquals($user->getId()->toString(), $modflowModel->getUser()->getId()->toString());
         $this->assertInstanceOf(Discretization::class, $modflowModel->discretization());
         $expected = Discretization::fromParams(
             $command['payload']['geometry'],
@@ -657,7 +657,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $modelId = Uuid::uuid4()->toString();
         $modflowModel = ModflowModel::createWithParams(
             $modelId,
-            $user->getId()->toString(),
+            $user,
             'T03',
             ToolMetadata::fromParams(
                 sprintf('Model-Name %d', rand(1000000, 10000000 - 1)),

@@ -66,7 +66,7 @@ class DashboardController
 
         $instances = $this->entityManager->getRepository($toolClass)->findBy([
             'tool' => $tool,
-            'userId' => $user->getId()->toString(),
+            'user' => $user,
             'isScenario' => false,
             'isArchived' => false
         ]);

@@ -6,6 +6,7 @@ namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Model\Modflow\ModflowModel;
+use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CreateModflowModelCommandHandler
@@ -30,7 +31,13 @@ class CreateModflowModelCommandHandler
         $metadata = $command->toolMetadata();
         $discretization = $command->discretization();
 
-        $modflowModel = ModflowModel::createWithParams($id, $userId, 'T03', $metadata);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $userId]);
+
+        if (!$user instanceof User) {
+            throw new \Exception(sprintf('User with id %s not found.', $userId));
+        }
+
+        $modflowModel = ModflowModel::createWithParams($id, $user, 'T03', $metadata);
         $modflowModel->setDiscretization($discretization);
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();

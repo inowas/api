@@ -73,7 +73,7 @@ class LoadDefaultTools extends Command
         $tools = ['T02', 'T08', 'T09A', 'T09B', 'T09C', 'T09D', 'T09E', 'T13A', 'T13B', 'T13C', 'T13E', 'T14A', 'T14B', 'T14C', 'T14D'];
 
         foreach ($tools as $tool) {
-            $simpleTool = $this->tools($tool, $user->getId()->toString());
+            $simpleTool = $this->tools($tool, $user);
             if (!$simpleTool instanceof SimpleTool) {
                 continue;
             }
@@ -85,15 +85,15 @@ class LoadDefaultTools extends Command
 
     /**
      * @param string $tool
-     * @param string $userId
+     * @param User $user
      * @return SimpleTool
      * @throws \Exception
      */
-    public function tools(string $tool, string $userId): ?SimpleTool
+    public function tools(string $tool, User $user): ?SimpleTool
     {
         $simpleTool = SimpleTool::createWithParams(
             Uuid::uuid4()->toString(),
-            $userId,
+            $user,
             $tool,
             ToolMetadata::fromParams(
                 'Default',

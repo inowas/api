@@ -6,6 +6,7 @@ namespace App\Domain\ToolInstance\CommandHandler;
 
 use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Model\Modflow\ModflowModel;
+use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CloneModflowModelCommandHandler
@@ -29,6 +30,11 @@ class CloneModflowModelCommandHandler
         $cloneId = $command->newId();
         $cloneAsTool = $command->isTool();
 
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $userId]);
+        if (!$user instanceof User) {
+            throw new \Exception(sprintf('User with id %s not found.', $userId));
+        }
+
         $original = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $originId]);
 
         if (!$original instanceof ModflowModel) {
@@ -44,7 +50,7 @@ class CloneModflowModelCommandHandler
         /** @var ModflowModel $clone */
         $clone = clone $original;
         $clone->setId($cloneId);
-        $clone->setUserId($userId);
+        $clone->setUser($user);
         $clone->setIsScenario(!$cloneAsTool);
 
         $this->entityManager->persist($clone);

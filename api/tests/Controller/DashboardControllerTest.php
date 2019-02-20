@@ -15,6 +15,7 @@ class DashboardControllerTest extends CommandTestBaseClass
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
         $response = $this->sendRequest('api/tools/' . $privateTool->tool(), $token);
+
         $this->assertEquals(200, $response->getStatusCode());
         $tools = json_decode($response->getContent(), true);
         $this->assertCount(1, $tools);

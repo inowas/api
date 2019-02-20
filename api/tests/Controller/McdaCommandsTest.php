@@ -57,7 +57,7 @@ class McdaCommandsTest extends CommandTestBaseClass
         $this->assertEquals($command['payload']['name'], $mcda->name());
         $this->assertEquals($command['payload']['description'], $mcda->description());
         $this->assertEquals($command['payload']['public'], $mcda->isPublic());
-        $this->assertEquals($user->getId()->toString(), $mcda->userId());
+        $this->assertEquals($user->getId()->toString(), $mcda->getUser()->getId()->toString());
 
         $this->assertEquals($command['payload']['data']['criteria'], $mcda->critera());
         $this->assertEquals($command['payload']['data']['constraints'], $mcda->constraints());
@@ -179,7 +179,7 @@ class McdaCommandsTest extends CommandTestBaseClass
         $mcdaId = Uuid::uuid4()->toString();
         $mcda = Mcda::createWithParams(
             $mcdaId,
-            $user->getId()->toString(),
+            $user,
             'T05',
             ToolMetadata::fromParams(
                 sprintf('Mcda-Name %d', rand(1000000, 10000000 - 1)),

@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 class UserAuthenticationTest extends CommandTestBaseClass
 {
 
+
     public function provider()
     {
         return [
@@ -29,10 +30,13 @@ class UserAuthenticationTest extends CommandTestBaseClass
 
         $client->request(
             'GET',
-            '/api/users',
+            '/api/users.json',
             [],
             [],
-            ['HTTP_Authorization' => sprintf('Bearer %s',  $token)]
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_Authorization' => sprintf('Bearer %s',  $token)
+            ]
         );
 
         $this->assertEquals($statusCode, $client->getResponse()->getStatusCode());

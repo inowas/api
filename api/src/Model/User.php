@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,6 +12,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
+ *
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"},
+ *     attributes={"access_control"="is_granted('ROLE_ADMIN')"})
  */
 class User implements UserInterface
 {
@@ -71,7 +77,7 @@ class User implements UserInterface
      * @return User
      * @throws \Exception
      */
-    public static function withAggregateId(string $aggregateId, string $username, string $password)
+    public static function withAggregateId(string $aggregateId, string $username, string $password): self
     {
         $self = new self($username, $password);
         $self->id = Uuid::fromString($aggregateId);
@@ -184,11 +190,11 @@ class User implements UserInterface
 
     public function getName(): string
     {
-        return $this->profile['name'];
+        return $this->profile['name'] ?? '';
     }
 
     public function getEmail(): string
     {
-        return $this->profile['email'];
+        return $this->profile['email'] ?? '';
     }
 }

@@ -40,7 +40,7 @@ class CommandTestBaseClass extends WebTestCase
     protected function createSimpleTool(User $user, bool $isPublic = true): SimpleTool
     {
         $id = Uuid::uuid4()->toString();
-        $simpleTool = SimpleTool::createWithParams($id, $user->getId(), 'T02', ToolMetadata::fromParams(
+        $simpleTool = SimpleTool::createWithParams($id, $user, 'T02', ToolMetadata::fromParams(
             'Tool01_' . rand(10000, 99999),
             'Description_' . rand(10000, 99999),
             $isPublic
@@ -60,15 +60,18 @@ class CommandTestBaseClass extends WebTestCase
      * @param $username
      * @param $password
      * @param array $roles
+     * @return User
      * @throws \Exception
      */
-    protected function createUser($username, $password, $roles = ['ROLE_USER']): void
+    protected function createUser($username, $password, $roles = ['ROLE_USER']): User
     {
         $user = new User($username, $password, $roles);
         /** @var EntityManager $em */
         $em = self::$container->get('doctrine')->getManager();
         $em->persist($user);
         $em->flush($user);
+
+        return $user;
     }
 
     /**

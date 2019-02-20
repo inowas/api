@@ -9,6 +9,7 @@ use App\Model\Mcda\Mcda;
 use App\Model\Modflow\ModflowModel;
 use App\Model\SimpleTool\SimpleTool;
 use App\Model\ToolInstance;
+use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CloneToolInstanceCommandHandler
@@ -30,6 +31,11 @@ class CloneToolInstanceCommandHandler
         $userId = $command->metadata()['user_id'];
         $originId = $command->baseId();
         $cloneId = $command->id();
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $userId]);
+        if (!$user instanceof User) {
+            throw new \Exception(sprintf('User with id %s not found.', $userId));
+        }
 
         /** @var SimpleTool $original */
         $original = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $originId]);
@@ -55,7 +61,7 @@ class CloneToolInstanceCommandHandler
         /** @var ToolInstance $clone */
         $clone = clone $original;
         $clone->setId($cloneId);
-        $clone->setUserId($userId);
+        $clone->setUser($user);
 
         $this->entityManager->persist($clone);
         $this->entityManager->flush();
