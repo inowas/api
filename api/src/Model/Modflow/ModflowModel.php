@@ -130,6 +130,11 @@ class ModflowModel extends ToolInstance
         return ['discretization' => $this->discretization];
     }
 
+    public function setData(array $data): void
+    {
+        $this->setDiscretization(Discretization::fromArray($data));
+    }
+
     public function toArray(): array
     {
         return [

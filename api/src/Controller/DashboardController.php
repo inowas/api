@@ -62,6 +62,19 @@ class DashboardController
                 'isArchived' => false
             ]);
 
+            /** @var ToolInstance $instance */
+            foreach ($instances as $key => $instance) {
+                $instances[$key] = [
+                    'id' => $instance->id(),
+                    'tool' => $instance->tool(),
+                    'name' => $instance->name(),
+                    'description' => $instance->description(),
+                    'created_at' => $instance->getCreatedAt()->format(DATE_ATOM),
+                    'updated_at' => $instance->getCreatedAt()->format(DATE_ATOM),
+                    'user_name' => $instance->getUser()->getUsername(),
+                ];
+            }
+
             return new JsonResponse($instances);
         }
 

@@ -186,6 +186,8 @@ abstract class ToolInstance implements \JsonSerializable
 
     abstract public function data(): array;
 
+    abstract public function setData(array $data): void;
+
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
