@@ -18,7 +18,7 @@ class UserCommandsTest extends CommandTestBaseClass
         $client = static::createClient();
         $client->request(
             'POST',
-            '/api/register',
+            '/v3/register',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -60,7 +60,7 @@ class UserCommandsTest extends CommandTestBaseClass
             ]
         ];
         $token = $this->getToken($username, $password);
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var User $user */
@@ -91,7 +91,7 @@ class UserCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($username, $password);
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var User $user */
@@ -125,7 +125,7 @@ class UserCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($username, $password);
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var User $user */
@@ -153,7 +153,7 @@ class UserCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($username, $password);
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var User $user */
@@ -181,7 +181,7 @@ class UserCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($username, $password);
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var User $user */
@@ -217,7 +217,7 @@ class UserCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken('super_admin', 'admin');
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var User $user */

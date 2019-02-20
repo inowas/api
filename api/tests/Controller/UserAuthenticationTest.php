@@ -30,7 +30,7 @@ class UserAuthenticationTest extends CommandTestBaseClass
 
         $client->request(
             'GET',
-            '/api/users.json',
+            '/v3/users.json',
             [],
             [],
             [

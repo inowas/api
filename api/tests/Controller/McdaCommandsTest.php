@@ -47,7 +47,7 @@ class McdaCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var Mcda $mcda */
@@ -89,7 +89,7 @@ class McdaCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var Mcda $mcda */
@@ -121,7 +121,7 @@ class McdaCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
 
@@ -155,7 +155,7 @@ class McdaCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
 

@@ -73,7 +73,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -121,7 +121,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -184,7 +184,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -237,7 +237,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -267,7 +267,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -299,7 +299,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $original */
@@ -335,7 +335,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $original */
@@ -368,7 +368,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -413,7 +413,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -460,7 +460,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -490,7 +490,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -535,7 +535,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -579,7 +579,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -608,7 +608,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */
@@ -636,7 +636,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var ModflowModel $modflowModel */

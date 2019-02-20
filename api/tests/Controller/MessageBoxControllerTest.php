@@ -15,7 +15,7 @@ class MessageBoxControllerTest extends WebTestCase
 
         $client->request(
             'POST',
-            '/api/messagebox',
+            '/v3/messagebox',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -50,7 +50,7 @@ class MessageBoxControllerTest extends WebTestCase
 
         $client->request(
             'POST',
-            '/api/login_check',
+            '/v3/login_check',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -63,7 +63,7 @@ class MessageBoxControllerTest extends WebTestCase
 
         $client->request(
             'GET',
-            '/api/users',
+            '/v3/users',
             [],
             [],
             ['HTTP_Authorization' => sprintf('Bearer %s',  $token)],

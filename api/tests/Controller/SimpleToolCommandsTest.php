@@ -30,7 +30,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var SimpleTool $simpleTool */
@@ -67,7 +67,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user2->getUsername(), $user2->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var SimpleTool $clone */
@@ -106,7 +106,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var SimpleTool $simpleTool */
@@ -141,7 +141,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var SimpleTool $simpleTool */
@@ -174,7 +174,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var SimpleTool $simpleTool */
@@ -202,7 +202,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         ];
 
         $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('api/messagebox', $command, $token);
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
         $this->assertEquals(202, $response->getStatusCode());
 
         /** @var SimpleTool $simpleTool */

@@ -84,7 +84,7 @@ class CommandTestBaseClass extends WebTestCase
         $client = static::createClient();
         $client->request(
             'POST',
-            '/api/login_check',
+            '/v3/login_check',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
