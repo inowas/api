@@ -139,4 +139,27 @@ class CommandTestBaseClass extends WebTestCase
 
         return $client->getResponse();
     }
+
+    /**
+     * @param $endpoint
+     * @param $content
+     * @param null $token
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function sendPostRequest($endpoint, $content, $token = null)
+    {
+        $headers = $token ? ['HTTP_Authorization' => sprintf('Bearer %s', $token)] : [];
+        $headers['CONTENT_TYPE'] = 'application/json';
+        $client = static::createClient();
+        $client->request(
+            'POST',
+            $endpoint,
+            [],
+            [],
+            $headers,
+            $content
+        );
+
+        return $client->getResponse();
+    }
 }
