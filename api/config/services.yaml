@@ -40,8 +40,9 @@ services:
 
     Google\Cloud\Storage\StorageClient:
         class: Google\Cloud\Storage\StorageClient
-        arguments:
+        arguments: 
             - projectId: "inowas-i"
+              keyFilePath: '%env(GOOGLE_APPLICATION_KEYFILE)%'
 
     Google\Cloud\Storage\Bucket:
         class: Google\Cloud\Storage\Bucket
