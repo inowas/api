@@ -45,22 +45,27 @@ class DataDropperController
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 
-        $content = $request->getContent();
-        $hash = hash('sha1', $content, false);
+        $contentType = $request->headers->get('Content-Type');
 
-        $dataDrop = $this->entityManager->getRepository(DataDrop::class)->findOneBy(['hash' => $hash]);
-
-        if ($dataDrop instanceof DataDrop) {
-            return new JsonResponse(['filename' => $hash]);
+        if (!$contentType === 'application/json') {
+            return new JsonResponse(['error' => 'Expecting Header: Content-Type: application/json']);
         }
 
-        $this->filesystem->write($hash, $content);
+        $content = $request->getContent();
+        $hash = hash('sha1', $content, false);
+        $filename = $hash . '.json';
 
-        $dataDrop = new DataDrop($hash, $user, $hash, 'local');
+        $dataDrop = $this->entityManager->getRepository(DataDrop::class)->findOneBy(['filename' => $filename]);
+        if ($dataDrop instanceof DataDrop) {
+            return new JsonResponse(['filename' => $filename]);
+        }
+
+        $this->filesystem->write($filename, $content);
+        $dataDrop = new DataDrop($hash, $user, $filename, '');
         $this->entityManager->persist($dataDrop);
         $this->entityManager->flush();
 
-        return new JsonResponse(['filename' => $hash]);
+        return new JsonResponse(['filename' => $filename]);
     }
 
     /**
@@ -72,7 +77,7 @@ class DataDropperController
     {
 
         /** @var DataDrop $dataDrop */
-        $dataDrop = $this->entityManager->getRepository(DataDrop::class)->findOneBy(['hash' => $filename]);
+        $dataDrop = $this->entityManager->getRepository(DataDrop::class)->findOneBy(['filename' => $filename]);
 
         if (!$dataDrop instanceof DataDrop) {
             return new Response('Not Found', 404);

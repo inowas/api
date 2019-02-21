@@ -21,17 +21,17 @@ class DataDrop
     private $hash;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="filename", type="string", length=64, unique=true, nullable=false)
+     */
+    private $filename;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Model\User")
      * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
     protected $user;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="filename", type="string", length=64, nullable=false)
-     */
-    private $filename;
 
     /**
      * @var string

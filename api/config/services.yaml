@@ -37,3 +37,14 @@ services:
         
     App\Model\ProjectorCollection:
         arguments: [!tagged app.projector]
+
+    Google\Cloud\Storage\StorageClient:
+        class: Google\Cloud\Storage\StorageClient
+        arguments:
+            - projectId: "inowas-i"
+
+    Google\Cloud\Storage\Bucket:
+        class: Google\Cloud\Storage\Bucket
+        factory: 'Google\Cloud\Storage\StorageClient:bucket'
+        arguments:
+            - '%env(GOOGLE_STORAGE_BUCKET_NAME)%'

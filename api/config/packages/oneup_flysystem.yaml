@@ -4,7 +4,13 @@ oneup_flysystem:
         default_adapter:
             local:
                 directory: '%kernel.cache_dir%/flysystem'
+                
+        gcloud_adapter:
+            googlecloudstorage:
+                client: Google\Cloud\Storage\StorageClient
+                bucket: Google\Cloud\Storage\Bucket
+                
     filesystems:
         default_filesystem:
-            adapter: default_adapter
+            adapter: gcloud_adapter
             alias: League\Flysystem\Filesystem

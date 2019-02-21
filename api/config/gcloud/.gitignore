@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "inowas-i",
+  "private_key_id": "3e4159dcf129f5d0304217c2cbd56c04765f609e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCoFkaqgnnLStHz\nPNFzAaP2Ap+6xh4uI1zoafvfX1Gf2bRI7qr8SuDA8K8OzRzFoUvE3bZDrN9MLkOT\nX6GeYATD45yZ/1X/Dsw2fpiX1gCSruCxoZnYxvTXtSBtrWcRET+eM8x5S7GNNlNg\n7tie9fMqRutc0XqXznL2+7fCH/5ZWy3IWgVfUe6qF7HQEwEhpzYr4Vc3UAD6zCgF\nrb97EuXO+KamDzena8NLJu2pa/VyrpN8GgB8QUtSeg2WM5CTtToj1uidk+vTiGLd\nkEfuaLmGDEa156dZUVizWTVRbAmk0Yxv/HnQGNtT9x1OuqhoVout6WJRBepK685/\nXddgkoORAgMBAAECggEAIOuH+JIoT2/+caCqNteN6Ls31GlD9O5ZHm3Pdj6hamjF\nffk8hMAXh8I7zu7OIUjHYa24qkV70FxJQN5cdXvBwynbfG+9RIB973hY43f20cOt\nXyzSyFmjD3I6gTCSfI2/w3jKpcD0677FkrkEtRFfiBqusxWV6JB3BLdlFICWnKJF\nFW3ho494cBH50qa6mQRruF3eus+FDZkBXB9fZRbb+7FQIugQ372KPRDOrqWnIk55\nzYuL1fBzAf/D30xvdVzaCz3sTPAyBXQpz5vjhxjdSohk6U+Pp5ZJPfWU9eXam/Ch\nwETddTvJQmm0cyfn66CXKUPRG8wXlomaUkQqDROjHwKBgQDar5GEGLY31jtW1Gci\n3DHStPLjvqQuc1sxzM50GCqEWBBXXFUJeDEJ8ZkT1PPv25/m8Pu7VTvTFNpyibC7\n6vTkDYQhVliivUatXUkBfXP9OgeMc7gCrSLTI0WIfptDvrZ4BWth4OFeXQD+XwX+\nIpIwEKc+d94TUy3O8COwivuw5wKBgQDExH9oBumodOVXtaobr6I6u1cE5PnPDmz7\n0vXSV8N4vSgdvbOaYNfwPEjMJhiC1+9olN0+LA09PEMD2NF6OVqj47lu0P1Wjn1R\ngMNZK2k5hY4gq5/NiUook2aySes9T9FZtMI5Ar9pS5ZhDkYZqbWpsM35iIkDM9Tq\n47F0WDQAxwKBgQCpztSWlz2/A8oV9V6UkhjZ/YnxUFJag1aXx+mz+iPhmiQuQdMC\nRGMHzqNH4/77DDYQ9KTz5Q5MLJAnikVC1gIMp3YnEM5Ip+KesaYD0y9ivVGpPR3w\nbhJxkpzmjTDxHMDBV6v3V9CIHn2sB4s2uA995SCIgDlgFiGm449DAdjIlwKBgQCB\nV8mIUEL4AR9g8IHJgUJa6RrilMHBYfIx9xKwGhDcJTthkXmmWVKZEIep6sDiAZ/W\nV0S3wa1SO3Kx7KyGc30pjmAugCKH61JlaQcAbpDUxv4Oa8K4ES82TO6M9Bo2S2mK\nVk/1ueCpDo7jbcaWyAAqc5ZyGVY3TLMBVHspx3EnsQKBgQCaYa24CSG1q58JEXfB\nFOuaU2ss/QVQg3xUnFm2hUUVBZM0rqfL+9Li8Ytbl2wg7O4v8nmAjJ2XK4gczyvS\nzH+IUBWBKCJSd/coCuifPWMSySI+aUxrD+Q46Q/RypP5PCuQjfeCCj7x6ls0AM6K\nYsjEdxAchct+bH3S4pdM4cDWHQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "inowas-data-dropper@inowas-i.iam.gserviceaccount.com",
+  "client_id": "117140923918020495881",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/inowas-data-dropper%40inowas-i.iam.gserviceaccount.com"
+}

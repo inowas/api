@@ -24,6 +24,8 @@ class DataDropperControllerTest extends CommandTestBaseClass
         $response = $this->sendRequest('v3/datadropper/' . $filename, $token);
         $this->assertEquals(200, $response->getStatusCode());
 
+        var_dump($response->getContent());
+
         $this->assertEquals($content, $response->getContent());
     }
 }
