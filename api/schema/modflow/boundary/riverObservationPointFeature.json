@@ -24,32 +24,24 @@
         },
         "type": {
           "type": "string",
-          "pattern": "^wel$"
-        },
-        "layers": {
-          "$ref": "/modflow/affectedLayers"
-        },
-        "cells": {
-          "$ref": "/modflow/activeCells"
-        },
-        "well_type": {
-          "type": "string",
-          "maxLength": 4
+          "pattern": "^op$"
         },
         "sp_values": {
           "type": "array",
           "items": {
-            "description": "0: Recharge Rate (float)",
-            "type": "number"
+            "type": "array",
+            "items": {
+              "description": "0: stage (float), 1: cond (float), 2: rbot (float)",
+              "type": "number",
+              "minItems": 3,
+              "maxItems": 3
+            }
           }
         }
       },
       "required": [
         "name",
         "type",
-        "cells",
-        "layers",
-        "well_type",
         "sp_values"
       ]
     }

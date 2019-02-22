@@ -8,6 +8,7 @@ use App\Model\Modflow\Boundary\BoundaryFactory;
 use App\Model\Modflow\Boundary\WellBoundary;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use Swaggest\JsonSchema\Schema;
 
 class WellBoundaryTest extends TestCase
 {
@@ -41,6 +42,24 @@ class WellBoundaryTest extends TestCase
      * @test
      * @throws \Exception
      */
+    public function it_validates_the_well_boundary_schema_successfully()
+    {
+        $schema = 'https://schema.inowas.com/modflow/boundary/wellBoundary.json';
+        $schema = Schema::import($schema);
+        $object = json_decode(json_encode($this->wellBoundaryJson), false);
+        $schema->in($object);
+        $this->assertTrue(true);
+
+        $wellBoundary = BoundaryFactory::fromArray($this->wellBoundaryJson);
+        $object = json_decode(json_encode($wellBoundary->jsonSerialize()), false);
+        $schema->in($object);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
     public function it_creates_a_well_from_json()
     {
         /** @var WellBoundary $wellBoundary */
@@ -59,4 +78,5 @@ class WellBoundaryTest extends TestCase
         $this->assertEquals($this->wellBoundaryJson['properties']['sp_values'], $wellBoundary->spValues());
         $this->assertEquals($this->wellBoundaryJson, $wellBoundary->jsonSerialize());
     }
+
 }

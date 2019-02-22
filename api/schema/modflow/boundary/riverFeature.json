@@ -12,7 +12,7 @@
       "pattern": "^[a-z0-9_\\-]{3,255}$"
     },
     "geometry": {
-      "$ref": "/geojson/point"
+      "$ref": "/geojson/linestring"
     },
     "properties": {
       "type": "object",
@@ -24,33 +24,20 @@
         },
         "type": {
           "type": "string",
-          "pattern": "^wel$"
+          "pattern": "^riv$"
         },
         "layers": {
           "$ref": "/modflow/affectedLayers"
         },
         "cells": {
           "$ref": "/modflow/activeCells"
-        },
-        "well_type": {
-          "type": "string",
-          "maxLength": 4
-        },
-        "sp_values": {
-          "type": "array",
-          "items": {
-            "description": "0: Recharge Rate (float)",
-            "type": "number"
-          }
         }
       },
       "required": [
         "name",
         "type",
         "cells",
-        "layers",
-        "well_type",
-        "sp_values"
+        "layers"
       ]
     }
   },

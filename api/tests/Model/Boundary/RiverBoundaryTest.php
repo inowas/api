@@ -9,6 +9,7 @@ use App\Model\Modflow\Boundary\RiverBoundary;
 use GeoJson\Feature\Feature;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use Swaggest\JsonSchema\Schema;
 
 class RiverBoundaryTest extends TestCase
 {
@@ -39,7 +40,7 @@ class RiverBoundaryTest extends TestCase
                 ],
                 [
                     'type' => 'Feature',
-                    'id' => Uuid::uuid4()->toString(),
+                    'id' => 'op1',
                     'geometry' => [
                         'type' => 'Point',
                         'coordinates' => [125.6, 10.1]
@@ -47,11 +48,31 @@ class RiverBoundaryTest extends TestCase
                     'properties' => [
                         'type' => 'op',
                         'name' => 'OP1',
-                        'sp_values' => [1, 2, 3, 4, 5, 6, 7, 8]
+                        'sp_values' => [
+                            [1, 2, 3]
+                        ]
                     ]
                 ]
             ]
         ];
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function it_validates_the_river_boundary_schema_successfully()
+    {
+        $schema = 'https://schema.inowas.com/modflow/boundary/riverBoundary.json';
+        $schema = Schema::import($schema);
+        $object = json_decode(json_encode($this->riverBoundaryJson), false);
+        $schema->in($object);
+        $this->assertTrue(true);
+
+        $riverBoundary = BoundaryFactory::fromArray($this->riverBoundaryJson);
+        $object = json_decode(json_encode($riverBoundary->jsonSerialize()), false);
+        $schema->in($object);
+        $this->assertTrue(true);
     }
 
     /**
