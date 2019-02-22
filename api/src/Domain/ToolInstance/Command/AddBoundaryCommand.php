@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
-use App\Model\Modflow\Boundary;
+use App\Model\Modflow\Boundary\BoundaryFactory;
+use App\Model\Modflow\Boundary\BoundaryInterface;
 
 class AddBoundaryCommand extends Command
 {
@@ -38,8 +39,12 @@ class AddBoundaryCommand extends Command
         return $this->id;
     }
 
-    public function boundary(): Boundary
+    /**
+     * @return BoundaryInterface
+     * @throws \Exception
+     */
+    public function boundary(): BoundaryInterface
     {
-        return Boundary::fromArray($this->boundary);
+        return BoundaryFactory::fromArray($this->boundary);
     }
 }

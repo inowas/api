@@ -2,8 +2,8 @@
 
 namespace App\Tests\Controller;
 
-use App\Model\Modflow\Boundaries;
-use App\Model\Modflow\Boundary;
+use App\Model\Modflow\Boundary\BoundaryCollection;
+use App\Model\Modflow\Boundary\BoundaryFactory;
 use App\Model\Modflow\Discretization;
 use App\Model\Modflow\Layer;
 use App\Model\Modflow\ModflowModel;
@@ -395,19 +395,19 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                 'id' => $modelId,
                 'boundary' => [
                     'id' => $boundaryId,
-                    'name' => 'New wel-Boundary',
+                    'type' => 'Feature',
                     'geometry' => [
                         'type' => 'Point',
-                        'coordinates' => [13, 52]
+                        'coordinates' => [12, 51]
                     ],
-                    'type' => 'wel',
-                    'active_cells' => [[1, 1]],
-                    'affected_layers' => [0],
-                    'metadata' => ['well_type' => 'puw'],
-                    'date_time_values' => [[
-                        'date_time' => '2005-05-17T00:00:00Z',
-                        'values' => [0],
-                    ]],
+                    'properties' => [
+                        'type' => 'wel',
+                        'name' => 'My Well',
+                        'well_type' => 'puw',
+                        'layers' => [0],
+                        'cells' => [[3, 2], [4, 2]],
+                        'sp_values' => [3444, 5255, 666, 777]
+                    ]
                 ],
             ],
         ];
@@ -431,22 +431,6 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         $model = $this->createRandomModflowModel($user);
 
         $boundary = $model->boundaries()->first();
-        $updatedBoundary = Boundary::fromArray([
-            'id' => $boundary->id(),
-            'name' => 'Updated',
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' => [12, 52]
-            ],
-            'type' => 'wel',
-            'active_cells' => [[2, 1]],
-            'affected_layers' => [1],
-            'metadata' => ['well_type' => 'puw'],
-            'date_time_values' => [[
-                'date_time' => '2005-05-11T00:00:00Z',
-                'values' => [2],
-            ]],
-        ]);
 
         $command = [
             'uuid' => Uuid::uuid4()->toString(),
@@ -455,7 +439,22 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             'payload' => [
                 'id' => $model->id(),
                 'boundary_id' => $boundary->id(),
-                'boundary' => $updatedBoundary->toArray()
+                'boundary' => [
+                    'id' => $boundary->id(),
+                    'type' => 'Feature',
+                    'geometry' => [
+                        'type' => 'Point',
+                        'coordinates' => [12, 51]
+                    ],
+                    'properties' => [
+                        'type' => 'wel',
+                        'name' => 'My Well',
+                        'well_type' => 'puw',
+                        'layers' => [0],
+                        'cells' => [[3, 2], [4, 2]],
+                        'sp_values' => [3444, 5255, 666, 777]
+                    ]
+                ]
             ],
         ];
 
@@ -641,9 +640,9 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
-        $this->assertEquals($command['payload']['properties'] ,$modflowModel->soilmodel()->properties());
+        $this->assertEquals($command['payload']['properties'], $modflowModel->soilmodel()->properties());
     }
-    
+
     /**
      * @param User $user
      * @return ModflowModel
@@ -701,24 +700,24 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
         ]);
         $modflowModel->setDiscretization($discretization);
 
-        # Boundaries
-        $boundary = Boundary::fromArray([
+        # BoundaryCollection
+        $boundary = BoundaryFactory::fromArray([
             'id' => Uuid::uuid4()->toString(),
-            'name' => 'New wel-Boundary',
+            'type' => 'Feature',
             'geometry' => [
                 'type' => 'Point',
                 'coordinates' => [13, 52]
             ],
-            'type' => 'wel',
-            'active_cells' => [[1, 1]],
-            'affected_layers' => [0],
-            'metadata' => ['well_type' => 'puw'],
-            'date_time_values' => [[
-                'date_time' => '2005-05-17T00:00:00Z',
-                'values' => [0],
-            ]],
+            'properties' => [
+                'type' => 'wel',
+                'name' => 'My new Well',
+                'well_type' => 'puw',
+                'layers' => [1],
+                'cells' => [[3, 4], [4, 5]],
+                'sp_values' => [3444, 5555, 666, 777]
+            ]
         ]);
-        $boundaries = Boundaries::create();
+        $boundaries = BoundaryCollection::create();
         $boundaries->addBoundary($boundary);
         $modflowModel->setBoundaries($boundaries);
 

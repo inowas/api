@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Modflow;
 
+use App\Model\Modflow\Boundary\BoundaryCollection;
 use App\Model\ToolInstance;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -75,12 +76,12 @@ class ModflowModel extends ToolInstance
         $this->discretization = $discretization->toArray();
     }
 
-    public function boundaries(): Boundaries
+    public function boundaries(): BoundaryCollection
     {
-        return Boundaries::fromArray($this->boundaries);
+        return BoundaryCollection::fromArray($this->boundaries);
     }
 
-    public function setBoundaries(Boundaries $boundaries): void
+    public function setBoundaries(BoundaryCollection $boundaries): void
     {
         $this->boundaries = $boundaries->toArray();
     }

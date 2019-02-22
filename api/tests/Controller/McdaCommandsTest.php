@@ -38,9 +38,9 @@ class McdaCommandsTest extends CommandTestBaseClass
                 'public' => true,
                 'data' => [
                     'criteria' => ['abc' => 'def'],
-                    'weightAssignments' => ['ghi' => 'jkl'],
+                    'weight_assignments' => ['ghi' => 'jkl'],
                     'constraints' => ['mno' => 'pqr'],
-                    'withAhp' => true,
+                    'with_ahp' => true,
                     'suitability' => ['stu' => 'vwx']
                 ]
             ],
@@ -62,8 +62,8 @@ class McdaCommandsTest extends CommandTestBaseClass
         $this->assertEquals($command['payload']['data']['criteria'], $mcda->critera());
         $this->assertEquals($command['payload']['data']['constraints'], $mcda->constraints());
         $this->assertEquals($command['payload']['data']['suitability'], $mcda->suitability());
-        $this->assertEquals($command['payload']['data']['weightAssignments'], $mcda->weightAssignments());
-        $this->assertEquals($command['payload']['data']['withAhp'], $mcda->withAhp());
+        $this->assertEquals($command['payload']['data']['weight_assignments'], $mcda->weightAssignments());
+        $this->assertEquals($command['payload']['data']['with_ahp'], $mcda->withAhp());
     }
 
     /**
@@ -146,9 +146,9 @@ class McdaCommandsTest extends CommandTestBaseClass
             'payload' => [
                 'id' => $mcda->id(),
                 'data' => [
-                    'weightAssignments' => ['ghi1' => 'jk11'],
+                    'weight_assignments' => ['ghi1' => 'jk11'],
                     'constraints' => ['mno1' => 'pqr1'],
-                    'withAhp' => false,
+                    'with_ahp' => false,
                     'suitability' => ['stu1' => 'vwx1']
                 ]
             ],
@@ -165,8 +165,8 @@ class McdaCommandsTest extends CommandTestBaseClass
         $this->assertEquals($mcda->critera(), $updatedMcda->critera());
         $this->assertEquals($command['payload']['data']['constraints'], $updatedMcda->constraints());
         $this->assertEquals($command['payload']['data']['suitability'], $updatedMcda->suitability());
-        $this->assertEquals($command['payload']['data']['weightAssignments'], $updatedMcda->weightAssignments());
-        $this->assertEquals($command['payload']['data']['withAhp'], $updatedMcda->withAhp());
+        $this->assertEquals($command['payload']['data']['weight_assignments'], $updatedMcda->weightAssignments());
+        $this->assertEquals($command['payload']['data']['with_ahp'], $updatedMcda->withAhp());
     }
 
     /**

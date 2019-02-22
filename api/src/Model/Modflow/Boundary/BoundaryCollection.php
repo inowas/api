@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Model\Modflow;
+declare(strict_types=1);
 
-use App\Model\ValueObject;
+namespace App\Model\Modflow\Boundary;
 
-final class Boundaries extends ValueObject
+final class BoundaryCollection
 {
     private $boundaries;
 
@@ -24,22 +24,26 @@ final class Boundaries extends ValueObject
     {
     }
 
-    public function first(): ?Boundary
+    /**
+     * @return BoundaryInterface|null
+     * @throws \Exception
+     */
+    public function first(): ?BoundaryInterface
     {
         if (count($this->boundaries) === 0) {
             return null;
         }
 
         /** @noinspection PhpParamsInspection */
-        return Boundary::fromArray(array_values($this->boundaries)[0]);
+        return BoundaryFactory::fromArray(array_values($this->boundaries)[0]);
     }
 
-    public function addBoundary(Boundary $boundary): void
+    public function addBoundary(BoundaryInterface $boundary): void
     {
         $this->updateBoundary($boundary);
     }
 
-    public function updateBoundary(Boundary $boundary): void
+    public function updateBoundary(BoundaryInterface $boundary): void
     {
         $this->boundaries[$boundary->id()] = $boundary->toArray();
     }
@@ -49,13 +53,18 @@ final class Boundaries extends ValueObject
         unset($this->boundaries[$id]);
     }
 
-    public function findById(string $id): ?Boundary
+    /**
+     * @param string $id
+     * @return BoundaryInterface|null
+     * @throws \Exception
+     */
+    public function findById(string $id): ?BoundaryInterface
     {
         if (!array_key_exists($id, $this->boundaries)) {
             return null;
         }
 
-        return Boundary::fromArray($this->boundaries[$id]);
+        return BoundaryFactory::fromArray($this->boundaries[$id]);
     }
 
     public function toArray(): array

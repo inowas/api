@@ -10,6 +10,7 @@
         "api-platform/core": "^2.4@beta",
         "beberlei/assert": "^3.2",
         "guzzlehttp/guzzle": "^6.3",
+        "jmikola/geojson": "^1.0",
         "lexik/jwt-authentication-bundle": "^2.6",
         "oneup/flysystem-bundle": "^3.0",
         "ramsey/uuid": "^3.8",
