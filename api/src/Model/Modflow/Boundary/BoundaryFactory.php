@@ -47,6 +47,12 @@ class BoundaryFactory
                 $type = $feature->getProperties()['type'];
 
                 switch ($type) {
+                    case 'chd':
+                        return ConstantHeadBoundary::fromArray($arr);
+                        break;
+                    case 'ghb':
+                        return GeneralHeadBoundary::fromArray($arr);
+                        break;
                     case 'riv':
                         return RiverBoundary::fromArray($arr);
                         break;

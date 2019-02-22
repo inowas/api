@@ -39,7 +39,7 @@
         "sp_values": {
           "type": "array",
           "items": {
-            "description": "0: Recharge Rate (float)",
+            "description": "0: Pumping Rate (float)",
             "type": "number"
           }
         }

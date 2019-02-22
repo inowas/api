@@ -1,41 +1,58 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "id": "https://schema.inowas.com/",
-    "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://schema.inowas.com/",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "pattern": "^Feature$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]{3,255}$"
+    },
+    "geometry": {
+      "$ref": "/geojson/polygon"
+    },
     "properties": {
-        "id": {
-            "type": "string",
-            "pattern": "^[a-z0-9_\\-]{3,255}$"
-        },
+      "type": "object",
+      "properties": {
         "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-        },
-        "geometry": {
-            "$ref": "/geojson/polygon"
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
         },
         "type": {
-            "type": "string",
-            "pattern": "^rch$"
+          "type": "string",
+          "pattern": "^rch$"
         },
-        "affected_layers": {
-            "$ref": "/modflow/affectedLayers"
+        "layers": {
+          "$ref": "/modflow/affectedLayers"
         },
-        "active_cells": {
-            "$ref": "/modflow/activeCells"
+        "cells": {
+          "$ref": "/modflow/activeCells"
         },
-        "metadata": {},
-        "date_time_values": {
-            "$ref": "/modflow/boundary/rechargeDateTimeValues"
+        "sp_values": {
+          "type": "array",
+          "items": {
+            "description": "0: Recharge Rate (float)",
+            "type": "number"
+          }
         }
-    },
-    "required": [
-        "id",
+      },
+      "required": [
         "name",
-        "geometry",
-        "affected_layers",
-        "metadata",
-        "date_time_values"
-    ]
+        "type",
+        "cells",
+        "layers",
+        "sp_values"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "geometry",
+    "properties"
+  ]
 }

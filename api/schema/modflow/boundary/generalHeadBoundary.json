@@ -1,45 +1,28 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "id": "https://schema.inowas.com/",
-    "type": "object",
-    "properties": {
-        "id": {
-            "type": "string",
-            "pattern": "^[a-z0-9_\\-]{3,255}$"
-        },
-        "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-        },
-        "geometry": {
-            "$ref": "/geojson/linestring"
-        },
-        "type": {
-            "type": "string",
-            "pattern": "^ghb$"
-        },
-        "affected_layers": {
-            "$ref": "/modflow/affectedLayers"
-        },
-        "active_cells": {
-            "$ref": "/modflow/activeCells"
-        },
-        "metadata": {},
-        "observation_points": {
-            "type": "array",
-            "items": {
-                "$ref": "/modflow/boundary/generalHeadObservationPoint"
-            },
-            "minItems": 1
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://schema.inowas.com/",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "pattern": "^FeatureCollection$"
     },
-    "required": [
-        "id",
-        "name",
-        "geometry",
-        "affected_layers",
-        "metadata",
-        "observation_points"
-    ]
+    "features": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "/modflow/boundary/generalHeadFeature"
+          },
+          {
+            "$ref": "/modflow/boundary/generalHeadObservationPointFeature"
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "type",
+    "features"
+  ]
 }
