@@ -32,6 +32,9 @@ class BoundaryFactory
                 case 'wel':
                     return WellBoundary::fromArray($arr);
                     break;
+                case 'rch':
+                    return RechargeBoundary::fromArray($arr);
+                    break;
                 default:
                     return null;
             }
