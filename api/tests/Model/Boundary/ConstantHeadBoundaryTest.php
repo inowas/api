@@ -86,5 +86,6 @@ class ConstantHeadBoundaryTest extends TestCase
         $this->assertInstanceOf(ConstantHeadBoundary::class, $constantHeadBoundary);
         $this->assertInstanceOf(Feature::class, $constantHeadBoundary->constantHeadBoundary());
         $this->assertCount(1, $constantHeadBoundary->observationPoints());
+        $this->assertEquals($this->constantHeadBoundaryJson, $constantHeadBoundary->jsonSerialize());
     }
 }

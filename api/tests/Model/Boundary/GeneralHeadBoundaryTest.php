@@ -86,5 +86,6 @@ class GeneralHeadBoundaryTest extends TestCase
         $this->assertInstanceOf(GeneralHeadBoundary::class, $generalHeadBoundary);
         $this->assertInstanceOf(Feature::class, $generalHeadBoundary->generalHeadBoundary());
         $this->assertCount(1, $generalHeadBoundary->observationPoints());
+        $this->assertEquals($this->generalHeadHeadBoundaryJson, $generalHeadBoundary->jsonSerialize());
     }
 }

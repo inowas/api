@@ -61,7 +61,7 @@ class RiverBoundaryTest extends TestCase
      * @test
      * @throws \Exception
      */
-    public function it_validates_the_river_boundary_schema_successfully()
+    public function it_validates_the_river_boundary_schema_successfully(): void
     {
         $schema = 'https://schema.inowas.com/modflow/boundary/riverBoundary.json';
         $schema = Schema::import($schema);
@@ -79,12 +79,13 @@ class RiverBoundaryTest extends TestCase
      * @test
      * @throws \Exception
      */
-    public function it_creates_a_river_from_json()
+    public function it_creates_a_river_boundary_from_json(): void
     {
         /** @var RiverBoundary $riverBoundary */
         $riverBoundary = BoundaryFactory::fromArray($this->riverBoundaryJson);
         $this->assertInstanceOf(RiverBoundary::class, $riverBoundary);
         $this->assertInstanceOf(Feature::class, $riverBoundary->river());
         $this->assertCount(1, $riverBoundary->observationPoints());
+        $this->assertEquals($this->riverBoundaryJson, $riverBoundary->jsonSerialize());
     }
 }
