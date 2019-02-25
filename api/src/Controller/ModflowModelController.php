@@ -126,7 +126,12 @@ class ModflowModelController
             return new JsonResponse([], 403);
         }
 
-        $result = $modflowModel->soilmodel()->toArray();
+
+        $soilmodel = $modflowModel->soilmodel();
+
+        $result = [
+            'layers' => $soilmodel
+        ];
         return new JsonResponse($result);
     }
 

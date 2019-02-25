@@ -11,7 +11,13 @@ final class Soilmodel
     {
         $self = new self();
         $self->properties = $arr['properties'] ?? [];
-        $self->layers = $arr['layers'] ?? [];
+
+        $layers = $arr['layers'] ?? [];
+        foreach ($layers as $layer) {
+            $layers[$layer->id] = $layer;
+        }
+
+        $self->layers = $layers;
         return $self;
     }
 
@@ -74,7 +80,7 @@ final class Soilmodel
     {
         return [
             'properties' => $this->properties,
-            'layers' => $this->layers
+            'layers' => array_values($this->layers)
         ];
     }
 }
