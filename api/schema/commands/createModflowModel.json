@@ -38,19 +38,31 @@
         "grid_size": {
           "$ref": "/modflow/gridSize"
         },
-        "active_cells": {
-          "$ref": "/modflow/activeCells"
+        "cells": {
+          "$ref": "/modflow/cells"
         },
         "stressperiods": {
           "$ref": "/modflow/stressperiods"
         },
         "length_unit": {
           "description": "0: undefined, 1: feet, 2: meters, 3: centimeters",
-          "enum": [0, 1, 2, 3]
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ]
         },
         "time_unit": {
           "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
-          "enum": [0, 1, 2, 3, 4, 5]
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
         },
         "public": {
           "type": "boolean"
@@ -63,6 +75,8 @@
         "geometry",
         "bounding_box",
         "grid_size",
+        "cells",
+        "stressperiods",
         "length_unit",
         "time_unit",
         "public"

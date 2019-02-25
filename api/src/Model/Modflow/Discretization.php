@@ -9,18 +9,18 @@ final class Discretization extends ValueObject
     private $geometry;
     private $boundingBox;
     private $gridSize;
-    private $activeCells;
+    private $cells;
     private $stressperiods;
     private $lengthUnit;
     private $timeUnit;
 
-    public static function fromParams(array $geometry, array $boundingBox, array $gridSize, array $activeCells, array $stressperiods, int $lengthUnit, int $timeUnit): Discretization
+    public static function fromParams(array $geometry, array $boundingBox, array $gridSize, array $cells, array $stressperiods, int $lengthUnit, int $timeUnit): Discretization
     {
         $self = new self();
         $self->geometry = $geometry;
         $self->boundingBox = $boundingBox;
         $self->gridSize = $gridSize;
-        $self->activeCells = $activeCells;
+        $self->cells = $cells;
         $self->stressperiods = $stressperiods;
         $self->lengthUnit = $lengthUnit;
         $self->timeUnit = $timeUnit;
@@ -33,7 +33,7 @@ final class Discretization extends ValueObject
         $self->geometry = $arr['geometry'];
         $self->boundingBox = $arr['bounding_box'];
         $self->gridSize = $arr['grid_size'];
-        $self->activeCells = $arr['active_cells'];
+        $self->cells = $arr['cells'];
         $self->stressperiods = $arr['stressperiods'];
         $self->lengthUnit = $arr['length_unit'];
         $self->timeUnit = $arr['time_unit'];
@@ -59,9 +59,9 @@ final class Discretization extends ValueObject
         return $this->gridSize;
     }
 
-    public function activeCells(): array
+    public function cells(): array
     {
-        return $this->activeCells;
+        return $this->cells;
     }
 
     public function stressperiods(): array
@@ -90,7 +90,7 @@ final class Discretization extends ValueObject
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit

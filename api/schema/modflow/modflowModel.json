@@ -41,8 +41,8 @@
             "minLength": 3,
             "maxLength": 3
         },
-        "active_cells": {
-            "$ref": "/modflow/activeCells"
+        "cells": {
+            "$ref": "/modflow/cells"
         },
         "mt3dms": {},
         "stressperiods": {

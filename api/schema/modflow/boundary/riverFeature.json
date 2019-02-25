@@ -27,10 +27,10 @@
           "pattern": "^riv$"
         },
         "layers": {
-          "$ref": "/modflow/affectedLayers"
+          "$ref": "/modflow/layers"
         },
         "cells": {
-          "$ref": "/modflow/activeCells"
+          "$ref": "/modflow/cells"
         }
       },
       "required": [

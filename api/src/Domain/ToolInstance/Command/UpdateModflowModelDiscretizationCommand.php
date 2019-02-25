@@ -34,7 +34,7 @@ class UpdateModflowModelDiscretizationCommand extends Command
             'geometry' => $payload['geometry'],
             'bounding_box' => $payload['bounding_box'],
             'grid_size' => $payload['grid_size'],
-            'active_cells' => $payload['active_cells'],
+            'cells' => $payload['cells'],
             'stressperiods' => $payload['stressperiods'],
             'length_unit' => $payload['length_unit'],
             'time_unit' => $payload['time_unit']

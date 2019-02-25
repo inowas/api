@@ -11,7 +11,7 @@ class DiscretizationTest extends TestCase
     private $geometry;
     private $boundingBox;
     private $gridSize;
-    private $activeCells;
+    private $cells;
     private $stressperiods;
     private $timeUnit;
     private $lengthUnit;
@@ -32,7 +32,7 @@ class DiscretizationTest extends TestCase
             'n_y' => 20
         ];
 
-        $this->activeCells = [
+        $this->cells = [
             [5, 6],
             [5, 7],
             [5, 8],
@@ -62,12 +62,12 @@ class DiscretizationTest extends TestCase
      */
     public function can_be_instantiated_from_params(): void
     {
-        $disc = Discretization::fromParams($this->geometry, $this->boundingBox, $this->gridSize, $this->activeCells, $this->stressperiods, $this->lengthUnit, $this->timeUnit);
+        $disc = Discretization::fromParams($this->geometry, $this->boundingBox, $this->gridSize, $this->cells, $this->stressperiods, $this->lengthUnit, $this->timeUnit);
         $this->assertInstanceOf(Discretization::class, $disc);
         $this->assertEquals($this->geometry, $disc->geometry());
         $this->assertEquals($this->boundingBox, $disc->boundingBox());
         $this->assertEquals($this->gridSize, $disc->gridSize());
-        $this->assertEquals($this->activeCells, $disc->activeCells());
+        $this->assertEquals($this->cells, $disc->cells());
         $this->assertEquals($this->stressperiods, $disc->stressperiods());
         $this->assertEquals($this->timeUnit, $disc->timeUnit());
         $this->assertEquals($this->lengthUnit, $disc->lengthUnit());
@@ -83,7 +83,7 @@ class DiscretizationTest extends TestCase
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit
@@ -103,7 +103,7 @@ class DiscretizationTest extends TestCase
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit
@@ -129,7 +129,7 @@ class DiscretizationTest extends TestCase
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit
@@ -152,7 +152,7 @@ class DiscretizationTest extends TestCase
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit
@@ -174,7 +174,7 @@ class DiscretizationTest extends TestCase
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit

@@ -19,7 +19,7 @@ class CreateModflowModelCommand extends Command
     private $geometry;
     private $boundingBox;
     private $gridSize;
-    private $activeCells;
+    private $cells;
     private $stressperiods;
     private $lengthUnit;
     private $timeUnit;
@@ -45,7 +45,7 @@ class CreateModflowModelCommand extends Command
         $self->geometry = $payload['geometry'];
         $self->boundingBox = $payload['bounding_box'];
         $self->gridSize = $payload['grid_size'];
-        $self->activeCells = $payload['active_cells'];
+        $self->cells = $payload['cells'];
         $self->stressperiods = $payload['stressperiods'];
         $self->lengthUnit = $payload['length_unit'];
         $self->timeUnit = $payload['time_unit'];
@@ -69,7 +69,7 @@ class CreateModflowModelCommand extends Command
             'geometry' => $this->geometry,
             'bounding_box' => $this->boundingBox,
             'grid_size' => $this->gridSize,
-            'active_cells' => $this->activeCells,
+            'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit

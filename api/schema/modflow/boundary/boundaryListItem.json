@@ -21,7 +21,7 @@
             "maxLength": 3
         },
         "affected_layers": {
-            "$ref": "/modflow/affectedLayers"
+            "$ref": "/modflow/layers"
         }
     },
     "required": [

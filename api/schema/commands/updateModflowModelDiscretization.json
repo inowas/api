@@ -1,66 +1,78 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "id": "https://schema.inowas.com/",
-    "type": "object",
-    "properties": {
-        "uuid": {
-            "type": "string",
-            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-        },
-        "message_name": {
-            "type": "string",
-            "pattern": "^updateModflowModelDiscretization$"
-        },
-        "metadata": {
-            "type": "object"
-        },
-        "payload": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                },
-                "geometry": {
-                    "$ref": "/geojson/polygon"
-                },
-                "bounding_box": {
-                    "$ref": "/modflow/boundingBox"
-                },
-                "grid_size": {
-                    "$ref": "/modflow/gridSize"
-                },
-                "active_cells": {
-                    "$ref": "/modflow/activeCells"
-                },
-                "stressperiods": {
-                    "$ref": "/modflow/stressperiods"
-                },
-                "length_unit": {
-                    "description": "0: undefined, 1: feet, 2: meters, 3: centimeters",
-                    "enum": [0, 1, 2, 3]
-                },
-                "time_unit": {
-                    "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
-                    "enum": [0, 1, 2, 3, 4, 5]
-                }
-            },
-            "required": [
-                "id",
-                "geometry",
-                "bounding_box",
-                "grid_size",
-                "active_cells",
-                "stressperiods",
-                "length_unit",
-                "time_unit"
-            ]
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://schema.inowas.com/",
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     },
-    "required": [
-        "uuid",
-        "message_name",
-        "metadata",
-        "payload"
-    ]
+    "message_name": {
+      "type": "string",
+      "pattern": "^updateModflowModelDiscretization$"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "geometry": {
+          "$ref": "/geojson/polygon"
+        },
+        "bounding_box": {
+          "$ref": "/modflow/boundingBox"
+        },
+        "grid_size": {
+          "$ref": "/modflow/gridSize"
+        },
+        "cells": {
+          "$ref": "/modflow/cells"
+        },
+        "stressperiods": {
+          "$ref": "/modflow/stressperiods"
+        },
+        "length_unit": {
+          "description": "0: undefined, 1: feet, 2: meters, 3: centimeters",
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "time_unit": {
+          "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "geometry",
+        "bounding_box",
+        "grid_size",
+        "cells",
+        "stressperiods",
+        "length_unit",
+        "time_unit"
+      ]
+    }
+  },
+  "required": [
+    "uuid",
+    "message_name",
+    "metadata",
+    "payload"
+  ]
 }
