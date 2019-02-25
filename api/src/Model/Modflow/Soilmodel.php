@@ -14,7 +14,7 @@ final class Soilmodel
 
         $layers = $arr['layers'] ?? [];
         foreach ($layers as $layer) {
-            $layers[$layer->id] = $layer;
+            $layers[$layer['id']] = $layer;
         }
 
         $self->layers = $layers;
