@@ -58,6 +58,7 @@ class ModflowModel extends ToolInstance
     {
         $self = new self();
         $self->discretization = $arr['discretization'] ?? [];
+        $self->soilmodel = $arr['soilmodel'] ?? [];
         $self->boundaries = $arr['boundaries'] ?? [];
         $self->transport = $arr['transport'] ?? [];
         $self->calculation = $arr['calculation'] ?? [];
@@ -106,7 +107,7 @@ class ModflowModel extends ToolInstance
         $this->soilmodel = $soilmodel->toArray();
     }
 
-    public function getCalculation(): Calculation
+    public function calculation(): Calculation
     {
         return Calculation::fromArray($this->calculation);
     }
@@ -140,6 +141,7 @@ class ModflowModel extends ToolInstance
     {
         return [
             'discretization' => $this->discretization,
+            'soilmodel' => $this->soilmodel,
             'boundaries' => $this->boundaries,
             'transport' => $this->transport,
             'calculation' => $this->calculation,
