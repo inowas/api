@@ -39,7 +39,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                 'name' => 'New numerical groundwater model',
                 'description' => 'This is the model description',
                 'public' => true,
-                'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
+                'cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
                 'bounding_box' => [[13.785759, 51.133180], [13.788094, 51.134608]],
                 'geometry' => [
                     'type' => 'Polygon',
@@ -91,7 +91,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             $command['payload']['geometry'],
             $command['payload']['bounding_box'],
             $command['payload']['grid_size'],
-            $command['payload']['active_cells'],
+            $command['payload']['cells'],
             $command['payload']['stressperiods'],
             $command['payload']['length_unit'],
             $command['payload']['time_unit']
@@ -150,7 +150,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             'metadata' => (object)[],
             'payload' => [
                 'id' => $model->id(),
-                'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0], [10, 10]],
+                'cells' => [[0, 1], [1, 1], [0, 0], [1, 0], [10, 10]],
                 'bounding_box' => [[13, 51], [14, 52]],
                 'geometry' => [
                     'type' => 'Polygon',
@@ -198,7 +198,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
             $command['payload']['geometry'],
             $command['payload']['bounding_box'],
             $command['payload']['grid_size'],
-            $command['payload']['active_cells'],
+            $command['payload']['cells'],
             $command['payload']['stressperiods'],
             $command['payload']['length_unit'],
             $command['payload']['time_unit']
@@ -590,6 +590,39 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
      * @test
      * @throws \Exception
      */
+    public function sendCloneLayerCommand(): void
+    {
+        $user = $this->createRandomUser();
+        $model = $this->createRandomModflowModel($user);
+
+        $layerId = $model->soilmodel()->firstLayer()->id();
+        $newLayerId = Uuid::uuid4()->toString();
+
+        $command = [
+            'uuid' => Uuid::uuid4()->toString(),
+            'message_name' => 'cloneLayer',
+            'metadata' => (object)[],
+            'payload' => [
+                'id' => $model->id(),
+                'layer_id' => $layerId,
+                'new_layer_id' => $newLayerId
+            ],
+        ];
+
+        $token = $this->getToken($user->getUsername(), $user->getPassword());
+        $response = $this->sendCommand('v3/messagebox', $command, $token);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
+        $this->assertCount(2, $modflowModel->soilmodel()->layers());
+    }
+
+
+    /**
+     * @test
+     * @throws \Exception
+     */
     public function sendRemoveLayerCommand(): void
     {
         $user = $this->createRandomUser();
@@ -667,7 +700,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
 
         # Discretization
         $discretization = Discretization::fromArray([
-            'active_cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
+            'cells' => [[0, 1], [1, 1], [0, 0], [1, 0]],
             'bounding_box' => [[13.785759, 51.133180], [13.788094, 51.134608]],
             'geometry' => [
                 'type' => 'Polygon',

@@ -11,13 +11,7 @@ final class Soilmodel
     {
         $self = new self();
         $self->properties = $arr['properties'] ?? [];
-
-        $layers = $arr['layers'] ?? [];
-        foreach ($layers as $layer) {
-            $layers[$layer['id']] = $layer;
-        }
-
-        $self->layers = $layers;
+        $self->layers = $arr['layers'] ?? [];
         return $self;
     }
 
@@ -34,6 +28,23 @@ final class Soilmodel
     public function addLayer(Layer $layer): void
     {
         $this->updateLayer($layer);
+    }
+
+    /**
+     * @param string $layerId
+     * @param string $newLayerId
+     * @throws \Exception
+     */
+    public function cloneLayer(string $layerId, string $newLayerId): void
+    {
+        /** @var Layer $layer */
+        $layer = $this->findLayer($layerId);
+        if (!$layer instanceof Layer) {
+            throw new \Exception('Layer not found');
+        }
+
+        $newLayer = $layer->clone($newLayerId);
+        $this->addLayer($newLayer);
     }
 
     public function updateLayer(Layer $layer): void
@@ -76,11 +87,16 @@ final class Soilmodel
         return $this->properties;
     }
 
+    public function layers(): array
+    {
+        return array_values($this->layers);
+    }
+
     public function toArray(): array
     {
         return [
             'properties' => $this->properties,
-            'layers' => array_values($this->layers)
+            'layers' => $this->layers
         ];
     }
 }

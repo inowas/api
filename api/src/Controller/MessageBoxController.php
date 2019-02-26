@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Domain\ToolInstance\Command\AddBoundaryCommand;
 use App\Domain\ToolInstance\Command\AddLayerCommand;
+use App\Domain\ToolInstance\Command\CloneLayerCommand;
 use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
@@ -79,6 +80,7 @@ final class MessageBoxController
 
             AddBoundaryCommand::class,
             AddLayerCommand::class,
+            CloneLayerCommand::class,
             CloneModflowModelCommand::class,
             CloneToolInstanceCommand::class,
             CreateModflowModelCommand::class,

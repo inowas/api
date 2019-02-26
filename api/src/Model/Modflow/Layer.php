@@ -28,6 +28,13 @@ class Layer
 
     public function toArray(): array
     {
+        $this->data['id'] = $this->id;
         return $this->data;
+    }
+
+    public function clone(string $newId): self
+    {
+        $this->id = $newId;
+        return self::fromArray($this->toArray());
     }
 }

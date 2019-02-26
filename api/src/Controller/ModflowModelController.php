@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\Modflow\Layer;
 use App\Model\Modflow\ModflowModel;
+use App\Model\Modflow\Soilmodel;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -126,13 +128,57 @@ class ModflowModelController
             return new JsonResponse([], 403);
         }
 
+        $layers = $modflowModel->soilmodel()->layers();
 
-        $soilmodel = $modflowModel->soilmodel();
+        foreach ($layers as &$layer) {
+            $layer = ['id' => $layer['id'], 'name' => $layer['name']];
+        }
 
         $result = [
-            'layers' => $soilmodel
+            'layers' => $layers
         ];
         return new JsonResponse($result);
+    }
+
+    /**
+     * @Route("/modflowmodels/{id}/soilmodel/{layerId}", name="modflowmodel_soilmodel_layer", methods={"GET"})
+     * @param string $id
+     * @param string $layerId
+     * @return JsonResponse
+     */
+    public function indexSoilmodelLayer(string $id, string $layerId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        $permissions = '---';
+
+        if ($modflowModel->isPublic()) {
+            $permissions = 'r--';
+        }
+
+        if ($modflowModel->userId() === $user->getId()->toString()) {
+            $permissions = 'rwx';
+        }
+
+        if ($permissions === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        /** @var Soilmodel $soilmodel */
+        $soilmodel = $modflowModel->soilmodel();
+
+        /** @var Layer $layer */
+        $layer = $soilmodel->findLayer($layerId);
+
+        if (!$layer instanceof Layer) {
+            return new JsonResponse([], 404);
+        }
+
+        return new JsonResponse($layer->toArray());
     }
 
     /**
