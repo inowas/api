@@ -185,6 +185,7 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}/boundaries", name="modflowmodel_boundaries", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws \Exception
      */
     public function indexBoundaries(string $id): JsonResponse
     {
@@ -208,8 +209,39 @@ class ModflowModelController
             return new JsonResponse([], 403);
         }
 
-        $result = $modflowModel->boundaries()->toArray();
-        return new JsonResponse($result);
+        return new JsonResponse($modflowModel->boundaries());
+    }
+
+    /**
+     * @Route("/modflowmodels/{id}/boundaries/{bId}", name="modflowmodel_boundary_details", methods={"GET"})
+     * @param string $id
+     * @param string $bId
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function indexBoundaryDetails(string $id, string $bId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        $permissions = '---';
+
+        if ($modflowModel->isPublic()) {
+            $permissions = 'r--';
+        }
+
+        if ($modflowModel->userId() === $user->getId()->toString()) {
+            $permissions = 'rwx';
+        }
+
+        if ($permissions === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        return new JsonResponse($modflowModel->boundaries()->findById($bId));
     }
 
     /**

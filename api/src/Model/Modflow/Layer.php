@@ -32,6 +32,10 @@ class Layer
         return $this->data;
     }
 
+    /**
+     * @param string $newId
+     * @return Layer
+     */
     public function clone(string $newId): self
     {
         $this->id = $newId;

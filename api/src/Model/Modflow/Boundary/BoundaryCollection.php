@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Modflow\Boundary;
 
-final class BoundaryCollection
+final class BoundaryCollection implements \JsonSerializable
 {
     private $boundaries;
 
@@ -70,5 +70,10 @@ final class BoundaryCollection
     public function toArray(): array
     {
         return $this->boundaries;
+    }
+
+    public function jsonSerialize()
+    {
+        return array_values($this->boundaries);
     }
 }
