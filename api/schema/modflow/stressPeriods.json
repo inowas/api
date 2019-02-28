@@ -1,6 +1,5 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "id": "https://schema.inowas.com/",
     "type": "object",
     "properties": {
         "start_date_time": {
@@ -18,7 +17,7 @@
         "stressperiods": {
             "type": "array",
             "items": {
-                "$ref": "/modflow/stressperiod"
+                "$ref": "./stressperiod.json"
             },
             "minItems": 1
         }
