@@ -33,7 +33,7 @@ class WellBoundaryTest extends TestCase
                 'well_type' => 'puw',
                 'layers' => [1],
                 'cells' => [[3, 4], [4, 5]],
-                'sp_values' => [3444, 5555, 666, 777]
+                'sp_values' => [[3444], [3445], [3446], [3447]]
             ]
         ];
     }
@@ -44,7 +44,7 @@ class WellBoundaryTest extends TestCase
      */
     public function it_validates_the_well_boundary_schema_successfully()
     {
-        $schema = 'https://schema.inowas.com/modflow/boundary/wellBoundary.json';
+        $schema = __DIR__.'/../../../schema/modflow/boundary/wellBoundary.json';
         $schema = Schema::import($schema);
         $object = json_decode(json_encode($this->wellBoundaryJson), false);
         $schema->in($object);

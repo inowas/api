@@ -1,12 +1,11 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "id": "https://schema.inowas.com/",
     "oneOf" : [
-        {"$ref": "/modflow/boundary/constantHeadBoundary"},
-        {"$ref": "/modflow/boundary/generalHeadBoundary"},
-        {"$ref": "/modflow/boundary/rechargeBoundary"},
-        {"$ref": "/modflow/boundary/riverBoundary"},
-        {"$ref": "/modflow/boundary/wellBoundary"},
-        {"$ref": "/modflow/boundary/headObservationWell"}
+        {"$ref": "./constantHeadBoundary.json"},
+        {"$ref": "./generalHeadBoundary.json"},
+        {"$ref": "./rechargeBoundary.json"},
+        {"$ref": "./riverBoundary.json"},
+        {"$ref": "./wellBoundary.json"},
+        {"$ref": "./headObservationWell.json"}
     ]
 }

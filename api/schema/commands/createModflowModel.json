@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "id": "https://schema.inowas.com/",
   "type": "object",
   "properties": {
     "uuid": {
@@ -30,19 +29,19 @@
           "type": "string"
         },
         "geometry": {
-          "$ref": "/geojson/polygon"
+          "$ref": "../geojson/polygon.json"
         },
         "bounding_box": {
-          "$ref": "/modflow/boundingBox"
+          "$ref": "../modflow/boundingBox.json"
         },
         "grid_size": {
-          "$ref": "/modflow/gridSize"
+          "$ref": "../modflow/gridSize.json"
         },
         "cells": {
-          "$ref": "/modflow/cells"
+          "$ref": "../modflow/cells.json"
         },
         "stressperiods": {
-          "$ref": "/modflow/stressperiods"
+          "$ref": "../modflow/stressperiods.json"
         },
         "length_unit": {
           "description": "0: undefined, 1: feet, 2: meters, 3: centimeters",

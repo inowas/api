@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "id": "https://schema.inowas.com/",
   "type": "object",
   "properties": {
     "type": {
@@ -12,10 +11,10 @@
       "items": {
         "oneOf": [
           {
-            "$ref": "/modflow/boundary/generalHeadFeature"
+            "$ref": "../../modflow/boundary/generalHeadFeature.json"
           },
           {
-            "$ref": "/modflow/boundary/generalHeadObservationPointFeature"
+            "$ref": "../../modflow/boundary/generalHeadObservationPointFeature.json"
           }
         ]
       }

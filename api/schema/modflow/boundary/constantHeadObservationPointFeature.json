@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "id": "https://schema.inowas.com/",
   "type": "object",
   "properties": {
     "type": {
@@ -12,7 +11,7 @@
       "pattern": "^[a-z0-9_\\-]{3,255}$"
     },
     "geometry": {
-      "$ref": "/geojson/point"
+      "$ref": "../../geojson/point.json"
     },
     "properties": {
       "type": "object",

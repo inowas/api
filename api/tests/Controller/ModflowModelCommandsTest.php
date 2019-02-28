@@ -406,7 +406,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                         'well_type' => 'puw',
                         'layers' => [0],
                         'cells' => [[3, 2], [4, 2]],
-                        'sp_values' => [3444, 5255, 666, 777]
+                        'sp_values' => [[3444], [3444], [3444], [3444]]
                     ]
                 ],
             ],
@@ -452,7 +452,7 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
                         'well_type' => 'puw',
                         'layers' => [0],
                         'cells' => [[3, 2], [4, 2]],
-                        'sp_values' => [3444, 5255, 666, 777]
+                        'sp_values' => [[3445], [3544], [3144], [3434]]
                     ]
                 ]
             ],

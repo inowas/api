@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "id": "https://schema.inowas.com/",
   "type": "object",
   "properties": {
     "type": {
@@ -12,7 +11,7 @@
       "pattern": "^[a-z0-9_\\-]{3,255}$"
     },
     "geometry": {
-      "$ref": "/geojson/point"
+      "$ref": "../../geojson/point.json"
     },
     "properties": {
       "type": "object",
@@ -27,10 +26,10 @@
           "pattern": "^wel$"
         },
         "layers": {
-          "$ref": "/modflow/layers"
+          "$ref": "../layers.json"
         },
         "cells": {
-          "$ref": "/modflow/cells"
+          "$ref": "../cells.json"
         },
         "well_type": {
           "type": "string",
@@ -39,8 +38,13 @@
         "sp_values": {
           "type": "array",
           "items": {
-            "description": "0: Pumping Rate (float)",
-            "type": "number"
+            "type": "array",
+            "items": {
+              "description": "0: stage (float), 1: cond (float), 2: rbot (float)",
+              "type": "number",
+              "minItems": 3,
+              "maxItems": 3
+            }
           }
         }
       },
