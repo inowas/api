@@ -40,10 +40,10 @@
           "items": {
             "type": "array",
             "items": {
-              "description": "0: stage (float), 1: cond (float), 2: rbot (float)",
+              "description": "0: pumping rate",
               "type": "number",
-              "minItems": 3,
-              "maxItems": 3
+              "minItems": 1,
+              "maxItems": 1
             }
           }
         }
