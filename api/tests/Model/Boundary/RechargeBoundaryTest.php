@@ -34,7 +34,7 @@ class RechargeBoundaryTest extends TestCase
                 'name' => 'My new Recharge',
                 'layers' => [1],
                 'cells' => [[3, 4], [4, 5]],
-                'sp_values' => [3444, 5555, 666, 777]
+                'sp_values' => [[0.0002], [0.0002], [0.0002], [0.0002]]
             ]
         ];
     }
