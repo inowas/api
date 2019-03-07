@@ -65,11 +65,8 @@ class LoadDefaultTools extends Command
 
         /** @var SimpleTool $simpleTool */
         foreach ($simpleTools as $simpleTool) {
-            if (!$simpleTool->getUser() instanceof User) {
-                $simpleTool->setUser($user);
-                $this->entityManager->persist($simpleTool);
-                $this->entityManager->flush();
-            }
+            $this->entityManager->remove($simpleTool);
+            $this->entityManager->flush();
         }
 
         $simpleTools = $this->entityManager->getRepository(SimpleTool::class)->findBy(['user' => $user]);
