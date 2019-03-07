@@ -60,6 +60,20 @@ class LoadDefaultTools extends Command
             throw new \Exception(sprintf('User with username %s not found.', $username));
         }
 
+        // Delete all SimpleTools with User === null
+        $simpleTools = $this->entityManager->getRepository(SimpleTool::class)->findAll();
+
+        /** @var SimpleTool $simpleTool */
+        foreach ($simpleTools as $simpleTool) {
+            try {
+                $simpleTool->getUser();
+            } catch (\Exception $e) {
+                $simpleTool->setUser($user);
+                $this->entityManager->persist($simpleTool);
+                $this->entityManager->flush();
+            }
+        }
+
         $simpleTools = $this->entityManager->getRepository(SimpleTool::class)->findBy(['user' => $user]);
         /** @var SimpleTool $simpleTool */
         foreach ($simpleTools as $simpleTool) {

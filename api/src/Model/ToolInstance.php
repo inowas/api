@@ -112,7 +112,7 @@ abstract class ToolInstance implements \JsonSerializable
         return $this->getUser()->getId()->toString();
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
