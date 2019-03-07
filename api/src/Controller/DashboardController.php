@@ -71,7 +71,7 @@ class DashboardController
                     'description' => $instance->description(),
                     'created_at' => $instance->getCreatedAt()->format(DATE_ATOM),
                     'updated_at' => $instance->getCreatedAt()->format(DATE_ATOM),
-                    'user_name' => $instance->getUser()
+                    'user_name' => $instance->getUser()->getUsername()
                 ];
             }
 
@@ -94,7 +94,7 @@ class DashboardController
                 'description' => $instance->description(),
                 'created_at' => $instance->getCreatedAt()->format(DATE_ATOM),
                 'updated_at' => $instance->getCreatedAt()->format(DATE_ATOM),
-                'user_name' => $instance->getUser()
+                'user_name' => $instance->getUser()->getUsername()
             ];
         }
 
