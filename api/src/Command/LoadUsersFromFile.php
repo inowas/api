@@ -76,18 +76,15 @@ class LoadUsersFromFile extends Command
 
             if (!$user instanceof User) {
                 $user = new User($item['username'], $item['password'], $roles);
+                $command = \App\Domain\User\Command\CreateUserCommand::fromParams($user->getUsername(), $user->getPassword(), $user->getRoles());
+                $command->withAddedMetadata('is_admin', true);
+
+                try {
+                    $this->commandBus->dispatch($command);
+                } catch (\Exception $exception) {
+                    $output->write(sprintf('Error creating user with username %s', $user->getUsername()));
+                }
             }
-
-            $user->setRoles($roles);
-            $command = \App\Domain\User\Command\CreateUserCommand::fromParams($user->getUsername(), $user->getPassword(), $user->getRoles());
-            $command->withAddedMetadata('is_admin', true);
-
-            try {
-                $this->commandBus->dispatch($command);
-            } catch (\Exception $exception) {
-                $output->write(sprintf('Error creating user with username %s', $user->getUsername()));
-            }
-
 
             $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $item['username']]);
 
