@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -67,7 +68,7 @@ class LoadDefaultTools extends Command
         foreach ($simpleTools as $simpleTool) {
             try {
                 $simpleTool->getUser();
-            } catch (\Exception $e) {
+            } catch (FatalThrowableError $e) {
                 $simpleTool->setUser($user);
                 $this->entityManager->persist($simpleTool);
                 $this->entityManager->flush();
