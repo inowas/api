@@ -37,7 +37,7 @@ class SimpleToolRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('t')
             ->andWhere('t.tool LIKE :tool')
-            ->andWhere('t.user LIKE :user')
+            ->andWhere('t.user = :user')
             ->setParameter('tool', $tool.'%')
             ->setParameter('user', $user)
             ->getQuery()
