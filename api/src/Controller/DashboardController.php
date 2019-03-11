@@ -52,43 +52,21 @@ class DashboardController
                 $toolClass = SimpleTool::class;
         }
 
-        $getAllPublicInstances = $request->query->has('public') && $request->query->get('public') === 'true';
+        $isPublic = $request->query->has('public') && $request->query->get('public') === 'true';
 
-        if ($getAllPublicInstances) {
+        if ($toolClass === SimpleTool::class) {
+            $instances = $this->entityManager->getRepository(SimpleTool::class)->getTool($tool, $isPublic);
+            return $this->createResponse($instances);
+        }
 
+        if ($isPublic) {
             $instances = $this->entityManager->getRepository($toolClass)->findBy([
                 'tool' => $tool,
                 'isPublic' => true,
                 'isScenario' => false,
                 'isArchived' => false
             ]);
-
-            $instances = $this->entityManager->getRepository($toolClass)->createQueryBuilder('t')
-                ->where('t.tool LIKE :tool')
-                ->andWhere('t.isPublic = :isPublic')
-                ->andWhere('t.isScenario = :isScenario')
-                ->andWhere('t.isArchived = :isArchived')
-                ->setParameter('tool', $tool)
-                ->setParameter('isPublic', true)
-                ->setParameter('isScenario', false)
-                ->setParameter('isArchived', false)
-                ->getQuery()
-                ->getResult();
-
-            /** @var ToolInstance $instance */
-            foreach ($instances as $key => $instance) {
-                $instances[$key] = [
-                    'id' => $instance->id(),
-                    'tool' => $instance->tool(),
-                    'name' => $instance->name(),
-                    'description' => $instance->description(),
-                    'created_at' => $instance->getCreatedAt()->format(DATE_ATOM),
-                    'updated_at' => $instance->getCreatedAt()->format(DATE_ATOM),
-                    'user_name' => $instance->getUser()->getUsername()
-                ];
-            }
-
-            return new JsonResponse($instances);
+            return $this->createResponse($instances);
         }
 
         $instances = $this->entityManager->getRepository($toolClass)->findBy([
@@ -98,6 +76,11 @@ class DashboardController
             'isArchived' => false
         ]);
 
+        return $this->createResponse($instances);
+    }
+
+    private function createResponse(array $instances): JsonResponse
+    {
         /** @var ToolInstance $instance */
         foreach ($instances as $key => $instance) {
             $instances[$key] = [
