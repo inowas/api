@@ -55,7 +55,7 @@ class DashboardController
         $isPublic = $request->query->has('public') && $request->query->get('public') === 'true';
 
         if ($toolClass === SimpleTool::class) {
-            $instances = $this->entityManager->getRepository(SimpleTool::class)->getTool($tool, $isPublic);
+            $instances = $this->entityManager->getRepository(SimpleTool::class)->getTool($tool, $user, $isPublic);
             return $this->createResponse($instances);
         }
 

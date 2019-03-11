@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Model\SimpleTool\SimpleTool;
+use App\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,10 +18,11 @@ class SimpleToolRepository extends ServiceEntityRepository
 
     /**
      * @param string $tool
+     * @param User $user
      * @param bool $isPublic
      * @return array
      */
-    public function getTool(string $tool, bool $isPublic): array
+    public function getTool(string $tool, User $user, bool $isPublic): array
     {
 
         if ($isPublic) {
@@ -33,7 +35,12 @@ class SimpleToolRepository extends ServiceEntityRepository
                 ->getResult();
         }
 
-
-        return $result;
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.tool LIKE :tool')
+            ->andWhere('t.user LIKE :user')
+            ->setParameter('tool', $tool.'%')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 }
