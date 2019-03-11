@@ -55,12 +55,25 @@ class DashboardController
         $getAllPublicInstances = $request->query->has('public') && $request->query->get('public') === 'true';
 
         if ($getAllPublicInstances) {
+
             $instances = $this->entityManager->getRepository($toolClass)->findBy([
                 'tool' => $tool,
                 'isPublic' => true,
                 'isScenario' => false,
                 'isArchived' => false
             ]);
+
+            $instances = $this->entityManager->getRepository($toolClass)->createQueryBuilder('t')
+                ->where('t.tool LIKE :tool')
+                ->andWhere('t.isPublic = :isPublic')
+                ->andWhere('t.isScenario = :isScenario')
+                ->andWhere('t.isArchived = :isArchived')
+                ->setParameter('tool', $tool)
+                ->setParameter('isPublic', true)
+                ->setParameter('isScenario', false)
+                ->setParameter('isArchived', false)
+                ->getQuery()
+                ->getResult();
 
             /** @var ToolInstance $instance */
             foreach ($instances as $key => $instance) {
