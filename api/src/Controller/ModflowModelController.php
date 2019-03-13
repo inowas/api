@@ -128,16 +128,7 @@ class ModflowModelController
             return new JsonResponse([], 403);
         }
 
-        $layers = $modflowModel->soilmodel()->layers();
-
-        foreach ($layers as &$layer) {
-            $layer = ['id' => $layer['id'], 'name' => $layer['name']];
-        }
-
-        $result = [
-            'layers' => $layers
-        ];
-        return new JsonResponse($result);
+        return new JsonResponse($modflowModel->soilmodel());
     }
 
     /**
@@ -245,7 +236,7 @@ class ModflowModelController
     }
 
     /**
-     * @Route("/modflowmodels/{id}/transport", name="modflowmodel_transport", methods={"GET"})
+     * @Route("/modflowmodels/{id}/packages", name="modflowmodel_packages", methods={"GET"})
      * @param string $id
      * @return JsonResponse
      */
@@ -271,38 +262,7 @@ class ModflowModelController
             return new JsonResponse([], 403);
         }
 
-        $result = $modflowModel->transport()->toArray();
-        return new JsonResponse($result);
-    }
-
-    /**
-     * @Route("/modflowmodels/{id}/calculation", name="modflowmodel_calculation", methods={"GET"})
-     * @param string $id
-     * @return JsonResponse
-     */
-    public function indexCalculation(string $id): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
-
-        /** @var ModflowModel $modflowModel */
-        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
-
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
-            return new JsonResponse([], 403);
-        }
-
-        $result = $modflowModel->calculation()->toArray();
+        $result = $modflowModel->packages()->toArray();
         return new JsonResponse($result);
     }
 }

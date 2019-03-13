@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Command\UpdateMt3dmsCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelPackagesCommand;
 use App\Model\Modflow\ModflowModel;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UpdateMt3dmsCommandHandler
+class UpdateModflowModelPackagesCommandHandler
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -19,10 +19,10 @@ class UpdateMt3dmsCommandHandler
     }
 
     /**
-     * @param UpdateMt3dmsCommand $command
+     * @param UpdateModflowModelPackagesCommand $command
      * @throws \Exception
      */
-    public function __invoke(UpdateMt3dmsCommand $command)
+    public function __invoke(UpdateModflowModelPackagesCommand $command)
     {
         $modelId = $command->id();
         $userId = $command->metadata()['user_id'];
@@ -37,7 +37,7 @@ class UpdateMt3dmsCommandHandler
             throw new \Exception('The Model cannot be updated due to permission problems.');
         }
 
-        $modflowModel->setTransport($command->mt3dms());
+        $modflowModel->setPackages($command->packages());
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }

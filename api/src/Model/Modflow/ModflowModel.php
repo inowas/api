@@ -30,21 +30,6 @@ class ModflowModel extends ToolInstance
     private $boundaries = [];
 
     /**
-     * @ORM\Column(name="transport", type="json_array", nullable=false)
-     */
-    private $transport = [];
-
-    /**
-     * @ORM\Column(name="calculation", type="json_array", nullable=false)
-     */
-    private $calculation = [];
-
-    /**
-     * @ORM\Column(name="optimization", type="json_array", nullable=false)
-     */
-    private $optimization = [];
-
-    /**
      * @ORM\Column(name="packages", type="json_array", nullable=false)
      */
     private $packages = [];
@@ -60,9 +45,6 @@ class ModflowModel extends ToolInstance
         $self->discretization = $arr['discretization'] ?? [];
         $self->soilmodel = $arr['soilmodel'] ?? [];
         $self->boundaries = $arr['boundaries'] ?? [];
-        $self->transport = $arr['transport'] ?? [];
-        $self->calculation = $arr['calculation'] ?? [];
-        $self->optimization = $arr['optimization'] ?? [];
         $self->packages = $arr['packages'] ?? [];
         return $self;
     }
@@ -87,14 +69,14 @@ class ModflowModel extends ToolInstance
         $this->boundaries = $boundaries->toArray();
     }
 
-    public function transport(): Transport
+    public function packages(): Packages
     {
-        return Transport::fromArray($this->transport);
+        return Packages::fromArray($this->packages);
     }
 
-    public function setTransport(Transport $transport): void
+    public function setPackages(Packages $packages): void
     {
-        $this->transport = $transport->toArray();
+        $this->packages = $packages->toArray();
     }
 
     public function soilmodel(): Soilmodel
@@ -105,26 +87,6 @@ class ModflowModel extends ToolInstance
     public function setSoilmodel(Soilmodel $soilmodel): void
     {
         $this->soilmodel = $soilmodel->toArray();
-    }
-
-    public function calculation(): Calculation
-    {
-        return Calculation::fromArray($this->calculation);
-    }
-
-    public function setCalculation(Calculation $calculation): void
-    {
-        $this->calculation = $calculation->toArray();
-    }
-
-    public function getPackages(): Packages
-    {
-        return Packages::fromArray($this->packages);
-    }
-
-    public function setPackages(Packages $packages): void
-    {
-        $this->packages = $packages->toArray();
     }
 
     public function data(): array
@@ -143,8 +105,6 @@ class ModflowModel extends ToolInstance
             'discretization' => $this->discretization,
             'soilmodel' => $this->soilmodel,
             'boundaries' => $this->boundaries,
-            'transport' => $this->transport,
-            'calculation' => $this->calculation,
             'packages' => $this->packages
         ];
     }

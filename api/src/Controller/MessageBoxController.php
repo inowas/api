@@ -22,7 +22,7 @@ use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
 use App\Domain\ToolInstance\Command\UpdateLayerCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
-use App\Domain\ToolInstance\Command\UpdateMt3dmsCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelPackagesCommand;
 use App\Domain\ToolInstance\Command\UpdateSoilmodelPropertiesCommand;
 use App\Domain\ToolInstance\Command\UpdateStressperiodsCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
@@ -96,7 +96,7 @@ final class MessageBoxController
             UpdateLayerCommand::class,
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
-            UpdateMt3dmsCommand::class,
+            UpdateModflowModelPackagesCommand::class,
             UpdateSoilmodelPropertiesCommand::class,
             UpdateStressperiodsCommand::class,
             UpdateToolInstanceCommand::class,

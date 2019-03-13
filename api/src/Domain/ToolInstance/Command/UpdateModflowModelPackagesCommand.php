@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
-use App\Model\Modflow\Transport;
+use App\Model\Modflow\Packages;
 
-class UpdateMt3dmsCommand extends Command
+class UpdateModflowModelPackagesCommand extends Command
 {
 
     private $id;
-    private $mt3dms;
+    private $packages;
 
     /**
      * @return string|null
      */
     public static function getJsonSchema(): ?string
     {
-        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateMt3dms.json');
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateModflowModelPackages.json');
     }
 
     /**
@@ -29,7 +29,7 @@ class UpdateMt3dmsCommand extends Command
     {
         $self = new self();
         $self->id = $payload['id'];
-        $self->mt3dms = $payload['mt3dms'];
+        $self->packages = $payload['packages'];
         return $self;
     }
 
@@ -38,8 +38,8 @@ class UpdateMt3dmsCommand extends Command
         return $this->id;
     }
 
-    public function mt3dms(): Transport
+    public function packages(): Packages
     {
-        return Transport::fromArray($this->mt3dms);
+        return Packages::fromArray($this->packages);
     }
 }
