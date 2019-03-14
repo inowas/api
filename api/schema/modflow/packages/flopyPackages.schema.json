@@ -8,7 +8,8 @@
     "project",
     "model_id",
     "calculation_id",
-    "data"
+    "mf",
+    "mt"
   ],
   "properties": {
     "version": {
@@ -29,20 +30,11 @@
       "type": "string",
       "pattern": "^([^:]+:[a-fA-F0-9]+|[a-fA-F0-9]{32}|)$"
     },
-    "data": {
-      "type": "object",
-      "required": [
-        "mf"
-      ],
-      "properties": {
-        "mf": {
-          "$ref": "./mfPackages.schema.json"
-        },
-        "mt": {
-          "$ref": "./mtPackages.schema.json"
-        }
-      },
-      "additionalProperties": false
+    "mf": {
+      "$ref": "./mfPackages.schema.json"
+    },
+    "mt": {
+      "$ref": "./mtPackages.schema.json"
     }
   }
 }
