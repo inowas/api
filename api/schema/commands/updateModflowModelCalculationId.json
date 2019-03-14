@@ -28,7 +28,7 @@
       },
       "required": [
         "id",
-        "calculation"
+        "calculation_id"
       ]
     }
   },
