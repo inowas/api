@@ -20,7 +20,7 @@ use App\Domain\ToolInstance\Command\RemoveBoundaryCommand;
 use App\Domain\ToolInstance\Command\RemoveLayerCommand;
 use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
 use App\Domain\ToolInstance\Command\UpdateLayerCommand;
-use App\Domain\ToolInstance\Command\UpdateModflowModelCalculationCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelCalculationIdCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateModflowModelDiscretizationCommand;
 use App\Domain\ToolInstance\Command\UpdateFlopyPackagesCommand;
@@ -96,7 +96,7 @@ final class MessageBoxController
             UpdateBoundaryCommand::class,
             UpdateFlopyPackagesCommand::class,
             UpdateLayerCommand::class,
-            UpdateModflowModelCalculationCommand::class,
+            UpdateModflowModelCalculationIdCommand::class,
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
             UpdateSoilmodelPropertiesCommand::class,

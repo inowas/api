@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
-use App\Model\Modflow\Calculation;
 
-class UpdateModflowModelCalculationCommand extends Command
+class UpdateModflowModelCalculationIdCommand extends Command
 {
 
     private $id;
-    private $calculation;
+    private $calculationId;
 
     /**
      * @return string|null
      */
     public static function getJsonSchema(): ?string
     {
-        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateModflowModelCalculation.json');
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateModflowModelCalculationId.json');
     }
 
     /**
@@ -29,7 +28,7 @@ class UpdateModflowModelCalculationCommand extends Command
     {
         $self = new self();
         $self->id = $payload['id'];
-        $self->calculation = $payload['calculation'];
+        $self->calculationId = $payload['calculation_id'];
         return $self;
     }
 
@@ -38,8 +37,8 @@ class UpdateModflowModelCalculationCommand extends Command
         return $this->id;
     }
 
-    public function calculation(): Calculation
+    public function calculationId(): string
     {
-        return Calculation::fromArray($this->calculation);
+        return $this->calculationId;
     }
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Command\UpdateModflowModelCalculationCommand;
+use App\Domain\ToolInstance\Command\UpdateModflowModelCalculationIdCommand;
 use App\Model\Modflow\ModflowModel;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UpdateModflowModelCalculationCommandHandler
+class UpdateModflowModelCalculationIdCommandHandler
 {
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -19,10 +19,10 @@ class UpdateModflowModelCalculationCommandHandler
     }
 
     /**
-     * @param UpdateModflowModelCalculationCommand $command
+     * @param UpdateModflowModelCalculationIdCommand $command
      * @throws \Exception
      */
-    public function __invoke(UpdateModflowModelCalculationCommand $command)
+    public function __invoke(UpdateModflowModelCalculationIdCommand $command)
     {
         $modelId = $command->id();
         $userId = $command->metadata()['user_id'];
@@ -37,7 +37,10 @@ class UpdateModflowModelCalculationCommandHandler
             throw new \Exception('The Model cannot be updated due to permission problems.');
         }
 
-        $modflowModel->setCalculation($command->calculation());
+        $calculation = $modflowModel->calculation();
+        $calculation->addCalculationId($command->calculationId());
+
+        $modflowModel->setCalculation($calculation);
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }
