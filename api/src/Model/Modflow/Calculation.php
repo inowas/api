@@ -6,12 +6,12 @@ use App\Model\ValueObject;
 
 final class Calculation extends ValueObject
 {
-    private $calculationId;
+    private $id;
 
     public static function fromArray(array $arr): self
     {
         $self = new self();
-        $self->calculationId = $arr['calculation_id'] ?? null;
+        $self->id = $arr['id'] ?? null;
         return $self;
     }
 
@@ -22,7 +22,7 @@ final class Calculation extends ValueObject
     public function toArray(): array
     {
         return [
-            "calculation_id" => $this->calculationId
+            "id" => $this->id
         ];
     }
 }
