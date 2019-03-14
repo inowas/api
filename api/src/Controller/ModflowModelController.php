@@ -128,7 +128,9 @@ class ModflowModelController
             return new JsonResponse([], 403);
         }
 
-        return new JsonResponse($modflowModel->soilmodel());
+        return new JsonResponse([
+            'layers' => $modflowModel->soilmodel()->layers()
+        ]);
     }
 
     /**
@@ -233,6 +235,37 @@ class ModflowModelController
         }
 
         return new JsonResponse($modflowModel->boundaries()->findById($bId));
+    }
+
+    /**
+     * @Route("/modflowmodels/{id}/calculation", name="modflowmodel_calculation", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function indexCalculation(string $id): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        $permissions = '---';
+
+        if ($modflowModel->isPublic()) {
+            $permissions = 'r--';
+        }
+
+        if ($modflowModel->userId() === $user->getId()->toString()) {
+            $permissions = 'rwx';
+        }
+
+        if ($permissions === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        $result = $modflowModel->calculation()->toArray();
+        return new JsonResponse($result);
     }
 
     /**

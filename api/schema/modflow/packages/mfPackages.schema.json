@@ -1,40 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Modflow Calculation object",
+  "title": "Modflow Flow Calculation Description",
   "type": "object",
-  "description": "This object represents all properties for calculation of modflow models",
+  "description": "This object represents all properties for calculation of modflow flow models",
   "required": [
-    "packages",
     "mf",
     "bas",
     "dis",
     "oc"
   ],
   "properties": {
-    "packages": {
-      "description": "An array of all packages used",
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "mf",
-          "bas",
-          "dis",
-          "oc",
-          "hob",
-          "chd",
-          "ghb",
-          "rch",
-          "riv",
-          "wel",
-          "lpf",
-          "upw",
-          "pcg",
-          "nwt",
-          "lmt"
-        ]
-      }
-    },
     "mf": {
       "$ref": "#/definitions/mfPackage"
     },
@@ -100,16 +75,16 @@
           "type": "string",
           "enum": [
             "mf2000",
-            "mf2005",
-            "mfnwt",
-            "..."
+            "mf2005"
           ]
         },
         "exe_name": {
           "type": "string",
           "enum": [
             "mf2000",
-            "mf2005"
+            "mf2005",
+            "mfnwt",
+            "mfusgw"
           ]
         },
         "structured": {
@@ -149,7 +124,10 @@
               "type": "number"
             },
             {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/layervalue"
+              }
             }
           ]
         },
@@ -159,7 +137,10 @@
               "type": "number"
             },
             {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/layervalue"
+              }
             }
           ]
         },
@@ -188,6 +169,9 @@
             },
             {
               "type": "array"
+            },
+            {
+              "type": "null"
             }
           ]
         },
@@ -229,10 +213,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
+                "type": "number"
               }
             }
           ]
@@ -245,10 +226,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
+                "type": "number"
               }
             }
           ]
@@ -261,29 +239,13 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
+                "$ref": "#/definitions/layervalue"
               }
             }
           ]
         },
         "top": {
-          "oneOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            }
-          ]
+          "$ref": "#/definitions/layervalue"
         },
         "btom": {
           "oneOf": [
@@ -293,10 +255,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
+                "$ref": "#/definitions/layervalue"
               }
             }
           ]
@@ -305,15 +264,6 @@
           "oneOf": [
             {
               "type": "number"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
             },
             {
               "type": "array",
@@ -331,15 +281,6 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
                 "type": "number"
               }
             }
@@ -353,15 +294,6 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
                 "type": "number"
               }
             }
@@ -371,15 +303,6 @@
           "oneOf": [
             {
               "type": "boolean"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "boolean"
-                }
-              }
             },
             {
               "type": "array",
@@ -400,15 +323,6 @@
         },
         "unitnumber": {
           "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
             {
               "type": "number"
             },
@@ -496,7 +410,22 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "type": "number"
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
                 }
               }
             },
@@ -507,15 +436,6 @@
         },
         "unitnumber": {
           "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
             {
               "type": "array",
               "items": {
@@ -532,10 +452,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+                "type": "string"
               }
             },
             {
@@ -591,7 +508,7 @@
         "mlay": {
           "oneOf": [
             {
-              "type": "array"
+              "type": "object"
             },
             {
               "type": "null"
@@ -613,10 +530,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+                "type": "string"
               }
             },
             {
@@ -633,26 +547,21 @@
           "type": "object"
         },
         "stress_period_data": {
-          "oneOf": [
-            {
-              "type": "object",
-              "properties": {
-                "number": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "number",
-                      "minItems": 5
-                    }
-                  }
-                }
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[0-9]+": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 5,
+                "maxItems": 5
               }
-            },
-            {
-              "type": "null"
             }
-          ]
+          }
         },
         "dtype": {
           "type": "null"
@@ -702,26 +611,21 @@
           ]
         },
         "stress_period_data": {
-          "oneOf": [
-            {
-              "type": "object",
-              "properties": {
-                "number": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "number",
-                      "minItems": 5
-                    }
-                  }
-                }
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[0-9]+": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 5,
+                "maxItems": 5
               }
-            },
-            {
-              "type": "null"
             }
-          ]
+          }
         },
         "dtype": {
           "type": "null"
@@ -777,36 +681,10 @@
           ]
         },
         "rech": {
-          "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "number"
-            }
-          ]
+          "$ref": "#/definitions/layervalue"
         },
         "irch": {
-          "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "number"
-            }
-          ]
+          "$ref": "#/definitions/layervalue"
         },
         "extension": {
           "type": "string"
@@ -850,26 +728,21 @@
           ]
         },
         "stress_period_data": {
-          "oneOf": [
-            {
-              "type": "object",
-              "properties": {
-                "number": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "number",
-                      "minItems": 6
-                    }
-                  }
-                }
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[0-9]+": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 6,
+                "maxItems": 6
               }
-            },
-            {
-              "type": "null"
             }
-          ]
+          }
         },
         "dtype": {
           "type": "null"
@@ -919,25 +792,21 @@
           ]
         },
         "stress_period_data": {
-          "oneOf": [
-            {
-              "type": "object",
-              "properties": {
-                "number": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "number"
-                    }
-                  }
-                }
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[0-9]+": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 4,
+                "maxItems": 4
               }
-            },
-            {
-              "type": "null"
             }
-          ]
+          }
         },
         "dtype": {
           "type": "null"
@@ -984,15 +853,6 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
                 "type": "number"
               }
             },
@@ -1003,15 +863,6 @@
         },
         "layavg": {
           "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
             {
               "type": "array",
               "items": {
@@ -1028,15 +879,6 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
                 "type": "number"
               }
             },
@@ -1050,15 +892,6 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
                 "type": "number"
               }
             },
@@ -1069,15 +902,6 @@
         },
         "laywet": {
           "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
             {
               "type": "array",
               "items": {
@@ -1116,6 +940,15 @@
         },
         "hk": {
           "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array"
+                }
+              }
+            },
             {
               "type": "array",
               "items": {
@@ -1165,6 +998,15 @@
               "items": {
                 "type": "array",
                 "items": {
+                  "type": "array"
+                }
+              }
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
                   "type": "number"
                 }
               }
@@ -1204,6 +1046,15 @@
         },
         "sy": {
           "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array"
+                }
+              }
+            },
             {
               "type": "array",
               "items": {
@@ -1439,16 +1290,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1461,16 +1303,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1483,16 +1316,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1505,16 +1329,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1527,16 +1342,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1549,16 +1355,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1824,6 +1621,25 @@
           ]
         }
       }
+    },
+    "layervalue": {
+      "oneOf": [
+        {
+          "type": "number",
+          "description": "One value for all in the layer"
+        },
+        {
+          "type": "array",
+          "description": "Rows",
+          "items": {
+            "type": "array",
+            "description": "Cols",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      ]
     }
   }
 }

@@ -30,6 +30,11 @@ class ModflowModel extends ToolInstance
     private $boundaries = [];
 
     /**
+     * @ORM\Column(name="calculation", type="json_array", nullable=false)
+     */
+    private $calculation = [];
+
+    /**
      * @ORM\Column(name="packages", type="json_array", nullable=false)
      */
     private $packages = [];
@@ -45,6 +50,7 @@ class ModflowModel extends ToolInstance
         $self->discretization = $arr['discretization'] ?? [];
         $self->soilmodel = $arr['soilmodel'] ?? [];
         $self->boundaries = $arr['boundaries'] ?? [];
+        $self->calculation = $arr['calculation'] ?? [];
         $self->packages = $arr['packages'] ?? [];
         return $self;
     }
@@ -67,6 +73,16 @@ class ModflowModel extends ToolInstance
     public function setBoundaries(BoundaryCollection $boundaries): void
     {
         $this->boundaries = $boundaries->toArray();
+    }
+
+    public function calculation(): Calculation
+    {
+        return Calculation::fromArray($this->calculation);
+    }
+
+    public function setCalculation(Calculation $calculation): void
+    {
+        $this->calculation = $calculation->toArray();
     }
 
     public function packages(): Packages
@@ -105,6 +121,7 @@ class ModflowModel extends ToolInstance
             'discretization' => $this->discretization,
             'soilmodel' => $this->soilmodel,
             'boundaries' => $this->boundaries,
+            'calculation' => $this->calculation,
             'packages' => $this->packages
         ];
     }

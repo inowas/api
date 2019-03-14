@@ -7,7 +7,7 @@ namespace App\Domain\ToolInstance\Command;
 use App\Model\Command;
 use App\Model\Modflow\Packages;
 
-class UpdateModflowModelPackagesCommand extends Command
+class UpdateFlopyPackagesCommand extends Command
 {
 
     private $id;
@@ -18,7 +18,7 @@ class UpdateModflowModelPackagesCommand extends Command
      */
     public static function getJsonSchema(): ?string
     {
-        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateModflowModelPackages.json');
+        return sprintf('%s%s', __DIR__, '/../../../../schema/commands/updateFlopyPackages.json');
     }
 
     /**
