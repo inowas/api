@@ -11,7 +11,7 @@ final class Calculation extends ValueObject
     public static function fromArray(array $arr): self
     {
         $self = new self();
-        $self->calculationId = $arr['calculation_id'];
+        $self->calculationId = $arr['calculation_id'] ?? null;
         return $self;
     }
 
