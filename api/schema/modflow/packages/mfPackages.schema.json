@@ -1595,7 +1595,10 @@
           "type": "string"
         },
         "package_flows": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "extension": {
           "type": "string"
