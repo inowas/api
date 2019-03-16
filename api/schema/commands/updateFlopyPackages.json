@@ -21,7 +21,7 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "packages": {
-          "$ref": "../modflow/packages/flopyPackages.schema.json"
+          "$ref": "../modflow/packages/flopyPackages.json"
         }
       },
       "required": [

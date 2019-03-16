@@ -7,8 +7,8 @@
     "author",
     "project",
     "model_id",
-    "calculation_id",
-    "data"
+    "mf",
+    "mt"
   ],
   "properties": {
     "version": {
@@ -24,25 +24,11 @@
       "type": "string",
       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     },
-    "calculation_id": {
-      "title": "MD5-Hash of the content",
-      "type": "string",
-      "pattern": "^([^:]+:[a-fA-F0-9]+|[a-fA-F0-9]{32}|)$"
+    "mf": {
+      "$ref": "./mfPackages.json"
     },
-    "data": {
-      "type": "object",
-      "required": [
-        "mf"
-      ],
-      "properties": {
-        "mf": {
-          "$ref": "./mfPackages.schema.json"
-        },
-        "mt": {
-          "$ref": "./mtPackages.schema.json"
-        }
-      },
-      "additionalProperties": false
+    "mt": {
+      "$ref": "./mtPackages.json"
     }
   }
 }
