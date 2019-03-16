@@ -10,18 +10,25 @@ class ChangeUserPasswordCommand extends Command
 {
     private $userId;
     private $password;
+    private $newPassword;
 
     public static function fromPayload(array $payload)
     {
         $self = new self();
         $self->userId = $payload['user_id'] ?? null;
         $self->password = $payload['password'];
+        $self->newPassword = $payload['new_password'];
         return $self;
     }
 
     public function password(): string
     {
         return $this->password;
+    }
+
+    public function newPassword(): string
+    {
+        return $this->newPassword;
     }
 
     public function userId(): ?string

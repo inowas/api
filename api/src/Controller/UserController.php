@@ -32,6 +32,7 @@ class UserController
         $user = $this->tokenStorage->getToken()->getUser();
 
         $response = [
+            'id' => $user->getId(),
             'username' => $user->getUsername(),
             'name' => $user->getName(),
             'email' => $user->getEmail(),

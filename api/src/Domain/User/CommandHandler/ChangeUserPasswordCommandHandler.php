@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\User\CommandHandler;
 
 use App\Domain\User\Aggregate\UserAggregate;
+use App\Domain\User\Exception\PasswordInvalidException;
 use App\Model\ProjectorCollection;
 use App\Repository\AggregateRepository;
 use App\Domain\User\Command\ChangeUserPasswordCommand;
@@ -12,11 +13,15 @@ use App\Domain\User\Event\UserPasswordHasBeenChanged;
 use App\Domain\User\Projection\UserProjector;
 use App\Model\User;
 use App\Service\UserManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ChangeUserPasswordCommandHandler
 {
     /** @var AggregateRepository */
     private $aggregateRepository;
+
+    /** @var UserPasswordEncoderInterface */
+    private $passwordEncoder;
 
     /** @var ProjectorCollection */
     private $projectors;
@@ -25,9 +30,10 @@ class ChangeUserPasswordCommandHandler
     private $userManager;
 
 
-    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, ProjectorCollection $projectors)
+    public function __construct(AggregateRepository $aggregateRepository, UserManager $userManager, ProjectorCollection $projectors, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->aggregateRepository = $aggregateRepository;
+        $this->passwordEncoder = $passwordEncoder;
         $this->projectors = $projectors;
         $this->userManager = $userManager;
     }
@@ -51,6 +57,12 @@ class ChangeUserPasswordCommandHandler
 
         if (!$user instanceof User) {
             throw new \Exception('User not found');
+        }
+
+        if (!$isAdmin) {
+            if (!$this->passwordEncoder->isPasswordValid($user, $command->password())) {
+                throw new PasswordInvalidException('The current password is wrong.', 400);
+            };
         }
 
         $newPassword = $this->userManager->encryptPassword($command->password());

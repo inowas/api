@@ -35,7 +35,6 @@ use App\Domain\User\Command\ArchiveUserCommand;
 use App\Domain\User\Command\ChangeUsernameCommand;
 use App\Domain\User\Command\ChangeUserPasswordCommand;
 use App\Domain\User\Command\ChangeUserProfileCommand;
-use App\Domain\User\Command\CreateUserCommand;
 use App\Domain\User\Command\DeleteUserCommand;
 use App\Domain\User\Command\ReactivateUserCommand;
 use Swaggest\JsonSchema\Exception;
@@ -136,46 +135,12 @@ final class MessageBoxController
         $command->withAddedMetadata('user_id', $user->getId()->toString());
         $command->withAddedMetadata('is_admin', in_array('ROLE_ADMIN', $user->getRoles()));
 
-        $this->commandBus->dispatch($command);
-        return new JsonResponse([], 202);
-    }
-
-    /**
-     * @Route("/register", name="register", methods={"POST"})
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Exception
-     */
-    public function register(Request $request): JsonResponse
-    {
-        $availableCommands = [
-            CreateUserCommand::class
-        ];
-
-        $this->setAvailableCommands($availableCommands);
-
         try {
-            $this->assertIsValidRequest($request);
+            $this->commandBus->dispatch($command);
         } catch (\Exception $e) {
-            return new JsonResponse(['message' => $e->getMessage()], 322);
+            return new JsonResponse(['message' => $e->getMessage()], $e->getCode());
         }
 
-        $message = $this->getMessage($request);
-        $messageName = $message['message_name'];
-        $payload = $message['payload'];
-
-        /** @var Command $commandClass */
-        $commandClass = $this->availableCommands[$messageName];
-
-        try {
-            $commandClass::getJsonSchema() && $this->validateSchema($commandClass::getJsonSchema(), $request->getContent());
-        } catch (\Exception $e) {
-            return new JsonResponse(['message' => $e->getMessage()], 322);
-        }
-
-        /** @var Command $command */
-        $command = $commandClass::fromPayload($payload);
-        $this->commandBus->dispatch($command);
         return new JsonResponse([], 202);
     }
 
