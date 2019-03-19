@@ -67,6 +67,8 @@ abstract class ToolInstance implements \JsonSerializable
     public function __clone()
     {
         $this->id = null;
+        $this->createdAt = null;
+        $this->name .= ' (clone)';
     }
 
     public static function createWithParams(string $id, User $user, string $tool, ToolMetadata $metadata)

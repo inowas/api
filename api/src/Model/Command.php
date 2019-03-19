@@ -8,6 +8,9 @@ abstract class Command
 {
     protected $metadata = [];
 
+    /** @var \DateTimeImmutable */
+    protected $dateTime;
+
     abstract public static function fromPayload(array $payload);
 
     public static function getMessageName(): string
@@ -20,6 +23,14 @@ abstract class Command
         return null;
     }
 
+    /**
+     * @throws \Exception
+     */
+    protected function __construct()
+    {
+        $this->dateTime = new \DateTimeImmutable('now');
+    }
+
     public function withAddedMetadata(string $key, $value): void
     {
         $this->metadata[$key] = $value;
@@ -28,5 +39,10 @@ abstract class Command
     public function metadata(): array
     {
         return $this->metadata;
+    }
+
+    public function dateTime(): \DateTimeImmutable
+    {
+        return $this->dateTime;
     }
 }
