@@ -20,17 +20,20 @@ class SimpleToolRepository extends ServiceEntityRepository
      * @param string $tool
      * @param User $user
      * @param bool $isPublic
+     * @param bool $isArchived
      * @return array
      */
-    public function getTool(string $tool, User $user, bool $isPublic): array
+    public function getTool(string $tool, User $user, bool $isPublic, bool $isArchived): array
     {
 
         if ($isPublic) {
             return $this->createQueryBuilder('t')
                 ->andWhere('t.tool LIKE :tool')
                 ->andWhere('t.isPublic = :isPublic')
-                ->setParameter('tool', $tool.'%')
+                ->andWhere('t.isArchived = :isArchived')
+                ->setParameter('tool', $tool . '%')
                 ->setParameter('isPublic', $isPublic)
+                ->setParameter('isArchived', $isArchived)
                 ->getQuery()
                 ->getResult();
         }
@@ -38,8 +41,10 @@ class SimpleToolRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.tool LIKE :tool')
             ->andWhere('t.user = :user')
-            ->setParameter('tool', $tool.'%')
+            ->andWhere('t.isArchived = :isArchived')
+            ->setParameter('tool', $tool . '%')
             ->setParameter('user', $user)
+            ->setParameter('isArchived', $isArchived)
             ->getQuery()
             ->getResult();
     }
