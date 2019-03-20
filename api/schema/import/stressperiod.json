@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "start_date_time": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "nstp": {
+            "type": "integer"
+        },
+        "tsmult": {
+            "type": "integer"
+        },
+        "steady": {
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "start_date_time",
+        "nstp",
+        "tsmult",
+        "steady"
+    ]
+}

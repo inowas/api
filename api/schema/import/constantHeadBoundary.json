@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "pattern": "^chd$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "geometry": {
+      "$ref": "../geojson/linestring.json"
+    },
+    "layers": {
+      "$ref": "../modflow/layers.json"
+    },
+    "ops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "geometry": {
+            "$ref": "../geojson/point.json"
+          },
+          "sp_values": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "description": "0: shead (float), 1: ehead (float)",
+                "type": "number",
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "geometry",
+          "sp_values"
+        ]
+      }
+    }
+  },
+  "required": [
+    "type",
+    "name",
+    "geometry",
+    "layers",
+    "ops"
+  ]
+}

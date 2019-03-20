@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "message_name": {
+      "type": "string",
+      "pattern": "^importModflowModel$"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 255
+        },
+        "description": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "discretization": {
+          "type": "object",
+          "geometry": {
+            "$ref": "../geojson/polygon.json"
+          },
+          "bounding_box": {
+            "$ref": "../modflow/boundingBox.json"
+          },
+          "grid_size": {
+            "$ref": "../modflow/gridSize.json"
+          },
+          "cells": {
+            "$ref": "../modflow/cells.json"
+          },
+          "stressperiods": {
+            "$ref": "../modflow/stressperiods.json"
+          },
+          "length_unit": {
+            "$ref": "../modflow/lengthUnit.json"
+          },
+          "time_unit": {
+            "$ref": "../modflow/timeUnit.json"
+          },
+          "required": [
+            "geometry",
+            "bounding_box",
+            "grid_size",
+            "cells",
+            "stressperiods",
+            "length_unit",
+            "time_unit"
+          ]
+        },
+        "soilmodel": {
+          "type": "object",
+          "properties": {
+            "layers": {
+              "type": "array",
+              "items": {
+                "$ref": "../modflow/soilmodel/layer.json"
+              }
+            }
+          },
+          "required": [
+            "layers"
+          ]
+        },
+        "boundaries": {
+          "type": "array",
+          "items": {
+            "$ref": "../modflow/boundary/boundary.json"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "public",
+        "discretization",
+        "soilmodel",
+        "boundaries"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "uuid",
+    "message_name",
+    "metadata",
+    "payload"
+  ]
+}

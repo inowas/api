@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "string"
+    },
+    "public": {
+      "type": "boolean"
+    },
+    "discretization": {
+      "type": "object",
+      "geometry": {
+        "$ref": "../geojson/polygon.json"
+      },
+      "grid_size": {
+        "$ref": "../modflow/gridSize.json"
+      },
+      "stressperiods": {
+        "$ref": "./stressperiods.json"
+      },
+      "length_unit": {
+        "$ref": "../modflow/lengthUnit.json"
+      },
+      "time_unit": {
+        "$ref": "../modflow/timeUnit.json"
+      },
+      "required": [
+        "geometry",
+        "grid_size",
+        "stressperiods",
+        "length_unit",
+        "time_unit"
+      ]
+    },
+    "soilmodel": {
+      "type": "object",
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "./layer.json"
+          }
+        }
+      },
+      "required": [
+        "layers"
+      ]
+    },
+    "boundaries": {
+      "type": "array",
+      "items": {
+        "$ref": "./boundary.json"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "public",
+    "discretization",
+    "soilmodel",
+    "boundaries"
+  ]
+}
+

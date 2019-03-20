@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "oneOf" : [
+        {"$ref": "./constantHeadBoundary.json"},
+        {"$ref": "./generalHeadBoundary.json"},
+        {"$ref": "./rechargeBoundary.json"},
+        {"$ref": "./riverBoundary.json"},
+        {"$ref": "./wellBoundary.json"}
+    ]
+}
