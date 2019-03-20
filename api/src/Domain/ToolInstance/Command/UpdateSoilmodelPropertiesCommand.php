@@ -23,6 +23,7 @@ class UpdateSoilmodelPropertiesCommand extends Command
     /**
      * @param array $payload
      * @return self
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): self
     {

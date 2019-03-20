@@ -29,6 +29,7 @@ class UpdateToolInstanceMetadataCommand extends Command
      * @param string $description
      * @param bool $public
      * @return UpdateToolInstanceMetadataCommand
+     * @throws \Exception
      */
     public static function fromParams(string $id, string $name, string $description, bool $public): UpdateToolInstanceMetadataCommand
     {
@@ -43,6 +44,7 @@ class UpdateToolInstanceMetadataCommand extends Command
     /**
      * @param array $payload
      * @return UpdateToolInstanceMetadataCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): UpdateToolInstanceMetadataCommand
     {

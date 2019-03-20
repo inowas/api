@@ -26,6 +26,7 @@ class UpdateModflowModelMetadataCommand extends Command
     /**
      * @param array $payload
      * @return UpdateModflowModelMetadataCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): UpdateModflowModelMetadataCommand
     {

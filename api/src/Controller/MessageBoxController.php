@@ -13,6 +13,7 @@ use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
+use App\Domain\ToolInstance\Command\ImportModflowModelCommand;
 use App\Domain\ToolInstance\Command\McdaDeleteCriterionCommand;
 use App\Domain\ToolInstance\Command\McdaUpdateCriterionCommand;
 use App\Domain\ToolInstance\Command\McdaUpdateProjectCommand;
@@ -87,6 +88,7 @@ final class MessageBoxController
             CreateToolInstanceCommand::class,
             DeleteModflowModelCommand::class,
             DeleteToolInstanceCommand::class,
+            ImportModflowModelCommand::class,
             McdaDeleteCriterionCommand::class,
             McdaUpdateCriterionCommand::class,
             McdaUpdateProjectCommand::class,

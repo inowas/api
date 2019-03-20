@@ -50,7 +50,7 @@
           "type": "string",
           "enum": [
             "mt3dms",
-            "mt3usgs"
+            "mt3dusgs"
           ]
         },
         "model_ws": {

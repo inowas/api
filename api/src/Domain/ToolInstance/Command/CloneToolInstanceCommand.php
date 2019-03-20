@@ -22,6 +22,7 @@ class CloneToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return CloneToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload)
     {

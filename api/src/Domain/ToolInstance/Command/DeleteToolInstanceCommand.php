@@ -22,6 +22,7 @@ class DeleteToolInstanceCommand extends Command
     /**
      * @param string $id
      * @return DeleteToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromParams(string $id): DeleteToolInstanceCommand
     {
@@ -33,6 +34,7 @@ class DeleteToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return DeleteToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): DeleteToolInstanceCommand
     {

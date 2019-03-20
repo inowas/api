@@ -31,6 +31,7 @@ class UpdateToolInstanceCommand extends Command
      * @param bool $public
      * @param array $data
      * @return UpdateToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromParams(string $id, string $name, string $description, bool $public, array $data = []): UpdateToolInstanceCommand
     {
@@ -46,6 +47,7 @@ class UpdateToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return UpdateToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): UpdateToolInstanceCommand
     {

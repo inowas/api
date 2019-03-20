@@ -23,6 +23,7 @@ class CloneModflowModelCommand extends Command
     /**
      * @param array $payload
      * @return CloneModflowModelCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload)
     {

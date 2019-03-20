@@ -35,6 +35,7 @@ class CreateModflowModelCommand extends Command
     /**
      * @param array $payload
      * @return CreateModflowModelCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): CreateModflowModelCommand
     {

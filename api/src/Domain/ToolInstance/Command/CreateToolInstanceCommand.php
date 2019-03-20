@@ -35,6 +35,7 @@ class CreateToolInstanceCommand extends Command
      * @param bool $public
      * @param array $data
      * @return CreateToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromParams(string $id, string $tool, string $name, string $description, bool $public, array $data = []): CreateToolInstanceCommand
     {
@@ -51,6 +52,7 @@ class CreateToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return CreateToolInstanceCommand
+     * @throws \Exception
      */
     public static function fromPayload(array $payload): CreateToolInstanceCommand
     {
