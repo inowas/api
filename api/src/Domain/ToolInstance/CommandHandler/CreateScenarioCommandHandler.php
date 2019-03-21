@@ -55,9 +55,6 @@ class CreateScenarioCommandHandler
 
         $this->entityManager->persist($simpleTool);
         $this->entityManager->flush();
-
-        //$newSimpleTool = $this->entityManager->getRepository(SimpleTool::class)->findOneBy(['id' => $id]);
-        //return new JsonResponse(var_dump($simpleTool->toArray()));
     }
 
     /**
