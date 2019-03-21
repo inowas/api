@@ -63,6 +63,10 @@ class CloneToolInstanceCommandHandler
         $clone->setId($cloneId);
         $clone->setUser($user);
 
+        $name = $clone->name();
+        $name .= ' (clone)';
+        $clone->setName($name);
+
         $this->entityManager->persist($clone);
         $this->entityManager->flush();
     }

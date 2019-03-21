@@ -68,7 +68,6 @@ abstract class ToolInstance implements \JsonSerializable
     {
         $this->id = null;
         $this->createdAt = null;
-        $this->name .= ' (clone)';
     }
 
     public static function createWithParams(string $id, User $user, string $tool, ToolMetadata $metadata)
@@ -136,6 +135,11 @@ abstract class ToolInstance implements \JsonSerializable
         return $this->name;
     }
 
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
     public function description(): string
     {
         return $this->description;
@@ -166,7 +170,7 @@ abstract class ToolInstance implements \JsonSerializable
         $this->isScenario = $isScenario;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function createdAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -214,7 +218,7 @@ abstract class ToolInstance implements \JsonSerializable
             'isPublic' => $this->isPublic,
             'isArchived' => $this->isArchived,
             'isScenario' => $this->isScenario,
-            'createdAt' => $this->getCreatedAt()->format(DATE_ATOM),
+            'createdAt' => $this->createdAt()->format(DATE_ATOM),
             'updatedAt' => $this->getUpdatedAt()->format(DATE_ATOM)
         ];
     }

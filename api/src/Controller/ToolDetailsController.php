@@ -76,6 +76,7 @@ class ToolDetailsController
             'description' => $toolInstance->description(),
             'permissions' => $permissions,
             'public' => $toolInstance->isPublic(),
+            'created_at' => $toolInstance->createdAt()->format(DATE_ATOM),
             'tool' => $toolInstance->tool(),
             'data' => $toolInstance->data()
         ];

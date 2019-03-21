@@ -90,8 +90,8 @@ class DashboardController
                 'tool' => $instance->tool(),
                 'name' => $instance->name(),
                 'description' => $instance->description(),
-                'created_at' => $instance->getCreatedAt()->format(DATE_ATOM),
-                'updated_at' => $instance->getCreatedAt()->format(DATE_ATOM),
+                'created_at' => $instance->createdAt()->format(DATE_ATOM),
+                'updated_at' => $instance->createdAt()->format(DATE_ATOM),
                 'user_name' => $instance->getUser()->getUsername()
             ];
         }

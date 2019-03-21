@@ -8,10 +8,15 @@ use App\Domain\ToolInstance\Command\AddBoundaryCommand;
 use App\Domain\ToolInstance\Command\AddLayerCommand;
 use App\Domain\ToolInstance\Command\CloneLayerCommand;
 use App\Domain\ToolInstance\Command\CloneModflowModelCommand;
+use App\Domain\ToolInstance\Command\CloneScenarioAnalysisCommand;
 use App\Domain\ToolInstance\Command\CloneToolInstanceCommand;
 use App\Domain\ToolInstance\Command\CreateModflowModelCommand;
+use App\Domain\ToolInstance\Command\CreateScenarioAnalysisCommand;
+use App\Domain\ToolInstance\Command\CreateScenarioCommand;
 use App\Domain\ToolInstance\Command\CreateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\DeleteModflowModelCommand;
+use App\Domain\ToolInstance\Command\DeleteScenarioAnalysisCommand;
+use App\Domain\ToolInstance\Command\DeleteScenarioCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
 use App\Domain\ToolInstance\Command\ImportModflowModelCommand;
 use App\Domain\ToolInstance\Command\McdaDeleteCriterionCommand;
@@ -102,9 +107,16 @@ final class MessageBoxController
             UpdateModflowModelMetadataCommand::class,
             UpdateSoilmodelPropertiesCommand::class,
             UpdateStressperiodsCommand::class,
+
             UpdateToolInstanceCommand::class,
             UpdateToolInstanceDataCommand::class,
-            UpdateToolInstanceMetadataCommand::class
+            UpdateToolInstanceMetadataCommand::class,
+
+            CloneScenarioAnalysisCommand::class,
+            CreateScenarioAnalysisCommand::class,
+            CreateScenarioCommand::class,
+            DeleteScenarioAnalysisCommand::class,
+            DeleteScenarioCommand::class
         ];
 
         $this->setAvailableCommands($availableCommands);
