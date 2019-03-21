@@ -680,8 +680,14 @@
             }
           ]
         },
-        "rech": {
-          "$ref": "#/definitions/layervalue"
+        "stress_period_data": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[0-9]+": {
+              "$ref": "#/definitions/layervalue"
+            }
+          }
         },
         "irch": {
           "$ref": "#/definitions/layervalue"
