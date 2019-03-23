@@ -6,7 +6,7 @@ namespace App\Model\Modflow\Boundary;
 
 final class BoundaryCollection implements \JsonSerializable
 {
-    private $boundaries;
+    private $boundaries = [];
 
     public static function fromArray(array $arr): self
     {

@@ -251,35 +251,6 @@ class ModflowModelCommandsTest extends CommandTestBaseClass
      * @test
      * @throws \Exception
      */
-    public function sendUpdateMt3dmsCommand(): void
-    {
-        $user = $this->createRandomUser();
-        $model = $this->createRandomModflowModel($user);
-
-        $command = [
-            'uuid' => Uuid::uuid4()->toString(),
-            'message_name' => 'updateMt3dms',
-            'metadata' => (object)[],
-            'payload' => [
-                'id' => $model->id(),
-                'mt3dms' => ['mt3dms-content']
-            ]
-        ];
-
-        $token = $this->getToken($user->getUsername(), $user->getPassword());
-        $response = $this->sendCommand('v3/messagebox', $command, $token);
-        $this->assertEquals(202, $response->getStatusCode());
-
-        /** @var ModflowModel $modflowModel */
-        $modflowModel = self::$container->get('doctrine')->getRepository(ModflowModel::class)->findOneById($model->id());
-        $this->assertInstanceOf(ModflowModel::class, $modflowModel);
-        $this->assertEquals($command['payload']['mt3dms'], $modflowModel->transport()->toArray());
-    }
-
-    /**
-     * @test
-     * @throws \Exception
-     */
     public function sendCloneModflowModelAsToolCommand(): void
     {
         $user = $this->createRandomUser();
