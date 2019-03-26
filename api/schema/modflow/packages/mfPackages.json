@@ -949,25 +949,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "array"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -980,16 +962,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1002,25 +975,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "array"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1033,16 +988,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1055,25 +1001,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "array"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1086,10 +1014,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
@@ -1102,16 +1027,7 @@
             {
               "type": "array",
               "items": {
-                "type": "array",
-                "items": {
-                  "type": "number"
-                }
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "number"
+                "$ref": "#/definitions/layervalue"
               }
             },
             {
