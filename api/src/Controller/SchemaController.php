@@ -41,13 +41,16 @@ final class SchemaController extends AbstractController
         $realBase = realpath($schemaBasePath);
         $userPath = $schemaBasePath . $path;
         $realUserPath = realpath($userPath);
+        if ($realUserPath === false) {
+            $realUserPath = realpath($userPath.'.json');
+        }
 
         if ($realUserPath === false || strpos($realUserPath, $realBase) !== 0) {
             # Directory Traversal!
             return new Response('Not found', Response::HTTP_NOT_FOUND);
         }
 
-        if ($this->endsWith($path, '.json')) {
+        if ($this->endsWith($realUserPath, '.json')) {
             try {
                 $content = file_get_contents($realUserPath);
                 return new JsonResponse($content, 200, [], true);
