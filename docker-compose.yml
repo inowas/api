@@ -72,22 +72,22 @@ services:
       # db-data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       - ./docker/db/data:/var/lib/postgresql/data:rw
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
         
-  traefik:
-    image: traefik
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - web
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik/acme.json:/acme.json
-      - ./traefik/traefik.toml:/traefik.toml
-      - ./traefik/logs:/logs        
+#  traefik:
+#    image: traefik
+#    restart: always
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    networks:
+#      - web
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./traefik/acme.json:/acme.json
+#      - ./traefik/traefik.toml:/traefik.toml
+#      - ./traefik/logs:/logs        
 
 #  mercure:
 #    # In production, you may want to use the managed version of Mercure, https://mercure.rocks
