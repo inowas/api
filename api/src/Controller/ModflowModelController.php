@@ -270,11 +270,42 @@ class ModflowModelController
     }
 
     /**
-     * @Route("/modflowmodels/{id}/packages", name="modflowmodel_packages", methods={"GET"})
+     * @Route("/modflowmodels/{id}/transport", name="modflowmodel_transport", methods={"GET"})
      * @param string $id
      * @return JsonResponse
      */
     public function indexTransport(string $id): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        $permissions = '---';
+
+        if ($modflowModel->isPublic()) {
+            $permissions = 'r--';
+        }
+
+        if ($modflowModel->userId() === $user->getId()->toString()) {
+            $permissions = 'rwx';
+        }
+
+        if ($permissions === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        $result = $modflowModel->transport()->toArray();
+        return new JsonResponse($result);
+    }
+
+    /**
+     * @Route("/modflowmodels/{id}/packages", name="modflowmodel_packages", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function indexPackages(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();

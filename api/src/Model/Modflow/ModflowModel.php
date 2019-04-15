@@ -83,6 +83,9 @@ class ModflowModel extends ToolInstance
 
     public function transport(): Transport
     {
+        if (null === $this->transport) {
+            $this->transport = [];
+        }
         return Transport::fromArray($this->transport);
     }
 
