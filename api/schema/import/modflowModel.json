@@ -15,20 +15,27 @@
     },
     "discretization": {
       "type": "object",
-      "geometry": {
-        "$ref": "../geojson/polygon.json"
-      },
-      "grid_size": {
-        "$ref": "../modflow/gridSize.json"
-      },
-      "stressperiods": {
-        "$ref": "./stressperiods.json"
-      },
-      "length_unit": {
-        "$ref": "../modflow/lengthUnit.json"
-      },
-      "time_unit": {
-        "$ref": "../modflow/timeUnit.json"
+      "properties": {
+        "geometry": {
+          "$ref": "../geojson/polygon.json"
+        },
+        "grid_size": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "stressperiods": {
+          "$ref": "./stressperiods.json"
+        },
+        "length_unit": {
+          "$ref": "../modflow/lengthUnit.json"
+        },
+        "time_unit": {
+          "$ref": "../modflow/timeUnit.json"
+        }
       },
       "required": [
         "geometry",
@@ -68,4 +75,3 @@
     "boundaries"
   ]
 }
-

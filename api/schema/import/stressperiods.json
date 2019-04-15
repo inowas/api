@@ -1,32 +1,55 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-        "start_date_time": {
-            "type": "string",
-            "format": "date-time"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "start_date_time": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date"
         },
-        "end_date_time": {
-            "type": "string",
-            "format": "date-time"
-        },
-        "time_unit": {
-            "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
-            "enum": [0, 1, 2, 3, 4, 5]
-        },
-        "stressperiods": {
-            "type": "array",
-            "items": {
-                "$ref": "./stressperiod.json"
-            },
-            "minItems": 1
+        {
+          "type": "string",
+          "format": "date-time"
         }
+      ]
     },
-    "additionalProperties": false,
-    "required": [
-        "start_date_time",
-        "end_date_time",
-        "time_unit",
-        "stressperiods"
-    ]
+    "end_date_time": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date"
+        },
+        {
+          "type": "string",
+          "format": "date-time"
+        }
+      ]
+    },
+    "time_unit": {
+      "description": "0: undefined, 1: seconds, 2: minutes, 3: hours, 4: days, 5: years",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "stressperiods": {
+      "type": "array",
+      "items": {
+        "$ref": "./stressperiod.json"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "start_date_time",
+    "end_date_time",
+    "time_unit",
+    "stressperiods"
+  ]
 }

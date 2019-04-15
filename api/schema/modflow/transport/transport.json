@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "substances": {
+      "type": "array",
+      "items": {
+        "$ref": "./substance.json"
+      }
+    }
+  },
+  "required": [
+    "enabled",
+    "substances"
+  ]
+}

@@ -3,8 +3,16 @@
     "type": "object",
     "properties": {
         "start_date_time": {
-            "type": "string",
-            "format": "date-time"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "format": "date"
+                },
+                {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            ]
         },
         "nstp": {
             "type": "integer"
