@@ -2,26 +2,31 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "boundaryIds": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "boundaryConcentrations": {
       "type": "array",
       "items": {
-        "type": "string"
-      }
-    },
-    "concentrations": {
-      "type": "object",
-      "properties": {
-        "boundaryId": {
-          "type": "string"
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "concentration": {
+            "type": "number"
+          }
         },
-        "concentration": {
-          "type": "number"
-        }
+        "minItems": 1
       }
     }
   },
   "required": [
-    "boundaryIds",
-    "concentrations"
+    "id",
+    "name",
+    "boundaryConcentrations"
   ]
 }
