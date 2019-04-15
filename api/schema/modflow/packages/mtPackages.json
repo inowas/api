@@ -213,7 +213,10 @@
           "type": "number"
         },
         "species_names": {
-          "type": "null"
+          "oneOf": [
+            {"type": "null"},
+            {"type": "array"}
+          ]
         },
         "extension": {
           "type": "string"
