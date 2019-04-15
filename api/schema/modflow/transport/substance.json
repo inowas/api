@@ -19,9 +19,9 @@
           "concentration": {
             "type": "number"
           }
-        },
-        "minItems": 1
-      }
+        }
+      },
+      "minItems": 1
     }
   },
   "required": [
