@@ -374,21 +374,20 @@
           "type": "null"
         },
         "stress_period_data": {
-          "oneOf": [
-            {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[0-9]+": {
               "type": "array",
               "items": {
                 "type": "array",
                 "items": {
-                  "type": "number",
-                  "minItems": 5
-                }
+                  "type": "number"
+                },
+                "minItems": 5
               }
-            },
-            {
-              "type": "null"
             }
-          ]
+          }
         },
         "dtype": {
           "type": "null"
