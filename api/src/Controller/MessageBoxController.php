@@ -35,6 +35,7 @@ use App\Domain\ToolInstance\Command\UpdateStressperiodsCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceDataCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
+use App\Domain\ToolInstance\Command\UpdateTransportCommand;
 use App\Model\User;
 use App\Model\Command;
 use App\Domain\User\Command\ArchiveUserCommand;
@@ -43,6 +44,10 @@ use App\Domain\User\Command\ChangeUserPasswordCommand;
 use App\Domain\User\Command\ChangeUserProfileCommand;
 use App\Domain\User\Command\DeleteUserCommand;
 use App\Domain\User\Command\ReactivateUserCommand;
+
+use function json_decode;
+use RuntimeException;
+
 use Swaggest\JsonSchema\Exception;
 use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\Schema;
@@ -105,6 +110,7 @@ final class MessageBoxController
             UpdateModflowModelCalculationIdCommand::class,
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
+            UpdateTransportCommand::class,
             UpdateSoilmodelPropertiesCommand::class,
             UpdateStressperiodsCommand::class,
 
@@ -173,10 +179,10 @@ final class MessageBoxController
     {
 
         if (0 !== strpos($request->headers->get('Content-Type'), 'application/json')) {
-            throw new \RuntimeException('Expecting Header: Content-Type: application/json');
+            throw new RuntimeException('Expecting Header: Content-Type: application/json');
         }
 
-        $body = \json_decode($request->getContent(), true);
+        $body = json_decode($request->getContent(), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \Exception('Invalid JSON received.');
