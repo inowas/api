@@ -15,32 +15,32 @@ class ModflowModel extends ToolInstance
 {
 
     /**
-     * @ORM\Column(name="discretization", type="json_array")
+     * @ORM\Column(name="discretization", type="json_array", nullable=false)
      */
     private $discretization = [];
 
     /**
-     * @ORM\Column(name="soilmodel", type="json_array")
+     * @ORM\Column(name="soilmodel", type="json_array", nullable=false)
      */
     private $soilmodel = [];
 
     /**
-     * @ORM\Column(name="boundaries", type="json_array")
+     * @ORM\Column(name="boundaries", type="json_array", nullable=false)
      */
     private $boundaries = [];
 
     /**
-     * @ORM\Column(name="transport", type="json_array")
+     * @ORM\Column(name="transport", type="json_array", nullable=true)
      */
     private $transport = [];
 
     /**
-     * @ORM\Column(name="calculation", type="json_array")
+     * @ORM\Column(name="calculation", type="json_array", nullable=false)
      */
     private $calculation = [];
 
     /**
-     * @ORM\Column(name="packages", type="json_array")
+     * @ORM\Column(name="packages", type="json_array", nullable=false)
      */
     private $packages = [];
 
