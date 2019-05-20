@@ -21,7 +21,32 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "packages": {
-          "$ref": "../modflow/packages/flopyPackages.json"
+          "type": "object",
+          "required": [
+            "version",
+            "author",
+            "project",
+            "model_id",
+            "mf",
+            "mt"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "model_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "mf": {},
+            "mt": {}
+          }
         }
       },
       "required": [

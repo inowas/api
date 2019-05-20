@@ -49,7 +49,6 @@
   "required": [
     "start_date_time",
     "end_date_time",
-    "time_unit",
     "stressperiods"
   ]
 }
