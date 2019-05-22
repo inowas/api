@@ -12,7 +12,6 @@
         "guzzlehttp/guzzle": "^6.3",
         "jmikola/geojson": "^1.0",
         "lexik/jwt-authentication-bundle": "^2.6",
-        "oneup/flysystem-bundle": "^3.0",
         "ramsey/uuid": "^3.8",
         "ramsey/uuid-doctrine": "^1.5",
         "superbalist/flysystem-google-storage": "^7.2",
@@ -23,7 +22,8 @@
         "symfony/framework-bundle": "4.2.*",
         "symfony/mercure-bundle": "*",
         "symfony/messenger": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "tweedegolf/prometheus-bundle": "^0.3.0"
     },
     "require-dev": {
         "api-platform/schema-generator": "^2.1",

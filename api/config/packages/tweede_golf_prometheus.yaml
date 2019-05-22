@@ -1,0 +1,7 @@
+tweede_golf_prometheus:
+    collectors:
+        requests:
+            counter:
+                labels: [url, user]
+                help: Number of requests
+

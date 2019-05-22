@@ -152,15 +152,6 @@
             "ref": "7b6cbc842f8cd3d550815247d12294f6f304a8c4"
         }
     },
-    "oneup/flysystem-bundle": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "0eb87bba411c227da027fe5f7c1dc7954b02f242"
-        }
-    },
     "php-cs-fixer/diff": {
         "version": "v1.2.0"
     },
@@ -424,6 +415,12 @@
     },
     "symfony/yaml": {
         "version": "v4.0.3"
+    },
+    "tweedegolf/prometheus-bundle": {
+        "version": "v0.3.0"
+    },
+    "tweedegolf/prometheus-client": {
+        "version": "v0.3.0"
     },
     "twig/twig": {
         "version": "v2.4.4"

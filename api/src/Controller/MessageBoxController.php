@@ -56,6 +56,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use TweedeGolf\PrometheusClient\CollectorRegistry;
+use TweedeGolf\PrometheusClient\PrometheusException;
 
 final class MessageBoxController
 {
@@ -77,9 +79,11 @@ final class MessageBoxController
     /**
      * @Route("/messagebox", name="messagebox", methods={"POST"})
      * @param Request $request
+     * @param CollectorRegistry $collectorRegistry
      * @return JsonResponse
+     * @throws PrometheusException
      */
-    public function messagebox(Request $request): JsonResponse
+    public function messagebox(Request $request, CollectorRegistry $collectorRegistry): JsonResponse
     {
         $availableCommands = [
             ArchiveUserCommand::class,
@@ -124,7 +128,6 @@ final class MessageBoxController
             DeleteScenarioAnalysisCommand::class,
             DeleteScenarioCommand::class
         ];
-
         $this->setAvailableCommands($availableCommands);
 
         try {
@@ -135,6 +138,9 @@ final class MessageBoxController
 
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+
+        $metric = $collectorRegistry->getCounter('requests');
+        $metric->inc(1, ['url' => 'schema', 'user' => $user->getId()->toString()]);
 
         # extract message
         $message = $this->getMessage($request);

@@ -7,14 +7,20 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use TweedeGolf\PrometheusClient\CollectorRegistry;
+use TweedeGolf\PrometheusClient\PrometheusException;
 
 final class SchemaController extends AbstractController
 {
     /**
+     * @param CollectorRegistry $collectorRegistry
      * @return Response
+     * @throws PrometheusException
      */
-    public function index(): Response
+    public function index(CollectorRegistry $collectorRegistry): Response
     {
+        $metric = $collectorRegistry->getCounter('requests');
+        $metric->inc(1, ['url' => 'schema', 'user' => 'anonymous']);
         $schemaBasePath = __DIR__ . '/../../schema/';
         $realBase = realpath($schemaBasePath);
 
@@ -42,7 +48,7 @@ final class SchemaController extends AbstractController
         $userPath = $schemaBasePath . $path;
         $realUserPath = realpath($userPath);
         if ($realUserPath === false) {
-            $realUserPath = realpath($userPath.'.json');
+            $realUserPath = realpath($userPath . '.json');
         }
 
         if ($realUserPath === false || strpos($realUserPath, $realBase) !== 0) {

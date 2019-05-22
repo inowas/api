@@ -29,23 +29,11 @@ services:
         namespace: App\Domain\
         resource: '../src/Domain/*/CommandHandler'
         tags: ['messenger.message_handler']
-        
+
     projectors:
         namespace: App\Domain\
         resource: '../src/Domain/*/Projection'
-        tags: ['app.projector']        
-        
+        tags: ['app.projector']
+
     App\Model\ProjectorCollection:
         arguments: [!tagged app.projector]
-
-    Google\Cloud\Storage\StorageClient:
-        class: Google\Cloud\Storage\StorageClient
-        arguments: 
-            - projectId: "inowas-i"
-              keyFilePath: '%env(GOOGLE_APPLICATION_KEYFILE)%'
-
-    Google\Cloud\Storage\Bucket:
-        class: Google\Cloud\Storage\Bucket
-        factory: 'Google\Cloud\Storage\StorageClient:bucket'
-        arguments:
-            - '%env(GOOGLE_STORAGE_BUCKET_NAME)%'
