@@ -2,6 +2,10 @@ tweede_golf_prometheus:
     collectors:
         requests:
             counter:
-                labels: [url, user]
+                labels: [url]
                 help: Number of requests
+        user_requests:
+            counter:
+                labels: [user]
+                help: Unique user requests
 

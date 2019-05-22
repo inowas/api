@@ -140,7 +140,9 @@ final class MessageBoxController
         $user = $this->tokenStorage->getToken()->getUser();
 
         $metric = $collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => 'schema', 'user' => $user->getId()->toString()]);
+        $metric->inc(1, ['url' => 'messagebox']);
+        $metric = $collectorRegistry->getCounter('user_requests');
+        $metric->inc(1, ['user' => md5($user->getId()->toString())]);
 
         # extract message
         $message = $this->getMessage($request);
