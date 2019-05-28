@@ -9,10 +9,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use TweedeGolf\PrometheusClient\CollectorRegistry;
 
 
 class RegisterUserController
 {
+
+    /** @var CollectorRegistry */
+    private $collectorRegistry;
 
     /** @var MessageBusInterface */
     private $commandBus;
@@ -20,8 +24,13 @@ class RegisterUserController
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    public function __construct(MessageBusInterface $bus, EntityManagerInterface $entityManager)
+    public function __construct(
+        MessageBusInterface $bus,
+        EntityManagerInterface $entityManager,
+        CollectorRegistry $collectorRegistry
+    )
     {
+        $this->collectorRegistry = $collectorRegistry;
         $this->commandBus = $bus;
         $this->entityManager = $entityManager;
     }
@@ -39,6 +48,9 @@ class RegisterUserController
         //if (strpos($origin, 'inowas.com') === false) {
         //    $sendMail = true;
         //}
+
+        $metric = $this->collectorRegistry->getCounter('requests');
+        $metric->inc(1, ['url' => '/register']);
 
         $content = json_decode($request->getContent(), true);
 

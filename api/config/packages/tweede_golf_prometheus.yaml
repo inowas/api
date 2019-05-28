@@ -4,8 +4,15 @@ tweede_golf_prometheus:
             counter:
                 labels: [url]
                 help: Number of requests
-        user_requests:
-            counter:
-                labels: [user]
-                help: Unique user requests
-
+        users_registered:
+            gauge:
+                help: Number of registered users
+        projects_simple_tools:
+            gauge:
+                help: Number of simple tools
+        projects_modflow_models:
+            gauge:
+                help: Number of modflow models
+        projects_mcda:
+            gauge:
+                help: Number of mcda projects

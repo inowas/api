@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +21,13 @@ final class SchemaController extends AbstractController
     public function index(CollectorRegistry $collectorRegistry): Response
     {
         $metric = $collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => 'schema']);
+        $metric->inc(1, ['url' => '/schema']);
         $schemaBasePath = __DIR__ . '/../../schema/';
         $realBase = realpath($schemaBasePath);
 
         try {
             $scandir = scandir($realBase);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new Response('Not found', Response::HTTP_NOT_FOUND);
         }
 
@@ -42,7 +43,6 @@ final class SchemaController extends AbstractController
      */
     public function withPath(string $path): Response
     {
-
         $schemaBasePath = __DIR__ . '/../../schema/';
         $realBase = realpath($schemaBasePath);
         $userPath = $schemaBasePath . $path;
@@ -60,14 +60,14 @@ final class SchemaController extends AbstractController
             try {
                 $content = file_get_contents($realUserPath);
                 return new JsonResponse($content, 200, [], true);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 return new Response('Not found', Response::HTTP_NOT_FOUND);
             }
         }
 
         try {
             $scandir = scandir($realUserPath);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new Response('Not found', Response::HTTP_NOT_FOUND);
         }
 
@@ -76,7 +76,6 @@ final class SchemaController extends AbstractController
             ['path' => $path, 'scandir' => $scandir]
         );
     }
-
 
     private function endsWith($haystack, $needle)
     {
@@ -87,5 +86,4 @@ final class SchemaController extends AbstractController
 
         return (substr($haystack, -$length) === $needle);
     }
-
 }

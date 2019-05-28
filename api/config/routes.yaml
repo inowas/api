@@ -16,7 +16,8 @@ schema_path:
     methods: [GET]
     requirements:
         path: .*
-
-tweede_golf_prometheus:
-    resource: "@TweedeGolfPrometheusBundle/Resources/config/routing.yml"
-    prefix: /
+        
+metrics_path:
+    path: /metrics
+    controller: App\Controller\MetricsController::index
+    methods: [GET]

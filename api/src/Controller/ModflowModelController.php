@@ -12,10 +12,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use TweedeGolf\PrometheusClient\CollectorRegistry;
+use TweedeGolf\PrometheusClient\PrometheusException;
 
 
 class ModflowModelController
 {
+    /** @var CollectorRegistry */
+    private $collectorRegistry;
 
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -24,8 +28,13 @@ class ModflowModelController
     private $tokenStorage;
 
 
-    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage,
+        CollectorRegistry $collectorRegistry
+    )
     {
+        $this->collectorRegistry = $collectorRegistry;
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
     }
@@ -34,11 +43,13 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}", name="modflowmodel_details", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function index(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -75,11 +86,13 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}/discretization", name="modflowmodel_discretization", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function indexDiscretization(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -106,11 +119,13 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}/soilmodel", name="modflowmodel_soilmodel", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function indexSoilmodel(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -135,15 +150,50 @@ class ModflowModelController
     }
 
     /**
+     * @Route("/modflowmodels/{id}/boundaries", name="modflowmodel_boundaries", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     * @throws PrometheusException
+     */
+    public function indexBoundaries(string $id): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
+
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        $permissions = '---';
+
+        if ($modflowModel->isPublic()) {
+            $permissions = 'r--';
+        }
+
+        if ($modflowModel->userId() === $user->getId()->toString()) {
+            $permissions = 'rwx';
+        }
+
+        if ($permissions === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        return new JsonResponse($modflowModel->boundaries());
+    }
+
+    /**
      * @Route("/modflowmodels/{id}/soilmodel/{layerId}", name="modflowmodel_soilmodel_layer", methods={"GET"})
      * @param string $id
      * @param string $layerId
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function indexSoilmodelLayer(string $id, string $layerId): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -176,47 +226,18 @@ class ModflowModelController
     }
 
     /**
-     * @Route("/modflowmodels/{id}/boundaries", name="modflowmodel_boundaries", methods={"GET"})
-     * @param string $id
-     * @return JsonResponse
-     * @throws \Exception
-     */
-    public function indexBoundaries(string $id): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
-
-        /** @var ModflowModel $modflowModel */
-        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
-
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
-            return new JsonResponse([], 403);
-        }
-
-        return new JsonResponse($modflowModel->boundaries());
-    }
-
-    /**
      * @Route("/modflowmodels/{id}/boundaries/{bId}", name="modflowmodel_boundary_details", methods={"GET"})
      * @param string $id
      * @param string $bId
      * @return JsonResponse
+     * @throws PrometheusException
      * @throws \Exception
      */
     public function indexBoundaryDetails(string $id, string $bId): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -242,11 +263,13 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}/calculation", name="modflowmodel_calculation", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function indexCalculation(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -273,11 +296,13 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}/transport", name="modflowmodel_transport", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function indexTransport(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -304,11 +329,13 @@ class ModflowModelController
      * @Route("/modflowmodels/{id}/packages", name="modflowmodel_packages", methods={"GET"})
      * @param string $id
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function indexPackages(string $id): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
@@ -329,5 +356,15 @@ class ModflowModelController
 
         $result = $modflowModel->packages()->toArray();
         return new JsonResponse($result);
+    }
+
+    /**
+     * @param string $route
+     * @throws PrometheusException
+     */
+    private function writeMetrics(string $route): void
+    {
+        $metric = $this->collectorRegistry->getCounter('requests');
+        $metric->inc(1, ['url' => $route]);
     }
 }

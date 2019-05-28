@@ -12,10 +12,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use TweedeGolf\PrometheusClient\CollectorRegistry;
+use TweedeGolf\PrometheusClient\PrometheusException;
 
 
-class DashboardController
+final class DashboardController
 {
+
+    /** @var CollectorRegistry */
+    private $collectorRegistry;
 
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -24,8 +29,13 @@ class DashboardController
     private $tokenStorage;
 
 
-    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage,
+        CollectorRegistry $collectorRegistry
+    )
     {
+        $this->collectorRegistry = $collectorRegistry;
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
     }
@@ -35,11 +45,15 @@ class DashboardController
      * @param Request $request
      * @param string $tool
      * @return JsonResponse
+     * @throws PrometheusException
      */
     public function __invoke(Request $request, string $tool): JsonResponse
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
+
+        $metric = $this->collectorRegistry->getCounter('requests');
+        $metric->inc(1, ['url' => '/tools/{tool}']);
 
         switch ($tool) {
             case ('T03'):

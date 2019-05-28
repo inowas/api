@@ -61,6 +61,9 @@ use TweedeGolf\PrometheusClient\PrometheusException;
 
 final class MessageBoxController
 {
+    /** @var CollectorRegistry */
+    private $collectorRegistry;
+
     /** @var MessageBusInterface */
     private $commandBus;
 
@@ -70,20 +73,24 @@ final class MessageBoxController
     /** @var array */
     private $availableCommands = [];
 
-    public function __construct(MessageBusInterface $bus, TokenStorageInterface $tokenStorage)
+    public function __construct(
+        MessageBusInterface $bus,
+        TokenStorageInterface $tokenStorage,
+        CollectorRegistry $collectorRegistry
+    )
     {
         $this->commandBus = $bus;
         $this->tokenStorage = $tokenStorage;
+        $this->collectorRegistry = $collectorRegistry;
     }
 
     /**
      * @Route("/messagebox", name="messagebox", methods={"POST"})
      * @param Request $request
-     * @param CollectorRegistry $collectorRegistry
      * @return JsonResponse
      * @throws PrometheusException
      */
-    public function messagebox(Request $request, CollectorRegistry $collectorRegistry): JsonResponse
+    public function messagebox(Request $request): JsonResponse
     {
         $availableCommands = [
             ArchiveUserCommand::class,
@@ -139,10 +146,8 @@ final class MessageBoxController
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 
-        $metric = $collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => 'messagebox']);
-        $metric = $collectorRegistry->getCounter('user_requests');
-        $metric->inc(1, ['user' => md5($user->getId()->toString())]);
+        $metric = $this->collectorRegistry->getCounter('requests');
+        $metric->inc(1, ['url' => '/messagebox']);
 
         # extract message
         $message = $this->getMessage($request);
