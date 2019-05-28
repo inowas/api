@@ -8,7 +8,7 @@ use App\Model\ToolInstance;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\McdaRepository")
  */
 class Mcda extends ToolInstance
 {

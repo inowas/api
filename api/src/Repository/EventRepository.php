@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Model\DomainEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class EventRepository extends ServiceEntityRepository
@@ -18,7 +19,7 @@ class EventRepository extends ServiceEntityRepository
     /**
      * @param string $aggregateId
      * @return int
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getVersion(string $aggregateId): int
     {

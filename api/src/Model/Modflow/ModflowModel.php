@@ -9,7 +9,7 @@ use App\Model\ToolInstance;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ModflowModelRepository")
  */
 class ModflowModel extends ToolInstance
 {
