@@ -51,8 +51,8 @@ class ToolDetailsController
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
-        $metric = $this->collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => sprintf('/tools/%s', $tool)]);
+        $metric = $this->collectorRegistry->getCounter('http_requests_total');
+        $metric->inc(1, ['handler' => sprintf('/tools/%s', $tool)]);
 
         switch ($tool) {
             case ('T03'):

@@ -20,8 +20,8 @@ final class SchemaController extends AbstractController
      */
     public function index(CollectorRegistry $collectorRegistry): Response
     {
-        $metric = $collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => '/schema']);
+        $metric = $collectorRegistry->getCounter('http_requests_total');
+        $metric->inc(1, ['handler' => '/schema']);
         $schemaBasePath = __DIR__ . '/../../schema/';
         $realBase = realpath($schemaBasePath);
 

@@ -38,8 +38,8 @@ class UserController
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 
-        $metric = $this->collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => '/user']);
+        $metric = $this->collectorRegistry->getCounter('http_requests_total');
+        $metric->inc(1, ['handler' => '/user']);
 
         $response = [
             'id' => $user->getId(),

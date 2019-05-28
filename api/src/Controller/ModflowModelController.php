@@ -364,7 +364,7 @@ class ModflowModelController
      */
     private function writeMetrics(string $route): void
     {
-        $metric = $this->collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => $route]);
+        $metric = $this->collectorRegistry->getCounter('http_requests_total');
+        $metric->inc(1, ['handler' => $route]);
     }
 }

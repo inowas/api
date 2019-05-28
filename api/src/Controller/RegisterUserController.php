@@ -49,8 +49,8 @@ class RegisterUserController
         //    $sendMail = true;
         //}
 
-        $metric = $this->collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => '/register']);
+        $metric = $this->collectorRegistry->getCounter('http_requests_total');
+        $metric->inc(1, ['handler' => '/register']);
 
         $content = json_decode($request->getContent(), true);
 

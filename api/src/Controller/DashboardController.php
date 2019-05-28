@@ -52,8 +52,8 @@ final class DashboardController
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 
-        $metric = $this->collectorRegistry->getCounter('requests');
-        $metric->inc(1, ['url' => '/tools/{tool}']);
+        $metric = $this->collectorRegistry->getCounter('http_requests_total');
+        $metric->inc(1, ['handler' => '/dashboard']);
 
         switch ($tool) {
             case ('T03'):

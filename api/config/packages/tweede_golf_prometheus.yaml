@@ -1,9 +1,9 @@
 tweede_golf_prometheus:
     collectors:
-        requests:
+        http_requests_total:
             counter:
-                labels: [url]
-                help: Number of requests
+                labels: [handler]
+                help: Total number of requests
         users_registered:
             gauge:
                 help: Number of registered users
