@@ -9,11 +9,13 @@ class UserCommandsTest extends CommandTestBaseClass
 
     /**
      * @test
+     * @throws \Exception
      */
-    public function aUserCanRegister()
+    public function aUserCanRegister(): array
     {
-        $username = sprintf('newUser_%d', rand(1000000, 10000000 - 1));
-        $password = sprintf('newUserPassword_%d', rand(1000000, 10000000 - 1));
+        $name = sprintf('newUser_%d', random_int(1000000, 10000000 - 1));
+        $email = $name . '@inowas.com';
+        $password = sprintf('newUserPassword_%d', random_int(1000000, 10000000 - 1));
 
         $client = static::createClient();
         $client->request(
@@ -23,21 +25,19 @@ class UserCommandsTest extends CommandTestBaseClass
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'message_name' => 'createUser',
-                'payload' => [
-                    'username' => $username,
-                    'password' => $password
-                ]
+                'name' => $name,
+                'email' => $email,
+                'password' => $password
             ])
         );
 
         $this->assertEquals(202, $client->getResponse()->getStatusCode());
 
         /** @var User $user */
-        $user = self::$container->get('doctrine')->getRepository(User::class)->findOneByUsername($username);
+        $user = self::$container->get('doctrine')->getRepository(User::class)->findOneByUsername($email);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals(['ROLE_USER'], $user->getRoles());
-        return ['username' => $username, 'password' => $password];
+        return ['username' => $user->getUsername(), 'password' => $password];
     }
 
     /**
@@ -45,14 +45,15 @@ class UserCommandsTest extends CommandTestBaseClass
      * @depends aUserCanRegister
      * @param array $credentials
      * @return array
+     * @throws \Exception
      */
-    public function aUserCanChangeUsername(array $credentials)
+    public function aUserCanChangeUsername(array $credentials): array
     {
         $username = $credentials['username'];
         $password = $credentials['password'];
 
 
-        $newUserName = sprintf('newUser_%d', rand(1000000, 10000000 - 1));
+        $newUserName = sprintf('newUser_%d', random_int(1000000, 10000000 - 1));
         $command = [
             'message_name' => 'changeUsername',
             'payload' => [
@@ -76,17 +77,19 @@ class UserCommandsTest extends CommandTestBaseClass
      * @depends aUserCanChangeUsername
      * @param array $credentials
      * @return array
+     * @throws \Exception
      */
-    public function aUserCanChangePassword(array $credentials)
+    public function aUserCanChangePassword(array $credentials): array
     {
         $username = $credentials['username'];
         $password = $credentials['password'];
 
-        $newPassword = sprintf('newPassword_%d', rand(1000000, 10000000 - 1));
+        $newPassword = sprintf('newPassword_%d', random_int(1000000, 10000000 - 1));
         $command = [
             'message_name' => 'changeUserPassword',
             'payload' => [
-                'password' => $newPassword
+                'password' => $password,
+                'new_password' => $newPassword
             ]
         ];
 
@@ -107,14 +110,15 @@ class UserCommandsTest extends CommandTestBaseClass
      * @depends aUserCanChangePassword
      * @param array $credentials
      * @return array
+     * @throws \Exception
      */
-    public function aUserCanChangeProfile(array $credentials)
+    public function aUserCanChangeProfile(array $credentials): array
     {
         $username = $credentials['username'];
         $password = $credentials['password'];
 
         $profile = [
-            'test123' => sprintf('pr_%s', rand(100000, 1000000 - 1)),
+            'test123' => sprintf('pr_%s', random_int(100000, 1000000 - 1)),
             'def' => 'lskdaölkd'
         ];
         $command = [
@@ -142,7 +146,7 @@ class UserCommandsTest extends CommandTestBaseClass
      * @param array $credentials
      * @return array
      */
-    public function aUserCanBeArchived(array $credentials)
+    public function aUserCanBeArchived(array $credentials): array
     {
         $username = $credentials['username'];
         $password = $credentials['password'];
@@ -170,7 +174,7 @@ class UserCommandsTest extends CommandTestBaseClass
      * @param array $credentials
      * @return array
      */
-    public function aUserCanBeReactivated(array $credentials)
+    public function aUserCanBeReactivated(array $credentials): array
     {
         $username = $credentials['username'];
         $password = $credentials['password'];
@@ -198,7 +202,7 @@ class UserCommandsTest extends CommandTestBaseClass
      * @param array $credentials
      * @throws \Exception
      */
-    public function aUserCanBeDeletedByAnAdmin(array $credentials)
+    public function aUserCanBeDeletedByAnAdmin(array $credentials): void
     {
         static::createClient();
 

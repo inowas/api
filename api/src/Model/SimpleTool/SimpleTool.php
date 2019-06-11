@@ -28,7 +28,7 @@ class SimpleTool extends ToolInstance
         $this->data = $data;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $arr = parent::toArray();
         $arr['data'] = $this->data;

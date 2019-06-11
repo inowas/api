@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use TweedeGolf\PrometheusClient\CollectorRegistry;
 use TweedeGolf\PrometheusClient\PrometheusException;
 
@@ -47,22 +48,19 @@ class ModflowModelController
      */
     public function index(string $id): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
+        /** @var string $permissions */
+        $permissions = $modflowModel->getPermissions($user);
 
         if ($permissions === '---') {
             return new JsonResponse([], 403);
@@ -90,24 +88,18 @@ class ModflowModelController
      */
     public function indexDiscretization(string $id): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -123,24 +115,18 @@ class ModflowModelController
      */
     public function indexSoilmodel(string $id): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -157,25 +143,18 @@ class ModflowModelController
      */
     public function indexBoundaries(string $id): JsonResponse
     {
-        /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
-        $this->writeMetrics('/modflowmodels');
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
 
+        /** @var User $user */
+        $user = $token->getUser();
+
+        $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -191,24 +170,18 @@ class ModflowModelController
      */
     public function indexSoilmodelLayer(string $id, string $layerId): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -235,24 +208,18 @@ class ModflowModelController
      */
     public function indexBoundaryDetails(string $id, string $bId): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -267,24 +234,18 @@ class ModflowModelController
      */
     public function indexCalculation(string $id): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -300,24 +261,19 @@ class ModflowModelController
      */
     public function indexTransport(string $id): JsonResponse
     {
+
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 
@@ -333,24 +289,18 @@ class ModflowModelController
      */
     public function indexPackages(string $id): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $this->writeMetrics('/modflowmodels');
 
         /** @var ModflowModel $modflowModel */
         $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($modflowModel->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($modflowModel->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
-        if ($permissions === '---') {
+        if ($modflowModel->getPermissions($user) === '---') {
             return new JsonResponse([], 403);
         }
 

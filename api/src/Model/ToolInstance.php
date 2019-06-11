@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+
 
 /**
  * @ORM\MappedSuperclass()
@@ -13,53 +16,73 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class ToolInstance implements \JsonSerializable
 {
     /**
+     * @var string
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="string", unique=true, nullable=false)
      */
     protected $id;
 
     /**
+     * @var User
+     *
      * @ORM\ManyToOne(targetEntity="App\Model\User")
      * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
     protected $user;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="tool", type="string", length=36, nullable=false)
      */
     protected $tool;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     protected $description;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(name="is_public", type="boolean", nullable=false)
      */
     protected $isPublic;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(name="is_archived", type="boolean", nullable=false)
      */
     protected $isArchived;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(name="is_scenario", type="boolean", nullable=false)
      */
     protected $isScenario;
 
     /**
+     * @var DateTimeImmutable
+     *
      * @ORM\Column(name="created_at", type="datetime_immutable", nullable=false)
      */
     protected $createdAt;
 
     /**
+     * @var DateTimeImmutable
+     *
      * @ORM\Column(name="updated_at", type="datetime_immutable", nullable=false)
      */
     protected $updatedAt;
@@ -98,6 +121,9 @@ abstract class ToolInstance implements \JsonSerializable
         $this->id = $id;
     }
 
+    /**
+     * @return string
+     */
     public function tool(): string
     {
         return $this->tool;
@@ -108,9 +134,9 @@ abstract class ToolInstance implements \JsonSerializable
         return ToolMetadata::fromParams($this->name, $this->description, $this->isPublic);
     }
 
-    public function userId(): string
+    public function userId(): ?string
     {
-        return $this->getUser()->getId()->toString();
+        return $this->getUser() instanceOf User ? $this->getUser()->getId()->toString() : null;
     }
 
     public function getUser(): ?User
@@ -130,6 +156,9 @@ abstract class ToolInstance implements \JsonSerializable
         $this->isPublic = $metadata->isPublic();
     }
 
+    /**
+     * @return string
+     */
     public function name(): string
     {
         return $this->name;
@@ -150,7 +179,7 @@ abstract class ToolInstance implements \JsonSerializable
         return $this->isPublic;
     }
 
-    public function isArchived()
+    public function isArchived(): bool
     {
         return $this->isArchived;
     }
@@ -160,7 +189,7 @@ abstract class ToolInstance implements \JsonSerializable
         $this->isArchived = $isArchived;
     }
 
-    public function isScenario()
+    public function isScenario(): bool
     {
         return $this->isScenario;
     }
@@ -170,22 +199,22 @@ abstract class ToolInstance implements \JsonSerializable
         $this->isScenario = $isScenario;
     }
 
-    public function createdAt(): \DateTimeImmutable
+    public function createdAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    public function setCreatedAt(DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeImmutable
+    public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -197,21 +226,24 @@ abstract class ToolInstance implements \JsonSerializable
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateTimestamps(): void
     {
-        $this->setUpdatedAt(new \DateTimeImmutable('now'));
+        $this->setUpdatedAt(new DateTimeImmutable('now'));
         if ($this->createdAt === null) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
+            $this->setCreatedAt(new DateTimeImmutable('now'));
         }
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
-            'userId' => $this->getUser()->getId()->toString(),
+            'userId' => $this->userId(),
             'tool' => $this->tool,
             'name' => $this->name,
             'description' => $this->description,
@@ -226,5 +258,20 @@ abstract class ToolInstance implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return $this->toArray();
+    }
+
+    public function getPermissions(?User $user): string
+    {
+        $permissions = '---';
+
+        if ($this->isPublic()) {
+            $permissions = 'r--';
+        }
+
+        if ($user instanceof User && $this->userId() === $user->getId()->toString()) {
+            $permissions = 'rwx';
+        }
+
+        return $permissions;
     }
 }

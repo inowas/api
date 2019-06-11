@@ -8,11 +8,16 @@ use App\Model\Command;
 
 class ChangeUserPasswordCommand extends Command
 {
+    /** @var string */
     private $userId;
+
+    /** @var string */
     private $password;
+
+    /** @var string */
     private $newPassword;
 
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): self
     {
         $self = new self();
         $self->userId = $payload['user_id'] ?? null;

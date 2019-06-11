@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use TweedeGolf\PrometheusClient\CollectorRegistry;
 use TweedeGolf\PrometheusClient\PrometheusException;
 
@@ -49,8 +50,12 @@ class ToolDetailsController
      */
     public function __invoke(Request $request, string $tool, string $id): JsonResponse
     {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
+
         $metric = $this->collectorRegistry->getCounter('http_requests_total');
         $metric->inc(1, ['handler' => sprintf('/tools/%s', $tool)]);
 
@@ -68,16 +73,8 @@ class ToolDetailsController
         /** @var ToolInstance $toolInstance */
         $toolInstance = $this->entityManager->getRepository($toolClass)->findOneBy(['id' => $id]);
 
-        $permissions = '---';
-
-        if ($toolInstance->isPublic()) {
-            $permissions = 'r--';
-        }
-
-        if ($toolInstance->userId() === $user->getId()->toString()) {
-            $permissions = 'rwx';
-        }
-
+        /** @var string $permissions */
+        $permissions = $toolInstance->getPermissions($user);
         if ($permissions === '---') {
             return new JsonResponse([]);
         }

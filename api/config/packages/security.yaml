@@ -3,7 +3,7 @@ security:
         App\Model\User:
             algorithm: bcrypt
             cost: 12
-            
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         db_provider:
@@ -15,7 +15,7 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-            
+
         login:
             pattern:  ^/v3/login
             stateless: true
@@ -24,16 +24,16 @@ security:
                 check_path:               /v3/login_check
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-                
+
         register:
             pattern:  ^/v3/register
             stateless: true
             anonymous: true
-            
+
         docs:
             pattern:  ^/v3/docs
             stateless: true
-            anonymous: true            
+            anonymous: true
 
         api:
             pattern:   ^/v3
@@ -41,7 +41,7 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-            
+
         main:
             anonymous: true
 
@@ -61,8 +61,8 @@ security:
         - { path: ^/v3/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v3/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v3/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/v3,       roles: IS_AUTHENTICATED_FULLY }
-          
+        - { path: ^/v3,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
     role_hierarchy:
         ROLE_ADMIN:       [ROLE_USER, ROLE_NM_MF]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]

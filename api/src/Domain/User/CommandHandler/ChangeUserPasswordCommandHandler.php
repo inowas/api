@@ -13,6 +13,8 @@ use App\Domain\User\Event\UserPasswordHasBeenChanged;
 use App\Domain\User\Projection\UserProjector;
 use App\Model\User;
 use App\Service\UserManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ChangeUserPasswordCommandHandler
@@ -40,15 +42,15 @@ class ChangeUserPasswordCommandHandler
 
     /**
      * @param ChangeUserPasswordCommand $command
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Exception
+     * @throws NonUniqueResultException
+     * @throws Exception
      */
     public function __invoke(ChangeUserPasswordCommand $command)
     {
         $isAdmin = $command->metadata()['is_admin'];
         $userId = $command->metadata()['user_id'];
 
-        if (($isAdmin && $command->userId())) {
+        if ($isAdmin && $command->userId()) {
             $userId = $command->userId();
         }
 
@@ -56,16 +58,14 @@ class ChangeUserPasswordCommandHandler
         $user = $this->userManager->findUserById($userId);
 
         if (!$user instanceof User) {
-            throw new \Exception('User not found');
+            throw new Exception('User not found');
         }
 
-        if (!$isAdmin) {
-            if (!$this->passwordEncoder->isPasswordValid($user, $command->password())) {
-                throw new PasswordInvalidException('The current password is wrong.', 400);
-            };
+        if (!$isAdmin && !$this->passwordEncoder->isPasswordValid($user, $command->password())) {
+            throw new PasswordInvalidException('The current password is wrong.', 400);
         }
 
-        $newPassword = $this->userManager->encryptPassword($command->password());
+        $newPassword = $this->userManager->encryptPassword($command->newPassword());
 
         $aggregateId = $userId;
         $event = UserPasswordHasBeenChanged::fromParams($aggregateId, $newPassword);

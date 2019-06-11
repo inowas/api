@@ -4,9 +4,7 @@ namespace App\Tests\Controller;
 
 class UserAuthenticationTest extends CommandTestBaseClass
 {
-
-
-    public function provider()
+    public function provider(): array
     {
         return [
             ['admin', 'admin_pw', ['ROLE_ADMIN'], 200],
@@ -22,7 +20,7 @@ class UserAuthenticationTest extends CommandTestBaseClass
      * @param $statusCode
      * @throws \Exception
      */
-    public function testAuthentication($username, $password, $roles, $statusCode)
+    public function testAuthentication($username, $password, $roles, $statusCode): void
     {
         $client = static::createClient();
         $this->createUser($username, $password, $roles);

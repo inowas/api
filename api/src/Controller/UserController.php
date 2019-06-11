@@ -35,6 +35,7 @@ class UserController
      */
     public function __invoke(Request $request): JsonResponse
     {
+        die();
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
 

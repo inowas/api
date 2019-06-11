@@ -11,7 +11,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
      * @test
      * @throws \Exception
      */
-    public function sendCreateSimpleToolCommand()
+    public function sendCreateSimpleToolCommand(): void
     {
         $user = $this->createRandomUser();
         $toolInstanceId = Uuid::uuid4()->toString();
@@ -48,7 +48,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
      * @depends sendCreateSimpleToolCommand
      * @throws \Exception
      */
-    public function sendCloneToolInstanceCommand()
+    public function sendCloneToolInstanceCommand(): void
     {
         $user = $this->createRandomUser();
         $simpleTool = $this->createSimpleTool($user);
@@ -74,20 +74,18 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         $clone = self::$container->get('doctrine')->getRepository(SimpleTool::class)->findOneById($cloneId);
 
         $this->assertEquals($simpleTool->tool(), $clone->tool());
-        $this->assertEquals($simpleTool->name(), $clone->name());
+        $this->assertEquals($simpleTool->name().' (clone)', $clone->name());
         $this->assertEquals($simpleTool->description(), $clone->description());
         $this->assertEquals($simpleTool->isPublic(), $clone->isPublic());
         $this->assertEquals($simpleTool->data(), $clone->data());
         $this->assertEquals($user2->getId()->toString(), $clone->userId());
     }
 
-
-
     /**
      * @test
      * @throws \Exception
      */
-    public function sendUpdateSimpleToolCommand()
+    public function sendUpdateSimpleToolCommand(): void
     {
         $user = $this->createRandomUser();
         $simpleTool = $this->createSimpleTool($user);
@@ -123,7 +121,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
      * @depends sendCreateSimpleToolCommand
      * @throws \Exception
      */
-    public function sendUpdateSimpleToolMetadataCommand()
+    public function sendUpdateSimpleToolMetadataCommand(): void
     {
         $user = $this->createRandomUser();
         $simpleTool = $this->createSimpleTool($user);
@@ -150,7 +148,6 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
         $this->assertEquals($command['payload']['description'], $simpleTool->description());
         $this->assertEquals($command['payload']['public'], $simpleTool->isPublic());
         $this->assertEquals($user->getId()->toString(), $simpleTool->userId());
-
     }
 
     /**
@@ -158,7 +155,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
      * @depends sendCreateSimpleToolCommand
      * @throws \Exception
      */
-    public function sendUpdateSimpleToolDataCommand()
+    public function sendUpdateSimpleToolDataCommand(): void
     {
         $user = $this->createRandomUser();
         $simpleTool = $this->createSimpleTool($user);
@@ -187,7 +184,7 @@ class SimpleToolCommandsTest extends CommandTestBaseClass
      * @test
      * @throws \Exception
      */
-    public function sendDeleteToolInstanceCommand()
+    public function sendDeleteToolInstanceCommand(): void
     {
         $user = $this->createRandomUser();
         $simpleTool = $this->createSimpleTool($user);
