@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use TweedeGolf\PrometheusClient\CollectorRegistry;
 use TweedeGolf\PrometheusClient\PrometheusException;
 
@@ -35,9 +36,11 @@ class UserController
      */
     public function __invoke(Request $request): JsonResponse
     {
-        die();
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
 
         $metric = $this->collectorRegistry->getCounter('http_requests_total');
         $metric->inc(1, ['handler' => '/user']);
