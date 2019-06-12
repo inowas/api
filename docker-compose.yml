@@ -53,7 +53,7 @@ services:
     image: google/cadvisor:latest
     restart: on-failure
     labels:
-      - "traefik.docker.network=traefik_web"
+      - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.basic.frontend.rule=Host:cadvisor.${HOST_URL}"
       - "traefik.basic.port=8080"
