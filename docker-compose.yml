@@ -49,25 +49,6 @@ services:
     volumes:
       - ./docker/db/data:/var/lib/postgresql/data:rw
 
-  cadvisor:
-    image: google/cadvisor:latest
-    restart: on-failure
-    labels:
-      - "traefik.docker.network=web"
-      - "traefik.enable=true"
-      - "traefik.basic.frontend.rule=Host:cadvisor.${HOST_URL}"
-      - "traefik.basic.port=8080"
-      - "traefik.basic.protocol=http"
-    networks:
-      - web
-      - default
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-
 networks:
   web:
     external: true
