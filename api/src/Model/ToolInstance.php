@@ -260,7 +260,7 @@ abstract class ToolInstance implements \JsonSerializable
         return $this->toArray();
     }
 
-    public function getPermissions(?User $user): string
+    public function getPermissions($user): string
     {
         $permissions = '---';
 
