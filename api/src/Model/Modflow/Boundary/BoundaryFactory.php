@@ -17,7 +17,6 @@ class BoundaryFactory
     /**
      * @param array $arr
      * @return RiverBoundary|WellBoundary
-     * @throws \Exception
      */
     public static function fromArray(array $arr): ?BoundaryInterface
     {
@@ -29,6 +28,9 @@ class BoundaryFactory
             $type = $geoJson->getProperties()['type'];
 
             switch ($type) {
+                case 'hob':
+                    return HeadObservationWell::fromArray($arr);
+                    break;
                 case 'wel':
                     return WellBoundary::fromArray($arr);
                     break;

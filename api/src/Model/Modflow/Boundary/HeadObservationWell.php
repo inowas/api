@@ -6,14 +6,14 @@ use GeoJson\Feature\Feature;
 use GeoJson\Geometry\Geometry;
 use RuntimeException;
 
-final class RechargeBoundary extends Feature implements BoundaryInterface
+final class HeadObservationWell extends Feature implements BoundaryInterface
 {
 
-    public const TYPE = 'rch';
+    public const TYPE = 'hob';
 
     /**
      * @param array $arr
-     * @return RechargeBoundary
+     * @return HeadObservationWell
      */
     public static function fromArray(array $arr): self
     {
@@ -57,11 +57,6 @@ final class RechargeBoundary extends Feature implements BoundaryInterface
     public function spValues(): array
     {
         return $this->getProperties()['sp_values'];
-    }
-
-    public function wellType(): string
-    {
-        return $this->getProperties()['well_type'];
     }
 
     public function type(): string

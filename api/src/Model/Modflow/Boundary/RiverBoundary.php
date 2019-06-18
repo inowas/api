@@ -8,11 +8,12 @@ use GeoJson\Feature\Feature;
 use GeoJson\Feature\FeatureCollection;
 use GeoJson\GeoJson;
 use GeoJson\Geometry\Geometry;
+use RuntimeException;
 
 final class RiverBoundary extends FeatureCollection implements BoundaryInterface
 {
 
-    const TYPE = 'riv';
+    public const TYPE = 'riv';
 
     /** @var Feature */
     private $river;
@@ -23,7 +24,6 @@ final class RiverBoundary extends FeatureCollection implements BoundaryInterface
     /**
      * @param array $arr
      * @return self
-     * @throws \Exception
      */
     public static function fromArray(array $arr): self
     {
@@ -35,7 +35,6 @@ final class RiverBoundary extends FeatureCollection implements BoundaryInterface
     /**
      * RiverBoundary constructor.
      * @param $features
-     * @throws \Exception
      */
     public function __construct($features)
     {
@@ -53,7 +52,7 @@ final class RiverBoundary extends FeatureCollection implements BoundaryInterface
         }
 
         if (null === $this->river) {
-            throw new \Exception('One Feature has to contain a property from type "riv"');
+            throw new RuntimeException('One Feature has to contain a property from type "riv"');
         }
     }
 

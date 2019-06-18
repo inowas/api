@@ -4,16 +4,16 @@ namespace App\Model\Modflow\Boundary;
 
 use GeoJson\Feature\Feature;
 use GeoJson\Geometry\Geometry;
+use RuntimeException;
 
 final class WellBoundary extends Feature implements BoundaryInterface
 {
 
-    const TYPE = 'wel';
+    public const TYPE = 'wel';
 
     /**
      * @param array $arr
      * @return WellBoundary
-     * @throws \Exception
      */
     public static function fromArray(array $arr): self
     {
@@ -21,7 +21,7 @@ final class WellBoundary extends Feature implements BoundaryInterface
         $self = self::jsonUnserialize($arr);
 
         if (!$self instanceof Feature) {
-            throw new \Exception('Invalid json, expecting type feature.');
+            throw new RuntimeException('Invalid json, expecting type feature.');
         }
 
         /** @noinspection PhpParamsInspection */

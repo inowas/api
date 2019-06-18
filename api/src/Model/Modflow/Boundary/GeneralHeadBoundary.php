@@ -8,11 +8,12 @@ use GeoJson\Feature\Feature;
 use GeoJson\Feature\FeatureCollection;
 use GeoJson\GeoJson;
 use GeoJson\Geometry\Geometry;
+use RuntimeException;
 
 final class GeneralHeadBoundary extends FeatureCollection implements BoundaryInterface
 {
 
-    const TYPE = 'ghb';
+    public const TYPE = 'ghb';
 
     /** @var Feature */
     private $generalHeadBoundary;
@@ -23,7 +24,6 @@ final class GeneralHeadBoundary extends FeatureCollection implements BoundaryInt
     /**
      * @param array $arr
      * @return self
-     * @throws \Exception
      */
     public static function fromArray(array $arr): self
     {
@@ -35,7 +35,6 @@ final class GeneralHeadBoundary extends FeatureCollection implements BoundaryInt
     /**
      * RiverBoundary constructor.
      * @param $features
-     * @throws \Exception
      */
     public function __construct($features)
     {
@@ -53,7 +52,7 @@ final class GeneralHeadBoundary extends FeatureCollection implements BoundaryInt
         }
 
         if (null === $this->generalHeadBoundary) {
-            throw new \Exception('One Feature has to contain a property from type "chd"');
+            throw new RuntimeException('One Feature has to contain a property from type "chd"');
         }
     }
 
