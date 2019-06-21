@@ -468,75 +468,35 @@
     "hobPackage": {
       "type": "object",
       "properties": {
-        "_meta": {
-          "type": "object"
+        "iuhobsv": {},
+        "hobdry": {
+          "type": "number"
         },
         "tomulth": {
           "type": "number"
         },
-        "obsnam": {
-          "type": "string"
-        },
-        "layer": {
-          "type": "number"
-        },
-        "row": {
-          "type": "number"
-        },
-        "column": {
-          "type": "number"
-        },
-        "irefsp": {
-          "oneOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "roff": {
-          "type": "number"
-        },
-        "coff": {
-          "type": "string"
-        },
-        "itt": {
-          "type": "null"
-        },
-        "mlay": {
-          "oneOf": [
-            {
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "time_series_data": {
-          "oneOf": [
-            {
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "names": {
-          "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
+        "obs_data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "layer": {
+                "type": "number"
+              },
+              "row": {
+                "type": "number"
+              },
+              "column": {
+                "type": "number"
+              },
+              "time_series_data": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
               }
-            },
-            {
-              "type": "null"
             }
-          ]
+          }
         }
       }
     },
