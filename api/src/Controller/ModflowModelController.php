@@ -282,6 +282,34 @@ class ModflowModelController
     }
 
     /**
+     * @Route("/modflowmodels/{id}/variableDensity", name="modflowmodel_variable_density", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     * @throws PrometheusException
+     */
+    public function indexVariableDensity(string $id): JsonResponse
+    {
+
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
+        /** @var User $user */
+        $user = $token->getUser();
+
+        $this->writeMetrics('/modflowmodels');
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        if ($modflowModel->getPermissions($user) === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        $result = $modflowModel->variableDensity()->toArray();
+        return new JsonResponse($result);
+    }
+
+    /**
      * @Route("/modflowmodels/{id}/packages", name="modflowmodel_packages", methods={"GET"})
      * @param string $id
      * @return JsonResponse

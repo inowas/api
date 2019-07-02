@@ -35,6 +35,11 @@ class ModflowModel extends ToolInstance
     private $transport = [];
 
     /**
+     * @ORM\Column(name="variable_density", type="json_array", nullable=true)
+     */
+    private $variableDensity = [];
+
+    /**
      * @ORM\Column(name="calculation", type="json_array", nullable=false)
      */
     private $calculation = [];
@@ -56,6 +61,7 @@ class ModflowModel extends ToolInstance
         $self->soilmodel = $arr['soilmodel'] ?? [];
         $self->boundaries = $arr['boundaries'] ?? [];
         $self->transport = $arr['transport'] ?? [];
+        $self->variableDensity = $arr['variableDensity'] ?? [];
         $self->calculation = $arr['calculation'] ?? [];
         $self->packages = $arr['packages'] ?? [];
         return $self;
@@ -92,6 +98,19 @@ class ModflowModel extends ToolInstance
     public function setTransport(Transport $transport): void
     {
         $this->transport = $transport->toArray();
+    }
+
+    public function variableDensity(): VariableDensity
+    {
+        if (null === $this->variableDensity) {
+            $this->variableDensity = [];
+        }
+        return VariableDensity::fromArray($this->variableDensity);
+    }
+
+    public function setVariableDensity(VariableDensity $variableDensity): void
+    {
+        $this->variableDensity = $variableDensity->toArray();
     }
 
     public function calculation(): Calculation

@@ -36,6 +36,7 @@ use App\Domain\ToolInstance\Command\UpdateToolInstanceCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceDataCommand;
 use App\Domain\ToolInstance\Command\UpdateToolInstanceMetadataCommand;
 use App\Domain\ToolInstance\Command\UpdateTransportCommand;
+use App\Domain\ToolInstance\Command\UpdateVariableDensityCommand;
 use App\Model\User;
 use App\Model\Command;
 use App\Domain\User\Command\ArchiveUserCommand;
@@ -122,6 +123,7 @@ final class MessageBoxController
             UpdateModflowModelDiscretizationCommand::class,
             UpdateModflowModelMetadataCommand::class,
             UpdateTransportCommand::class,
+            UpdateVariableDensityCommand::class,
             UpdateSoilmodelPropertiesCommand::class,
             UpdateStressperiodsCommand::class,
 
@@ -135,6 +137,7 @@ final class MessageBoxController
             DeleteScenarioAnalysisCommand::class,
             DeleteScenarioCommand::class
         ];
+
         $this->setAvailableCommands($availableCommands);
 
         try {
@@ -166,7 +169,7 @@ final class MessageBoxController
         /** @var Command $command */
         $command = $commandClass::fromPayload($payload);
         $command->withAddedMetadata('user_id', $user->getId()->toString());
-        $command->withAddedMetadata('is_admin', in_array('ROLE_ADMIN', $user->getRoles()));
+        $command->withAddedMetadata('is_admin', in_array('ROLE_ADMIN', $user->getRoles(), true));
 
         try {
             $this->commandBus->dispatch($command);
@@ -198,17 +201,17 @@ final class MessageBoxController
         $body = json_decode($request->getContent(), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception('Invalid JSON received.');
+            throw new RuntimeException('Invalid JSON received.');
         }
 
         $message_name = $body['message_name'] ?? null;
 
         if (!$message_name) {
-            throw new \Exception(sprintf('Parameter message_name not given or null.'));
+            throw new RuntimeException(sprintf('Parameter message_name not given or null.'));
         }
 
         if (!array_key_exists($message_name, $this->availableCommands)) {
-            throw new \Exception(
+            throw new RuntimeException(
                 sprintf(
                     'MessageName: %s not in the list of available commands. Available commands are: %s.',
                     $message_name, implode(', ', array_keys($this->availableCommands))
@@ -219,7 +222,7 @@ final class MessageBoxController
         $payload = $body['payload'] ?? null;
 
         if (null === $payload) {
-            throw new \Exception('Parameter payload expected.');
+            throw new RuntimeException('Parameter payload expected.');
         }
     }
 
