@@ -8,7 +8,8 @@
     "project",
     "model_id",
     "mf",
-    "mt"
+    "mt",
+    "swt"
   ],
   "properties": {
     "version": {
@@ -29,6 +30,9 @@
     },
     "mt": {
       "$ref": "./mtPackages.json"
+    },
+    "swt": {
+      "$ref": "./swtPackages.json"
     }
   }
 }

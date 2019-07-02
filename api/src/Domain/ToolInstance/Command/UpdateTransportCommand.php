@@ -9,7 +9,10 @@ use App\Model\Modflow\Transport;
 
 class UpdateTransportCommand extends Command
 {
+    /** @var string */
     private $id;
+
+    /** @var array */
     private $transport;
 
     /**

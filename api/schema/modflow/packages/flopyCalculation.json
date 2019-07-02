@@ -40,6 +40,9 @@
         },
         "mt": {
           "$ref": "./mtPackages.json"
+        },
+        "swt": {
+          "$ref": "./swtPackages.json"
         }
       },
       "additionalProperties": false

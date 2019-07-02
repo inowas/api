@@ -492,7 +492,10 @@
               "time_series_data": {
                 "type": "array",
                 "items": {
-                  "type": "number"
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
                 }
               }
             }
