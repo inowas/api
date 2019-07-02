@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\ToolInstance\CommandHandler;
 
-use App\Domain\ToolInstance\Command\UpdateTransportCommand;
 use App\Domain\ToolInstance\Command\UpdateVariableDensityCommand;
 use App\Model\Modflow\ModflowModel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,7 +39,7 @@ class UpdateVariableDensityCommandHandler
             throw new RuntimeException('The Model cannot be updated due to permission problems.');
         }
 
-        $modflowModel->setTransport($command->transport());
+        $modflowModel->setVariableDensity($command->variableDensity());
         $this->entityManager->persist($modflowModel);
         $this->entityManager->flush();
     }
