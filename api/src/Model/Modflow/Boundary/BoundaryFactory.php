@@ -31,11 +31,14 @@ class BoundaryFactory
                 case 'hob':
                     return HeadObservationWell::fromArray($arr);
                     break;
-                case 'wel':
-                    return WellBoundary::fromArray($arr);
+                case 'evt':
+                    return EvapotranspirationBoundary::fromArray($arr);
                     break;
                 case 'rch':
                     return RechargeBoundary::fromArray($arr);
+                    break;
+                case 'wel':
+                    return WellBoundary::fromArray($arr);
                     break;
                 default:
                     return null;
@@ -51,6 +54,9 @@ class BoundaryFactory
                 switch ($type) {
                     case 'chd':
                         return ConstantHeadBoundary::fromArray($arr);
+                        break;
+                    case 'drn':
+                        return DrainageBoundary::fromArray($arr);
                         break;
                     case 'ghb':
                         return GeneralHeadBoundary::fromArray($arr);
