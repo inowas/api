@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "pattern": "^Feature$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]{3,255}$"
+    },
+    "geometry": {
+      "$ref": "../../geojson/polygon.json"
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^evt$"
+        },
+        "layers": {
+          "$ref": "../../modflow/layers.json"
+        },
+        "cells": {
+          "$ref": "../../modflow/cells.json"
+        },
+        "nevtop": {
+            "type": "number"
+        },
+        "sp_values": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "description": "0: maximum evt, 1: surface evt, 2: depth evt",
+              "type": "number",
+              "minItems": 1,
+              "maxItems": 1
+            }
+          }
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "cells",
+        "layers",
+        "sp_values"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "geometry",
+    "properties"
+  ]
+}

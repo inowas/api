@@ -2,6 +2,8 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "oneOf" : [
         {"$ref": "./constantHeadBoundary.json"},
+        {"$ref": "./drainageBoundary.json"},
+        {"$ref": "./evapotranspirationBoundary.json"},
         {"$ref": "./generalHeadBoundary.json"},
         {"$ref": "./rechargeBoundary.json"},
         {"$ref": "./riverBoundary.json"},
