@@ -7,7 +7,6 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "api-platform/api-pack": "^1.1",
-        "api-platform/core": "^2.4@beta",
         "beberlei/assert": "^3.2",
         "guzzlehttp/guzzle": "^6.3",
         "jmikola/geojson": "^1.0",
@@ -16,19 +15,21 @@
         "ramsey/uuid-doctrine": "^1.5",
         "superbalist/flysystem-google-storage": "^7.2",
         "swaggest/json-schema": "^0.12.7",
-        "symfony/console": "4.2.*",
-        "symfony/dotenv": "4.2.*",
+        "symfony/console": "4.3.*",
+        "symfony/dotenv": "4.3.*",
         "symfony/flex": "^1.1",
-        "symfony/framework-bundle": "4.2.*",
+        "symfony/framework-bundle": "4.3.*",
         "symfony/mercure-bundle": "*",
-        "symfony/messenger": "4.2.*",
-        "symfony/yaml": "4.2.*",
+        "symfony/messenger": "4.3.*",
+        "symfony/yaml": "4.3.*",
         "tweedegolf/prometheus-bundle": "^0.3.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "api-platform/schema-generator": "^2.1",
-        "symfony/browser-kit": "4.2.*",
-        "symfony/phpunit-bridge": "4.2.*",
+        "symfony/browser-kit": "4.3.*",
+        "symfony/maker-bundle": "^1.11",
+        "symfony/phpunit-bridge": "4.3.*",
         "symfony/profiler-pack": "^1.0"
     },
     "config": {
@@ -73,7 +74,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "4.2.*"
+            "require": "4.3.*"
         }
     }
 }
