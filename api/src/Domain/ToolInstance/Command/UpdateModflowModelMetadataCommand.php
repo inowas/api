@@ -6,13 +6,21 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\ToolMetadata;
+use Exception;
 
 class UpdateModflowModelMetadataCommand extends Command
 {
 
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $name;
+
+    /** @var string */
     private $description;
+
+    /** @var bool */
     private $public;
 
     /**
@@ -26,7 +34,7 @@ class UpdateModflowModelMetadataCommand extends Command
     /**
      * @param array $payload
      * @return UpdateModflowModelMetadataCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): UpdateModflowModelMetadataCommand
     {

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class DeleteToolInstanceCommand extends Command
 {
 
+    /** @var string */
     private $id;
 
     /**
@@ -22,7 +24,7 @@ class DeleteToolInstanceCommand extends Command
     /**
      * @param string $id
      * @return DeleteToolInstanceCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromParams(string $id): DeleteToolInstanceCommand
     {
@@ -34,7 +36,7 @@ class DeleteToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return DeleteToolInstanceCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): DeleteToolInstanceCommand
     {

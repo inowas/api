@@ -6,11 +6,15 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\Modflow\Discretization;
+use Exception;
 
 class UpdateModflowModelDiscretizationCommand extends Command
 {
 
+    /** @var string */
     private $id;
+
+    /** @var array */
     private $discretization;
 
     /**
@@ -24,7 +28,7 @@ class UpdateModflowModelDiscretizationCommand extends Command
     /**
      * @param array $payload
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {

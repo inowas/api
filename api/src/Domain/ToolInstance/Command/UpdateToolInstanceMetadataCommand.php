@@ -6,13 +6,21 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\ToolMetadata;
+use Exception;
 
 class UpdateToolInstanceMetadataCommand extends Command
 {
 
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $name;
+
+    /** @var string */
     private $description;
+
+    /** @var bool */
     private $public;
 
     /**
@@ -29,7 +37,7 @@ class UpdateToolInstanceMetadataCommand extends Command
      * @param string $description
      * @param bool $public
      * @return UpdateToolInstanceMetadataCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromParams(string $id, string $name, string $description, bool $public): UpdateToolInstanceMetadataCommand
     {
@@ -44,7 +52,7 @@ class UpdateToolInstanceMetadataCommand extends Command
     /**
      * @param array $payload
      * @return UpdateToolInstanceMetadataCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): UpdateToolInstanceMetadataCommand
     {

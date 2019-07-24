@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class CloneLayerCommand extends Command
 {
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $layerId;
+
+    /** @var string */
     private $newLayerId;
 
     /**
@@ -23,14 +29,14 @@ class CloneLayerCommand extends Command
     /**
      * @param array $payload
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {
         $self = new self();
         $self->id = $payload['id'];
-        $self->layerId = $payload['layer_id'];;
-        $self->newLayerId = $payload['new_layer_id'];;
+        $self->layerId = $payload['layer_id'];
+        $self->newLayerId = $payload['new_layer_id'];
         return $self;
     }
 

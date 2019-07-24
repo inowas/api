@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class CloneModflowModelCommand extends Command
 {
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $newId;
+
+    /** @var bool */
     private $isTool;
 
     /**
@@ -23,9 +29,9 @@ class CloneModflowModelCommand extends Command
     /**
      * @param array $payload
      * @return CloneModflowModelCommand
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): CloneModflowModelCommand
     {
         $self = new self();
         $self->id = $payload['id'];

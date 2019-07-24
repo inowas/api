@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class CloneToolInstanceCommand extends Command
 {
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $baseId;
 
     /**
@@ -22,13 +26,13 @@ class CloneToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return CloneToolInstanceCommand
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): CloneToolInstanceCommand
     {
         $self = new self();
         $self->id = $payload['id'];
-        $self->baseId = $payload['base_id'];;
+        $self->baseId = $payload['base_id'];
         return $self;
     }
 

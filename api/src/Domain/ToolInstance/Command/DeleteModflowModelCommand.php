@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class DeleteModflowModelCommand extends Command
 {
-
+    /** @var string */
     private $id;
 
     /**
@@ -22,7 +23,7 @@ class DeleteModflowModelCommand extends Command
     /**
      * @param string $id
      * @return DeleteModflowModelCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromParams(string $id): self
     {
@@ -34,7 +35,7 @@ class DeleteModflowModelCommand extends Command
     /**
      * @param array $payload
      * @return DeleteModflowModelCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {

@@ -6,17 +6,27 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\ToolMetadata;
+use Exception;
 
 class CreateToolInstanceCommand extends Command
 {
 
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $tool;
 
+    /** @var string */
     private $name;
+
+    /** @var string */
     private $description;
+
+    /** @var bool */
     private $public;
 
+    /** @var array */
     private $data;
 
     /**
@@ -35,7 +45,7 @@ class CreateToolInstanceCommand extends Command
      * @param bool $public
      * @param array $data
      * @return CreateToolInstanceCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromParams(string $id, string $tool, string $name, string $description, bool $public, array $data = []): CreateToolInstanceCommand
     {
@@ -52,7 +62,7 @@ class CreateToolInstanceCommand extends Command
     /**
      * @param array $payload
      * @return CreateToolInstanceCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): CreateToolInstanceCommand
     {

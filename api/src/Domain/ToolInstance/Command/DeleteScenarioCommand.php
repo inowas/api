@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class DeleteScenarioCommand extends Command
 {
-
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $scenarioId;
 
     /**
@@ -23,7 +26,7 @@ class DeleteScenarioCommand extends Command
     /**
      * @param array $payload
      * @return DeleteScenarioCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): DeleteScenarioCommand
     {

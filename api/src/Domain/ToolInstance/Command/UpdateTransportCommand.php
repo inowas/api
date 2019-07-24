@@ -6,6 +6,7 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\Modflow\Transport;
+use Exception;
 
 class UpdateTransportCommand extends Command
 {
@@ -26,7 +27,7 @@ class UpdateTransportCommand extends Command
     /**
      * @param array $payload
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {

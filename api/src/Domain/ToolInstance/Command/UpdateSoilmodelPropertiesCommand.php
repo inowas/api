@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class UpdateSoilmodelPropertiesCommand extends Command
 {
-
+    /** @var string */
     private $id;
+
+    /** @var array */
     private $properties;
 
     /**
@@ -23,7 +26,7 @@ class UpdateSoilmodelPropertiesCommand extends Command
     /**
      * @param array $payload
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {

@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
+use Exception;
 
 class UpdateToolInstanceDataCommand extends Command
 {
 
+    /** @var string */
     private $id;
+
+    /** @var array */
     private $data;
 
     /**
@@ -24,7 +28,7 @@ class UpdateToolInstanceDataCommand extends Command
      * @param string $id
      * @param array $data
      * @return UpdateToolInstanceDataCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromParams(string $id, array $data): UpdateToolInstanceDataCommand
     {
@@ -37,7 +41,7 @@ class UpdateToolInstanceDataCommand extends Command
     /**
      * @param array $payload
      * @return UpdateToolInstanceDataCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): UpdateToolInstanceDataCommand
     {

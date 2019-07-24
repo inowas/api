@@ -7,11 +7,14 @@ namespace App\Domain\ToolInstance\Command;
 use App\Model\Command;
 use App\Model\Modflow\Boundary\BoundaryFactory;
 use App\Model\Modflow\Boundary\BoundaryInterface;
+use Exception;
 
 class UpdateBoundaryCommand extends Command
 {
-
+    /** @var string */
     private $id;
+
+    /** @var array */
     private $boundary;
 
     /**
@@ -25,7 +28,7 @@ class UpdateBoundaryCommand extends Command
     /**
      * @param array $payload
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {
@@ -42,7 +45,7 @@ class UpdateBoundaryCommand extends Command
 
     /**
      * @return BoundaryInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function boundary(): BoundaryInterface
     {

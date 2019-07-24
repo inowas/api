@@ -6,15 +6,24 @@ namespace App\Domain\ToolInstance\Command;
 
 use App\Model\Command;
 use App\Model\ToolMetadata;
+use Exception;
 
 class CreateScenarioAnalysisCommand extends Command
 {
 
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $name;
+
+    /** @var string */
     private $description;
+
+    /** @var bool */
     private $public;
 
+    /** @var string */
     private $basemodelId;
 
     /**
@@ -28,7 +37,7 @@ class CreateScenarioAnalysisCommand extends Command
     /**
      * @param array $payload
      * @return CreateScenarioAnalysisCommand
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): CreateScenarioAnalysisCommand
     {

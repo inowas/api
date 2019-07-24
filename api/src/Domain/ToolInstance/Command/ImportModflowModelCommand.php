@@ -10,16 +10,29 @@ use App\Model\Modflow\Boundary\BoundaryFactory;
 use App\Model\Modflow\Discretization;
 use App\Model\Modflow\Layer;
 use App\Model\Modflow\Soilmodel;
+use Exception;
 
 class ImportModflowModelCommand extends Command
 {
-
+    /** @var string */
     private $id;
+
+    /** @var string */
     private $name;
+
+    /** @var string */
     private $description;
+
+    /** @var bool */
     private $isPublic;
+
+    /** @var array */
     private $discretization;
+
+    /** @var array */
     private $soilmodel;
+
+    /** @var array */
     private $boundaries;
 
     /**
@@ -33,7 +46,7 @@ class ImportModflowModelCommand extends Command
     /**
      * @param array $payload
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromPayload(array $payload): self
     {
@@ -85,7 +98,7 @@ class ImportModflowModelCommand extends Command
 
     /**
      * @return BoundaryCollection
-     * @throws \Exception
+     * @throws Exception
      */
     public function boundaries(): BoundaryCollection
     {
