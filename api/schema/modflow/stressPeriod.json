@@ -1,29 +1,26 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-        "totim_start": {
-            "type": "integer"
-        },
-        "perlen": {
-            "type": "integer"
-        },
-        "nstp": {
-            "type": "integer"
-        },
-        "tsmult": {
-            "type": "integer"
-        },
-        "steady": {
-            "type": "boolean"
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "start_date_time": {
+      "type": "string",
+      "format": "date-time"
     },
-    "additionalProperties": false,
-    "required": [
-        "totim_start",
-        "perlen",
-        "nstp",
-        "tsmult",
-        "steady"
-    ]
+    "nstp": {
+      "type": "integer"
+    },
+    "tsmult": {
+      "type": "integer"
+    },
+    "steady": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "start_date_time",
+    "nstp",
+    "tsmult",
+    "steady"
+  ]
 }
