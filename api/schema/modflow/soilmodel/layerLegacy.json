@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]{1,255}$",
+      "maxLength": 255
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "top": {
+      "$ref": "./layerValue.json"
+    },
+    "botm": {
+      "$ref": "./layerValue.json"
+    },
+    "hk": {
+      "$ref": "./layerValue.json"
+    },
+    "hani": {
+      "$ref": "./layerValue.json"
+    },
+    "vka": {
+      "$ref": "./layerValue.json"
+    },
+    "layavg": {
+      "type": "number"
+    },
+    "laytyp": {
+      "type": "number"
+    },
+    "laywet": {
+      "type": "number"
+    },
+    "ss": {
+      "$ref": "./layerValue.json"
+    },
+    "sy": {
+      "$ref": "./layerValue.json"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "description",
+    "number",
+    "top",
+    "botm",
+    "hk",
+    "hani",
+    "vka",
+    "layavg",
+    "laytyp",
+    "laywet",
+    "ss",
+    "sy"
+  ]
+}

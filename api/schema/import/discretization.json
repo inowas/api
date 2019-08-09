@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "geometry": {
+      "$ref": "../geojson/polygon.json"
+    },
+    "grid_size": {
+      "$ref": "../modflow/gridSize.json"
+    },
+    "stressperiods": {
+      "$ref": "./stressperiods.json"
+    },
+    "length_unit": {
+      "$ref": "../modflow/lengthUnit.json"
+    },
+    "time_unit": {
+      "$ref": "../modflow/timeUnit.json"
+    }
+  }
+}
