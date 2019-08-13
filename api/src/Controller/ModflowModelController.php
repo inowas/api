@@ -131,8 +131,61 @@ class ModflowModelController
         }
 
         return new JsonResponse([
+            'properties' => $modflowModel->soilmodel()->properties(),
             'layers' => $modflowModel->soilmodel()->layers()
         ]);
+    }
+
+    /**
+     * @Route("/modflowmodels/{id}/soilmodel/layers", name="modflowmodel_soilmodel_layers", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     * @throws PrometheusException
+     */
+    public function indexSoilmodelLayers(string $id): JsonResponse
+    {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
+        /** @var User $user */
+        $user = $token->getUser();
+
+        $this->writeMetrics('/modflowmodels');
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        if ($modflowModel->getPermissions($user) === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        return new JsonResponse($modflowModel->soilmodel()->layers());
+    }
+
+    /**
+     * @Route("/modflowmodels/{id}/soilmodel/properties", name="modflowmodel_soilmodel_properties", methods={"GET"})
+     * @param string $id
+     * @return JsonResponse
+     * @throws PrometheusException
+     */
+    public function indexSoilmodelProperties(string $id): JsonResponse
+    {
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
+        /** @var User $user */
+        $user = $token->getUser();
+
+        $this->writeMetrics('/modflowmodels');
+
+        /** @var ModflowModel $modflowModel */
+        $modflowModel = $this->entityManager->getRepository(ModflowModel::class)->findOneBy(['id' => $id]);
+
+        if ($modflowModel->getPermissions($user) === '---') {
+            return new JsonResponse([], 403);
+        }
+
+        return new JsonResponse($modflowModel->soilmodel()->properties());
     }
 
     /**
