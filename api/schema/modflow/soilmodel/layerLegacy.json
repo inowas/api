@@ -19,19 +19,19 @@
       "type": "integer"
     },
     "top": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     },
     "botm": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     },
     "hk": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     },
     "hani": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     },
     "vka": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     },
     "layavg": {
       "type": "number"
@@ -43,10 +43,10 @@
       "type": "number"
     },
     "ss": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     },
     "sy": {
-      "$ref": "./layerValueLegacy.json"
+      "$ref": "./layerValue.json"
     }
   },
   "required": [
