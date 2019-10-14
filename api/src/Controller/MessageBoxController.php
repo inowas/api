@@ -19,9 +19,6 @@ use App\Domain\ToolInstance\Command\DeleteScenarioAnalysisCommand;
 use App\Domain\ToolInstance\Command\DeleteScenarioCommand;
 use App\Domain\ToolInstance\Command\DeleteToolInstanceCommand;
 use App\Domain\ToolInstance\Command\ImportModflowModelCommand;
-use App\Domain\ToolInstance\Command\McdaDeleteCriterionCommand;
-use App\Domain\ToolInstance\Command\McdaUpdateCriterionCommand;
-use App\Domain\ToolInstance\Command\McdaUpdateProjectCommand;
 use App\Domain\ToolInstance\Command\RemoveBoundaryCommand;
 use App\Domain\ToolInstance\Command\RemoveLayerCommand;
 use App\Domain\ToolInstance\Command\UpdateBoundaryCommand;
@@ -111,9 +108,6 @@ final class MessageBoxController
             DeleteModflowModelCommand::class,
             DeleteToolInstanceCommand::class,
             ImportModflowModelCommand::class,
-            McdaDeleteCriterionCommand::class,
-            McdaUpdateCriterionCommand::class,
-            McdaUpdateProjectCommand::class,
             RemoveBoundaryCommand::class,
             RemoveLayerCommand::class,
             UpdateBoundaryCommand::class,
@@ -240,6 +234,6 @@ final class MessageBoxController
     private function validateSchema(string $schema, string $content): void
     {
         $schema = Schema::import($schema);
-        $schema->in(json_decode($content));
+        $schema->in(json_decode($content, true));
     }
 }

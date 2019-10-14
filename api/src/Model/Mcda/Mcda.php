@@ -37,24 +37,19 @@ class Mcda extends ToolInstance
      */
     private $suitability = [];
 
+    /**
+     * @ORM\Column(name="grid_size", type="json_array", nullable=true)
+     */
+    private $gridSize = null;
+
+    /**
+     * @ORM\Column(name="version", type="string", nullable=true)
+     */
+    private $version = '0';
+
     public function critera(): array
     {
         return $this->criteria;
-    }
-
-    public function addCriterion(Criterion $criterion): void
-    {
-        $this->criteria[$criterion->id()] = $criterion->toArray();
-    }
-
-    public function updateCriterion(Criterion $criterion): void
-    {
-        $this->criteria[$criterion->id()] = $criterion->toArray();
-    }
-
-    public function removeCriterion(string $id): void
-    {
-        unset($this->criteria[$id]);
     }
 
     public function findCriterion(string $id): ?Criterion
@@ -71,19 +66,9 @@ class Mcda extends ToolInstance
         return $this->weightAssignments;
     }
 
-    public function setWeightAssignments(array $weightAssignments): void
-    {
-        $this->weightAssignments = $weightAssignments;
-    }
-
     public function constraints(): array
     {
         return $this->constraints;
-    }
-
-    public function setConstraints(array $constraints): void
-    {
-        $this->constraints = $constraints;
     }
 
     public function withAhp(): bool
@@ -91,24 +76,35 @@ class Mcda extends ToolInstance
         return $this->withAhp;
     }
 
-    public function setWithAhp(bool $withAhp): void
-    {
-        $this->withAhp = $withAhp;
-    }
-
     public function suitability(): array
     {
         return $this->suitability;
     }
 
-    public function setSuitability(array $suitability): void
+    public function gridSize(): ?array
     {
-        $this->suitability = $suitability;
+        return $this->gridSize;
     }
+
+    public function version(): string
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param int $version
+     */
+    public function setVersion(int $version): void
+    {
+        $this->version = $version;
+    }
+
 
     public function data(): array
     {
         return [
+            'version' => $this->version(),
+            'grid_size' => $this->gridSize(),
             'criteria' => array_values($this->critera()),
             'constraints' => $this->constraints(),
             'suitability' => $this->suitability(),
@@ -119,6 +115,8 @@ class Mcda extends ToolInstance
 
     public function setData(array $data): void
     {
+        $this->version = $data['version'] ?? $this->version;
+        $this->gridSize = $data['grid_size'] ?? $this->gridSize;
         $this->criteria = $data['criteria'] ?? $this->criteria;
         $this->constraints = $data['constraints'] ?? $this->constraints;
         $this->suitability = $data['suitability'] ?? $this->suitability;
