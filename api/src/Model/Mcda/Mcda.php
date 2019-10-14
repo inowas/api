@@ -88,6 +88,9 @@ class Mcda extends ToolInstance
 
     public function version(): string
     {
+        if (null === $this->version) {
+            $this->version = '0';
+        }
         return $this->version;
     }
 
