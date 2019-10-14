@@ -234,6 +234,8 @@ final class MessageBoxController
     private function validateSchema(string $schema, string $content): void
     {
         $schema = Schema::import($schema);
-        $schema->in(json_decode($content, true));
+
+        /** @noinspection JsonEncodingApiUsageInspection */
+        $schema->in(json_decode($content));
     }
 }
