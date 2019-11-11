@@ -2,6 +2,8 @@
 
 namespace App\Model\Modflow;
 
+use Exception;
+
 final class Soilmodel
 {
     private $properties = [];
@@ -17,8 +19,7 @@ final class Soilmodel
 
     public static function create(): Soilmodel
     {
-        $self = new self();
-        return $self;
+        return new self();
     }
 
     private function __construct()
@@ -33,14 +34,14 @@ final class Soilmodel
     /**
      * @param string $layerId
      * @param string $newLayerId
-     * @throws \Exception
+     * @throws Exception
      */
     public function cloneLayer(string $layerId, string $newLayerId): void
     {
         /** @var Layer $layer */
         $layer = $this->findLayer($layerId);
         if (!$layer instanceof Layer) {
-            throw new \Exception('Layer not found');
+            throw new Exception('Layer not found');
         }
 
         $newLayer = $layer->clone($newLayerId);
