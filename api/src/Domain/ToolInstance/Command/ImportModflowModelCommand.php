@@ -93,6 +93,10 @@ class ImportModflowModelCommand extends Command
             $soilmodel->addLayer(Layer::fromArray($layer));
         }
 
+        if (array_key_exists('properties', $this->soilmodel)) {
+            $soilmodel->updateProperties($this->soilmodel['properties']);
+        }
+
         return $soilmodel;
     }
 
