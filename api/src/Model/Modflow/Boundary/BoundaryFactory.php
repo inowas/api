@@ -55,6 +55,9 @@ class BoundaryFactory
                     case 'chd':
                         return ConstantHeadBoundary::fromArray($arr);
                         break;
+                    case 'fhb':
+                        return FlowAndHeadBoundary::fromArray($arr);
+                        break;
                     case 'drn':
                         return DrainageBoundary::fromArray($arr);
                         break;
