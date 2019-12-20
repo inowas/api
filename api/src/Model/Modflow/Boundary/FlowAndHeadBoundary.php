@@ -42,7 +42,7 @@ final class FlowAndHeadBoundary extends FeatureCollection implements BoundaryInt
 
         /** @var Feature $feature */
         foreach ($features as $feature) {
-            if ($feature->getProperties()['type'] === 'ghb') {
+            if ($feature->getProperties()['type'] === 'fhb') {
                 $this->flowAndHeadBoundary = $feature;
             }
 
@@ -52,7 +52,7 @@ final class FlowAndHeadBoundary extends FeatureCollection implements BoundaryInt
         }
 
         if (null === $this->flowAndHeadBoundary) {
-            throw new RuntimeException('One Feature has to contain a property from type "chd"');
+            throw new RuntimeException('One Feature has to contain a property from type "fhb"');
         }
     }
 
