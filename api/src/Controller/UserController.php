@@ -42,6 +42,10 @@ class UserController
         /** @var User $user */
         $user = $token->getUser();
 
+        if (!$user instanceof User) {
+            return new JsonResponse(null, 401);
+        }
+
         $metric = $this->collectorRegistry->getCounter('http_requests_total');
         $metric->inc(1, ['handler' => '/user']);
 
