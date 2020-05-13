@@ -13,8 +13,10 @@ final class Discretization extends ValueObject
     private $stressperiods;
     private $lengthUnit;
     private $timeUnit;
+    private $rotation;
+    private $interception;
 
-    public static function fromParams(array $geometry, array $boundingBox, array $gridSize, array $cells, array $stressperiods, int $lengthUnit, int $timeUnit): Discretization
+    public static function fromParams(array $geometry, array $boundingBox, array $gridSize, array $cells, array $stressperiods, int $lengthUnit, int $timeUnit, ?float $rotation = 0.0, ?float $interception = 0.5): Discretization
     {
         $self = new self();
         $self->geometry = $geometry;
@@ -24,6 +26,8 @@ final class Discretization extends ValueObject
         $self->stressperiods = $stressperiods;
         $self->lengthUnit = $lengthUnit;
         $self->timeUnit = $timeUnit;
+        $self->rotation = $rotation;
+        $self->interception = $interception;
         return $self;
     }
 
@@ -37,6 +41,8 @@ final class Discretization extends ValueObject
         $self->stressperiods = $arr['stressperiods'];
         $self->lengthUnit = $arr['length_unit'];
         $self->timeUnit = $arr['time_unit'];
+        $self->rotation = $arr['rotation'] ?? 0.0;
+        $self->interception = $arr['interception'] ?? 0.5;
         return $self;
     }
 
@@ -84,6 +90,16 @@ final class Discretization extends ValueObject
         return $this->timeUnit;
     }
 
+    public function rotation(): float
+    {
+        return $this->rotation;
+    }
+
+    public function interception(): float
+    {
+        return $this->interception;
+    }
+
     public function toArray(): array
     {
         return [
@@ -93,7 +109,9 @@ final class Discretization extends ValueObject
             'cells' => $this->cells,
             'stressperiods' => $this->stressperiods,
             'length_unit' => $this->lengthUnit,
-            'time_unit' => $this->timeUnit
+            'time_unit' => $this->timeUnit,
+            'rotation' => $this->rotation,
+            'interception' => $this->interception,
         ];
     }
 }
