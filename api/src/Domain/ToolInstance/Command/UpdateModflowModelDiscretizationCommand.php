@@ -12,10 +12,10 @@ class UpdateModflowModelDiscretizationCommand extends Command
 {
 
     /** @var string */
-    private $id;
+    private string $id;
 
     /** @var array */
-    private $discretization;
+    private array $discretization;
 
     /**
      * @return string|null
@@ -42,7 +42,9 @@ class UpdateModflowModelDiscretizationCommand extends Command
             'cells' => $payload['cells'],
             'stressperiods' => $payload['stressperiods'],
             'length_unit' => $payload['length_unit'],
-            'time_unit' => $payload['time_unit']
+            'time_unit' => $payload['time_unit'],
+            'rotation' => $payload['rotation'] ?? 0.0,
+            'intersection' => $payload['intersection'] ?? 0.0
         ];
 
         return $self;

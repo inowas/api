@@ -15,7 +15,7 @@ class DiscretizationTest extends TestCase
     private int $timeUnit;
     private int $lengthUnit;
     private float $rotation;
-    private float $interception;
+    private float $intersection;
 
     public function setUp()
     {
@@ -58,7 +58,7 @@ class DiscretizationTest extends TestCase
         $this->lengthUnit = 1;
 
         $this->rotation = -5.0;
-        $this->interception = 0.25;
+        $this->intersection = 0.25;
     }
 
     /**
@@ -66,7 +66,7 @@ class DiscretizationTest extends TestCase
      */
     public function can_be_instantiated_from_params(): void
     {
-        $disc = Discretization::fromParams($this->geometry, $this->boundingBox, $this->gridSize, $this->cells, $this->stressperiods, $this->lengthUnit, $this->timeUnit, $this->rotation, $this->interception);
+        $disc = Discretization::fromParams($this->geometry, $this->boundingBox, $this->gridSize, $this->cells, $this->stressperiods, $this->lengthUnit, $this->timeUnit, $this->rotation, $this->intersection);
         $this->assertInstanceOf(Discretization::class, $disc);
         $this->assertEquals($this->geometry, $disc->geometry());
         $this->assertEquals($this->boundingBox, $disc->boundingBox());
@@ -76,7 +76,7 @@ class DiscretizationTest extends TestCase
         $this->assertEquals($this->timeUnit, $disc->timeUnit());
         $this->assertEquals($this->lengthUnit, $disc->lengthUnit());
         $this->assertEquals($this->rotation, $disc->rotation());
-        $this->assertEquals($this->interception, $disc->interception());
+        $this->assertEquals($this->intersection, $disc->intersection());
     }
 
     /**

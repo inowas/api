@@ -14,9 +14,9 @@ final class Discretization extends ValueObject
     private $lengthUnit;
     private $timeUnit;
     private $rotation;
-    private $interception;
+    private $intersection;
 
-    public static function fromParams(array $geometry, array $boundingBox, array $gridSize, array $cells, array $stressperiods, int $lengthUnit, int $timeUnit, ?float $rotation = 0.0, ?float $interception = 0.5): Discretization
+    public static function fromParams(array $geometry, array $boundingBox, array $gridSize, array $cells, array $stressperiods, int $lengthUnit, int $timeUnit, ?float $rotation = 0.0, ?float $intersection = 0.0): Discretization
     {
         $self = new self();
         $self->geometry = $geometry;
@@ -27,7 +27,7 @@ final class Discretization extends ValueObject
         $self->lengthUnit = $lengthUnit;
         $self->timeUnit = $timeUnit;
         $self->rotation = $rotation;
-        $self->interception = $interception;
+        $self->intersection = $intersection;
         return $self;
     }
 
@@ -42,7 +42,7 @@ final class Discretization extends ValueObject
         $self->lengthUnit = $arr['length_unit'];
         $self->timeUnit = $arr['time_unit'];
         $self->rotation = $arr['rotation'] ?? 0.0;
-        $self->interception = $arr['interception'] ?? 0.5;
+        $self->intersection = $arr['intersection'] ?? 0.0;
         return $self;
     }
 
@@ -95,9 +95,9 @@ final class Discretization extends ValueObject
         return $this->rotation;
     }
 
-    public function interception(): float
+    public function intersection(): float
     {
-        return $this->interception;
+        return $this->intersection;
     }
 
     public function toArray(): array
@@ -111,7 +111,7 @@ final class Discretization extends ValueObject
             'length_unit' => $this->lengthUnit,
             'time_unit' => $this->timeUnit,
             'rotation' => $this->rotation,
-            'interception' => $this->interception,
+            'intersection' => $this->intersection,
         ];
     }
 }
